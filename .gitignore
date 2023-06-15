@@ -9,6 +9,15 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.idea/
+/.idea/
+/idea/
+idea/
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
