@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace BannerlordEnhancedFramework.utils
 {
@@ -28,19 +27,6 @@ namespace BannerlordEnhancedFramework.utils
                 throw new Exception("Config.txt must be set in mod folder");
             }
             AddDataToConfigurationsList(configFileData);
-
-            if (File.Exists(currentAssemblyFullPathDirectory + "\\Extended_Install_Configurations.txt"))
-            {
-                using (StreamReader r = new StreamReader(currentAssemblyFullPathDirectory + "\\Extended_Install_Configurations.txt"))
-                {
-                    string json = r.ReadToEnd();
-                    var jsonConfigValues = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-                    if (jsonConfigValues != null)
-                    {
-                        AddDataToConfigurationsList(jsonConfigValues);
-                    }
-                }
-            }
         }
 
         private static void AddDataToConfigurationsList(Dictionary<String, string> configFileData)
