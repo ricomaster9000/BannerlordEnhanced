@@ -46,152 +46,152 @@
             <HintPath>..\..\BannerlordEnhancedFramework\Releases\$(BannerlordEnhancedFrameworkVersion)\BannerlordEnhancedFramework.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.AchievementSystem">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.AchievementSystem.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.AchievementSystem.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.ActivitySystem">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ActivitySystem.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ActivitySystem.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.CampaignSystem">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.CampaignSystem.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.CampaignSystem.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.CampaignSystem.ViewModelCollection">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.CampaignSystem.ViewModelCollection.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.CampaignSystem.ViewModelCollection.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.Core">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Core.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Core.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.Core.ViewModelCollection">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Core.ViewModelCollection.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Core.ViewModelCollection.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.Diamond">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Diamond.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Diamond.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.Diamond.ChatSystem.Library">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Diamond.ChatSystem.Library.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Diamond.ChatSystem.Library.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.Engine">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Engine.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Engine.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.Engine.GauntletUI">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Engine.GauntletUI.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Engine.GauntletUI.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.GauntletUI">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.GauntletUI.CodeGenerator">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.CodeGenerator.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.CodeGenerator.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.GauntletUI.Data">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.Data.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.Data.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.GauntletUI.ExtraWidgets">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.ExtraWidgets.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.ExtraWidgets.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.GauntletUI.PrefabSystem">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.PrefabSystem.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.PrefabSystem.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.GauntletUI.TooltipExtensions">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.TooltipExtensions.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.TooltipExtensions.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.InputSystem">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.InputSystem.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.InputSystem.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.Library">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Library.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Library.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.LinQuick">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.LinQuick.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.LinQuick.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.Localization">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Localization.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Localization.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.ModuleManager">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ModuleManager.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ModuleManager.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.MountAndBlade">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.MountAndBlade.AutoGenerated">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.AutoGenerated.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.AutoGenerated.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.MountAndBlade.Diamond">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.Diamond.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.Diamond.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.MountAndBlade.GauntletUI.Widgets">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.GauntletUI.Widgets.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.GauntletUI.Widgets.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.MountAndBlade.Helpers">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.Helpers.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.Helpers.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.MountAndBlade.ViewModelCollection">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.ViewModelCollection.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.ViewModelCollection.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.NavigationSystem">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.NavigationSystem.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.NavigationSystem.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.Network">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Network.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Network.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.ObjectSystem">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ObjectSystem.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ObjectSystem.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.PlayerServices">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.PlayerServices.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.PlayerServices.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.PSAI">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.PSAI.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.PSAI.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.SaveSystem">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.SaveSystem.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.SaveSystem.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.ScreenSystem">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ScreenSystem.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ScreenSystem.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.ServiceDiscovery.Client">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ServiceDiscovery.Client.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ServiceDiscovery.Client.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.Starter.Library">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Starter.Library.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Starter.Library.dll</HintPath>
         </Reference>
         <Reference Include="TaleWorlds.TwoDimension">
-          <Private>false</Private>
-          <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.TwoDimension.dll</HintPath>
+            <Private>false</Private>
+            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.TwoDimension.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
@@ -200,8 +200,8 @@
         <Compile Include="src\patches\QuartermasterPatches.cs" />
     </ItemGroup>
     <ItemGroup>
-      <None Include="App.config" />
-      <None Include="packages.config" />
+        <None Include="App.config" />
+        <None Include="packages.config" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <UsingTask TaskName="GetBannerlordModulesInstallationDirectory" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
@@ -237,5 +237,4 @@
         </ItemGroup>
         <Copy  SourceFiles="@(_CopyItems)" DestinationFolder="$(BannerlordModulesInstallationDir)\BannerlordEnhancedPartyRoles" />
     </Target>
-
 </Project>
