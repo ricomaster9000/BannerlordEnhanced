@@ -16,20 +16,36 @@ namespace BannerlordEnhancedFramework.utils
 
         public static void LogAndPrintInfo(String message)
         {
+            message = PrefixMessageWithModuleName(message);
             Debug.Print(message);
-            Color green = new Color(124, 242, 0);
-            InformationManager.DisplayMessage(new InformationMessage(message, green));
+            DisplayMessageInGameConsole(message, Colors.White);
         }
         
         public static void LogAndPrintWarning(String message)
         {
+            message = PrefixMessageWithModuleName(message);
+
             // TODO - I am not certain what logLevel does
-            Debug.Print("WARNING: " + message, 0, Debug.DebugColor.Yellow);
+            Debug.Print(message, 0, Debug.DebugColor.Yellow);
+            DisplayMessageInGameConsole(message, Colors.Yellow);
         }
         
         public static void LogAndPrintError(String message)
         {
+            message = PrefixMessageWithModuleName(message);
+            DisplayMessageInGameConsole(message, Colors.Red);
             Debug.Print("ERROR: " + message,0, Debug.DebugColor.Red);
+        }
+
+        private static string PrefixMessageWithModuleName(string message)
+        {
+            return System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + " - " + message;
+        }
+
+        private static void DisplayMessageInGameConsole(String msg, Color color)
+        {
+            InformationMessage infoMsg = new InformationMessage(msg, color);
+            InformationManager.DisplayMessage(infoMsg);
         }
 
         public static void PrintMethodNames(Type classTypes)
