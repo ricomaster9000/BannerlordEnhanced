@@ -17,6 +17,8 @@ namespace BannerlordEnhancedFramework.utils
         public static void LogAndPrintInfo(String message)
         {
             Debug.Print(message);
+            Color green = new Color(124, 242, 0);
+            InformationManager.DisplayMessage(new InformationMessage(message, green));
         }
         
         public static void LogAndPrintWarning(String message)

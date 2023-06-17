@@ -201,6 +201,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\BannerlordEnhancedPartyRolesSubModule.cs" />
+    <Compile Include="src\Behaviors\QuaterMasterDialogs.cs" />
+    <Compile Include="src\Models\MoneyHandler.cs" />
     <Compile Include="src\patches\QuartermasterPatches.cs" />
   </ItemGroup>
   <ItemGroup>
