@@ -204,9 +204,38 @@
       <None Include="packages.config" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <UsingTask TaskName="GetBannerlordModulesInstallationDirectory" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+        <ParameterGroup>
+            <BannerlordModulesInstallationDirectory ParameterType="System.String" Output="true" />
+        </ParameterGroup>
+        <Task>
+            <Using Namespace="System.Diagnostics" />
+            <Code Type="Fragment" Language="cs">
+                <![CDATA[
+      String windows32BitPath = @"C:\Program Files\Steam\SteamApps\common\Mount & Blade II Bannerlord\Modules";
+      String windows64BitPath = @"C:\Program Files (x86)\Steam\SteamApps\common\Mount & Blade II Bannerlord\Modules";
+      String customPath01 = @"D:\Steam\SteamApps\common\Mount & Blade II Bannerlord\Modules";
+      if(Directory.Exists(windows32BitPath)) {
+        this.BannerlordModulesInstallationDirectory = windows32BitPath;
+      } else if(Directory.Exists(windows64BitPath)) {
+        this.BannerlordModulesInstallationDirectory = windows64BitPath;
+      } else if(Directory.Exists(customPath01)) {
+        this.BannerlordModulesInstallationDirectory = customPath01;
+      }
+    ]]>
+            </Code>
+        </Task>
+    </UsingTask>
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+        <GetBannerlordModulesInstallationDirectory AssemblyPath="$(TargetPath)">
+            <Output TaskParameter="BannerlordModulesInstallationDirectory" PropertyName="BannerlordModulesInstallationDir" />
+        </GetBannerlordModulesInstallationDirectory>
         <Copy SourceFiles="bin\Debug\BannerlordEnhancedFramework.dll" DestinationFolder="..\..\Modules\BannerlordEnhancedPartyRolesModule\bin\Win64_Shipping_Client" />
         <Copy SourceFiles="bin\Debug\BannerlordEnhancedPartyRoles.dll" DestinationFolder="..\..\Modules\BannerlordEnhancedPartyRolesModule\bin\Win64_Shipping_Client" />
+        <ItemGroup>
+            <_CopyItems Include="..\..\Modules\BannerlordEnhancedPartyRolesModule\*.*" />
+        </ItemGroup>
+        <Copy  SourceFiles="@(_CopyItems)" DestinationFolder="$(BannerlordModulesInstallationDir)\BannerlordEnhancedPartyRoles" />
     </Target>
 
 </Project>

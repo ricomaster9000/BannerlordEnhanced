@@ -296,7 +296,9 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="src\Colors.cs" />
         <Compile Include="src\models\EnhancedPartyRole.cs" />
+        <Compile Include="src\utils\ButterLibUtils.cs" />
         <Compile Include="src\utils\ConfigurationUtils.cs" />
         <Compile Include="src\utils\DebugUtils.cs" />
         <Compile Include="src\utils\HarmonyPatcher.cs" />
@@ -318,10 +320,7 @@
     </Target>
     -->
 
-    <UsingTask
-            TaskName="GetFileVersion"
-            TaskFactory="CodeTaskFactory"
-            AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <UsingTask TaskName="GetFileVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
 
         <ParameterGroup>
             <AssemblyPath ParameterType="System.String" Required="true" />
