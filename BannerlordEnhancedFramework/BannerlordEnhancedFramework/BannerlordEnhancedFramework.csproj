@@ -296,16 +296,13 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="src\Colors.cs" />
-        <Compile Include="src\models\EnhancedPartyRole.cs" />
-        <Compile Include="src\utils\ButterLibUtils.cs" />
-        <Compile Include="src\utils\ConfigurationUtils.cs" />
-        <Compile Include="src\utils\DebugUtils.cs" />
-        <Compile Include="src\utils\HarmonyPatcher.cs" />
+        <Compile Include="src\*" />
+        <Compile Include="src\extendedtypes\*" />
+        <Compile Include="src\models\*" />
+        <Compile Include="src\utils\*" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Properties" />
-      <Folder Include="src\extendedtypes" />
     </ItemGroup>
     <ItemGroup>
       <None Include="App.config" />
