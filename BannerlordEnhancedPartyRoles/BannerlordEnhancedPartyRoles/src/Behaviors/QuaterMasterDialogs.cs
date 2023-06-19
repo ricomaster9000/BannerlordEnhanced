@@ -9,7 +9,7 @@ using TaleWorlds.Library;
 using TaleWorlds.Core;
 using BannerlordEnhancedFramework.utils;
 
-namespace BannerlordEnhancedPartyRoles.Behaviours
+namespace BannerlordEnhancedPartyRoles.Behaviors
 {
     class QuaterMasterDialog : CampaignBehaviorBase
     {
