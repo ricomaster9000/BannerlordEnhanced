@@ -196,9 +196,11 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="Properties\AssemblyInfo.cs" />
-		<Compile Include="src\BannerlordEnhancedPartyRolesSubModule.cs" />
-		<Compile Include="src\patches\QuartermasterPatches.cs" />
+		<Compile Include="src\*" />
+		<Compile Include="src\patches\*" />
 		<Compile Include="src\Behaviors\*" />
+		<Compile Include="src\Storage\*" />
+		<Compile Include="src\Services\*" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="App.config" />
