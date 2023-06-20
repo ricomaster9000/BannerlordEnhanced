@@ -88,7 +88,7 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
 
 
 
-// Will delete later
+// TODO Will delete later
 
 /*
  *         starter.AddDialogLine("QauerMaster_Ontmoeting", "start", "continue_conversation", "Yes me lord?", isQuaterMaster, null);
