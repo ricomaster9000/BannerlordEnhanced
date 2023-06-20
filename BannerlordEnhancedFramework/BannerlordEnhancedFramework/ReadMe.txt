@@ -35,4 +35,17 @@ Start options
 	
 	Working Directory ->
 		C:\Program Files (x86)\Steam\steamapps\common\Mount & Blade II Bannerlord\bin\Win64_Shipping_Client\
+
+Indenting 
+	Description
+		Changes to indenting might cause git to update entire files indenting.
+	Visual studio default indenting should be.
+		Tools/Options/Text Edito/C#/Tabs
+			Tab size -> 4
+			Indent size -> 4
+		NOTE turn off Adaptive formatting (This cause might override you custom tab settings)
+	
+	How to format
+		Edit/Advanced/Format Document
+
 */

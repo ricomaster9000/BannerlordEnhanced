@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Module>
     <Name value="Bannerlord Enhanced Party Roles"/>
-    <Id value="BannerlordEnhancedPartyRoles"/>
+    <Id value="BannerlordEnhancedPartyRolesModule"/>
     <Version value="v0.0.1"/>
     <SingleplayerModule value="true"/>
     <MultiplayerModule value="false"/>
