@@ -1,218 +1,218 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{1913B7D7-C252-4BAE-AD5F-56E9314F08A4}</ProjectGuid>
-        <OutputType>Library</OutputType>
-        <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>BannerlordEnhancedPartyRoles</RootNamespace>
-        <AssemblyName>BannerlordEnhancedPartyRoles</AssemblyName>
-        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-        <FileAlignment>512</FileAlignment>
-        <LangVersion>10</LangVersion>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugSymbols>true</DebugSymbols>
-        <DebugType>full</DebugType>
-        <Optimize>false</Optimize>
-        <OutputPath>bin\Debug\</OutputPath>
-        <DefineConstants>DEBUG;TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-        <PlatformTarget>AnyCPU</PlatformTarget>
-        <DebugType>pdbonly</DebugType>
-        <Optimize>true</Optimize>
-        <OutputPath>bin\Release\</OutputPath>
-        <DefineConstants>TRACE</DefineConstants>
-        <ErrorReport>prompt</ErrorReport>
-        <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
-    <PropertyGroup>
-        <BannerlordEnhancedFrameworkVersion>0.1.0.0</BannerlordEnhancedFrameworkVersion>
-        <BannerlordGameVersionToUse>1.1</BannerlordGameVersionToUse>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
-        <Reference Include="System.Numerics" />
-        <Reference Include="System.Windows.Forms" />
-        <Reference Include="System.Xml" />
-        <Reference Include="BannerlordEnhancedFramework">
-            <HintPath>..\..\BannerlordEnhancedFramework\Releases\$(BannerlordEnhancedFrameworkVersion)\BannerlordEnhancedFramework.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.AchievementSystem">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.AchievementSystem.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.ActivitySystem">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ActivitySystem.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.CampaignSystem">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.CampaignSystem.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.CampaignSystem.ViewModelCollection">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.CampaignSystem.ViewModelCollection.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.Core">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Core.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.Core.ViewModelCollection">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Core.ViewModelCollection.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.Diamond">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Diamond.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.Diamond.ChatSystem.Library">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Diamond.ChatSystem.Library.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.Engine">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Engine.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.Engine.GauntletUI">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Engine.GauntletUI.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.GauntletUI">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.GauntletUI.CodeGenerator">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.CodeGenerator.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.GauntletUI.Data">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.Data.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.GauntletUI.ExtraWidgets">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.ExtraWidgets.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.GauntletUI.PrefabSystem">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.PrefabSystem.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.GauntletUI.TooltipExtensions">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.TooltipExtensions.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.InputSystem">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.InputSystem.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.Library">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Library.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.LinQuick">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.LinQuick.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.Localization">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Localization.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.ModuleManager">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ModuleManager.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.MountAndBlade">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.MountAndBlade.AutoGenerated">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.AutoGenerated.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.MountAndBlade.Diamond">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.Diamond.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.MountAndBlade.GauntletUI.Widgets">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.GauntletUI.Widgets.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.MountAndBlade.Helpers">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.Helpers.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.MountAndBlade.ViewModelCollection">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.ViewModelCollection.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.NavigationSystem">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.NavigationSystem.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.Network">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Network.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.ObjectSystem">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ObjectSystem.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.PlayerServices">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.PlayerServices.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.PSAI">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.PSAI.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.SaveSystem">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.SaveSystem.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.ScreenSystem">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ScreenSystem.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.ServiceDiscovery.Client">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ServiceDiscovery.Client.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.Starter.Library">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Starter.Library.dll</HintPath>
-        </Reference>
-        <Reference Include="TaleWorlds.TwoDimension">
-            <Private>false</Private>
-            <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.TwoDimension.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="src\BannerlordEnhancedPartyRolesSubModule.cs" />
-        <Compile Include="src\patches\QuartermasterPatches.cs" />
-        <Compile Include="src\Behaviours\*" />
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="App.config" />
-        <None Include="packages.config" />
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-    <UsingTask TaskName="GetBannerlordModulesInstallationDirectory" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
-        <ParameterGroup>
-            <BannerlordModulesInstallationDirectory ParameterType="System.String" Output="true" />
-        </ParameterGroup>
-        <Task>
-            <Using Namespace="System.Diagnostics" />
-            <Code Type="Fragment" Language="cs">
-                <![CDATA[
+	<Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+		<ProjectGuid>{1913B7D7-C252-4BAE-AD5F-56E9314F08A4}</ProjectGuid>
+		<OutputType>Library</OutputType>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
+		<RootNamespace>BannerlordEnhancedPartyRoles</RootNamespace>
+		<AssemblyName>BannerlordEnhancedPartyRoles</AssemblyName>
+		<TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+		<FileAlignment>512</FileAlignment>
+		<LangVersion>10</LangVersion>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<Optimize>false</Optimize>
+		<OutputPath>bin\Debug\</OutputPath>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<PlatformTarget>AnyCPU</PlatformTarget>
+		<DebugType>pdbonly</DebugType>
+		<Optimize>true</Optimize>
+		<OutputPath>bin\Release\</OutputPath>
+		<DefineConstants>TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup>
+		<BannerlordEnhancedFrameworkVersion>0.1.0.0</BannerlordEnhancedFrameworkVersion>
+		<BannerlordGameVersionToUse>1.1</BannerlordGameVersionToUse>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="System.Core" />
+		<Reference Include="System.Data" />
+		<Reference Include="System.Numerics" />
+		<Reference Include="System.Windows.Forms" />
+		<Reference Include="System.Xml" />
+		<Reference Include="BannerlordEnhancedFramework">
+			<HintPath>..\..\BannerlordEnhancedFramework\Releases\$(BannerlordEnhancedFrameworkVersion)\BannerlordEnhancedFramework.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.AchievementSystem">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.AchievementSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.ActivitySystem">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ActivitySystem.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.CampaignSystem">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.CampaignSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.CampaignSystem.ViewModelCollection">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.CampaignSystem.ViewModelCollection.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Core">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Core.ViewModelCollection">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Core.ViewModelCollection.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Diamond">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Diamond.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Diamond.ChatSystem.Library">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Diamond.ChatSystem.Library.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Engine">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Engine.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Engine.GauntletUI">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Engine.GauntletUI.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.GauntletUI">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.GauntletUI.CodeGenerator">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.CodeGenerator.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.GauntletUI.Data">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.Data.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.GauntletUI.ExtraWidgets">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.ExtraWidgets.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.GauntletUI.PrefabSystem">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.PrefabSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.GauntletUI.TooltipExtensions">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.GauntletUI.TooltipExtensions.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.InputSystem">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.InputSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Library">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Library.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.LinQuick">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.LinQuick.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Localization">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Localization.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.ModuleManager">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ModuleManager.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.MountAndBlade">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.MountAndBlade.AutoGenerated">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.AutoGenerated.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.MountAndBlade.Diamond">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.Diamond.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.MountAndBlade.GauntletUI.Widgets">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.GauntletUI.Widgets.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.MountAndBlade.Helpers">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.Helpers.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.MountAndBlade.ViewModelCollection">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.MountAndBlade.ViewModelCollection.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.NavigationSystem">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.NavigationSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Network">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Network.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.ObjectSystem">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ObjectSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.PlayerServices">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.PlayerServices.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.PSAI">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.PSAI.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.SaveSystem">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.SaveSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.ScreenSystem">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ScreenSystem.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.ServiceDiscovery.Client">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ServiceDiscovery.Client.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.Starter.Library">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.Starter.Library.dll</HintPath>
+		</Reference>
+		<Reference Include="TaleWorlds.TwoDimension">
+			<Private>false</Private>
+			<HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.TwoDimension.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="Properties\AssemblyInfo.cs" />
+		<Compile Include="src\BannerlordEnhancedPartyRolesSubModule.cs" />
+		<Compile Include="src\patches\QuartermasterPatches.cs" />
+		<Compile Include="src\Behaviors\*" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="App.config" />
+		<None Include="packages.config" />
+	</ItemGroup>
+	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+	<UsingTask TaskName="GetBannerlordModulesInstallationDirectory" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+		<ParameterGroup>
+			<BannerlordModulesInstallationDirectory ParameterType="System.String" Output="true" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System.Diagnostics" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
       String windows32BitPath = @"C:\Program Files\Steam\SteamApps\common\Mount & Blade II Bannerlord\Modules";
       String windows64BitPath = @"C:\Program Files (x86)\Steam\SteamApps\common\Mount & Blade II Bannerlord\Modules";
       String customPath01 = @"D:\Steam\SteamApps\common\Mount & Blade II Bannerlord\Modules";
@@ -224,18 +224,20 @@
         this.BannerlordModulesInstallationDirectory = customPath01;
       }
     ]]>
-            </Code>
-        </Task>
-    </UsingTask>
-    <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-        <GetBannerlordModulesInstallationDirectory>
-            <Output TaskParameter="BannerlordModulesInstallationDirectory" PropertyName="BannerlordModulesInstallationDir" />
-        </GetBannerlordModulesInstallationDirectory>
-        <Copy SourceFiles="bin\Debug\BannerlordEnhancedFramework.dll" DestinationFolder="..\..\Modules\BannerlordEnhancedPartyRolesModule\bin\Win64_Shipping_Client" />
-        <Copy SourceFiles="bin\Debug\BannerlordEnhancedPartyRoles.dll" DestinationFolder="..\..\Modules\BannerlordEnhancedPartyRolesModule\bin\Win64_Shipping_Client" />
-        <ItemGroup>
-            <_CopyItems Include="..\..\Modules\BannerlordEnhancedPartyRolesModule\*.*" />
-        </ItemGroup>
-        <Copy SourceFiles="@(_CopyItems)" DestinationFolder="$(BannerlordModulesInstallationDir)\BannerlordEnhancedPartyRoles" />
-    </Target>
+			</Code>
+		</Task>
+	</UsingTask>
+	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+		<GetBannerlordModulesInstallationDirectory>
+			<Output TaskParameter="BannerlordModulesInstallationDirectory" PropertyName="BannerlordModulesInstallationDir" />
+		</GetBannerlordModulesInstallationDirectory>
+		<Copy SourceFiles="bin\Debug\BannerlordEnhancedFramework.dll" DestinationFolder="..\..\Modules\BannerlordEnhancedPartyRoles\bin\Win64_Shipping_Client" />
+		<Copy SourceFiles="bin\Debug\BannerlordEnhancedPartyRoles.dll" DestinationFolder="..\..\Modules\BannerlordEnhancedPartyRoles\bin\Win64_Shipping_Client" />
+		<ItemGroup>
+			<_CopySubModule Include="..\..\Modules\BannerlordEnhancedPartyRoles\*.*" />
+			<_CopyDll Include="..\..\Modules\BannerlordEnhancedPartyRoles\bin\Win64_Shipping_Client\*.*" />
+		</ItemGroup>
+		<Copy SourceFiles="@(_CopySubModule)" DestinationFolder="$(BannerlordModulesInstallationDir)\BannerlordEnhancedPartyRoles" />
+		<Copy SourceFiles="@(_CopyDll)" DestinationFolder="$(BannerlordModulesInstallationDir)\BannerlordEnhancedPartyRoles\bin\Win64_Shipping_Client" />
+	</Target>
 </Project>

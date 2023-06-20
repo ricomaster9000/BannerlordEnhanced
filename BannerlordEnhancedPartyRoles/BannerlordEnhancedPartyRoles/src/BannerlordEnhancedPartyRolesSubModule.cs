@@ -1,6 +1,6 @@
 ﻿using BannerlordEnhancedFramework.utils;
 using BannerlordEnhancedPartyRoles.patches;
-using BannerlordEnhancedPartyRoles.Behaviours;
+using BannerlordEnhancedPartyRoles.Behaviors;
 
 using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.MountAndBlade;
