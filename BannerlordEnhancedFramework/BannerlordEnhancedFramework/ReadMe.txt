@@ -1,3 +1,4 @@
+/*
 Visual Studio Setup & Debugging
 
 Project Setup
@@ -26,11 +27,25 @@ Debug
 
 Start options
 	Command line arguments ->
-		/singleplayer _MODULES_*Bannerlord.Harmony*Native*SandBoxCore*CustomBattle*SandBox*StoryMode*BannerlordEnhancedPartyRolesModule*_MODULES_
-		(NOTE make sure BannerlordEnhancedPartyRolesModule is name of module you use for debugging.)
+		/singleplayer _MODULES_*Bannerlord.Harmony*Native*SandBoxCore*CustomBattle*SandBox*StoryMode*BannerlordEnhancedPartyRoles*_MODULES_
+		(NOTE make sure BannerlordEnhancedPartyRoles is name of module you use for debugging.)
 		
 		To make game skip MainMenu (same as using continue in launcher) add space then /continuegame example below ->
-		/singleplayer _MODULES_*Bannerlord.Harmony*Native*SandBoxCore*CustomBattle*SandBox*StoryMode*BannerlordEnhancedPartyRolesModule*_MODULES_ /continuegame
+		/singleplayer _MODULES_*Bannerlord.Harmony*Native*SandBoxCore*CustomBattle*SandBox*StoryMode*BannerlordEnhancedPartyRoles*_MODULES_ /continuegame
 	
 	Working Directory ->
 		C:\Program Files (x86)\Steam\steamapps\common\Mount & Blade II Bannerlord\bin\Win64_Shipping_Client\
+
+Indenting 
+	Description
+		Changes to indenting might cause git to update entire files indenting.
+	Visual studio default indenting should be.
+		Tools/Options/Text Edito/C#/Tabs
+			Tab size -> 4
+			Indent size -> 4
+		NOTE turn off Adaptive formatting (This cause might override you custom tab settings)
+	
+	How to format
+		Edit/Advanced/Format Document
+
+*/
