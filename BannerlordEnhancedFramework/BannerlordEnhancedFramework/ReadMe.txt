@@ -1,4 +1,3 @@
-/*
 Visual Studio Setup & Debugging
 
 Project Setup
@@ -27,12 +26,11 @@ Debug
 
 Start options
 	Command line arguments ->
-		/singleplayer _MODULES_*Bannerlord.Harmony*Native*SandBoxCore*CustomBattle*SandBox*StoryMode*BannerlordEnhancedPartyRoles*_MODULES_
-		(NOTE make sure BannerlordEnhancedPartyRoles is name of module you use for debugging.)
+		/singleplayer _MODULES_*Bannerlord.Harmony*Native*SandBoxCore*CustomBattle*SandBox*StoryMode*BannerlordEnhancedPartyRolesModule*_MODULES_
+		(NOTE make sure BannerlordEnhancedPartyRolesModule is name of module you use for debugging.)
 		
 		To make game skip MainMenu (same as using continue in launcher) add space then /continuegame example below ->
-		/singleplayer _MODULES_*Bannerlord.Harmony*Native*SandBoxCore*CustomBattle*SandBox*StoryMode*BannerlordEnhancedPartyRoles*_MODULES_ /continuegame
+		/singleplayer _MODULES_*Bannerlord.Harmony*Native*SandBoxCore*CustomBattle*SandBox*StoryMode*BannerlordEnhancedPartyRolesModule*_MODULES_ /continuegame
 	
 	Working Directory ->
 		C:\Program Files (x86)\Steam\steamapps\common\Mount & Blade II Bannerlord\bin\Win64_Shipping_Client\
-*/
