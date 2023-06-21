@@ -297,16 +297,18 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="src\*" />
+        <Compile Include="src\dialogues\*" />
         <Compile Include="src\extendedtypes\*" />
         <Compile Include="src\models\*" />
         <Compile Include="src\utils\*" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Properties" />
+        <Folder Include="Properties" />
+        <Folder Include="src\models" />
     </ItemGroup>
     <ItemGroup>
-      <None Include="App.config" />
-      <None Include="packages.config" />
+        <None Include="App.config" />
+        <None Include="packages.config" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -334,7 +336,7 @@
             </Code>
         </Task>
     </UsingTask>
-    
+
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
         <GetFileVersion AssemblyPath="$(TargetPath)">
             <Output TaskParameter="Version" PropertyName="MyAssemblyFileVersion" />
