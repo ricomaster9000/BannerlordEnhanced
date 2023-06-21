@@ -5,6 +5,10 @@ using TaleWorlds.CampaignSystem.Conversation;
 
 namespace BannerlordEnhancedFramework.dialogues;
 
+/// <summary>
+/// Class <c>DialogueBuilder</c> is a helper class that wraps logic and handles the creation of dialogues in the game
+/// (it becomes more relevant in very complex big dialogues).
+/// </summary>
 public class DialogueBuilder
 {
     private readonly string _dialogueId;
@@ -42,6 +46,10 @@ public class DialogueBuilder
         return this;
     }
 
+    /// <summary>
+    /// Method <c>Build</c> Constructs and ADDS the dialogues to the game
+    /// (it becomes more relevant in very complex big dialogues).
+    /// </summary>
     public List<CustomConversationSentence> Build(CampaignGameStarter starter)
     {
         foreach (var conversationSentence in _dialogueLinesToAdd)
