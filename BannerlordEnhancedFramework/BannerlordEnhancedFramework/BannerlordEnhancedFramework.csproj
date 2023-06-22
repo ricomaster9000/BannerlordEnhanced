@@ -38,6 +38,9 @@
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Reference Include="Bannerlord.UIExtenderEx, Version=2.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>..\packages\Bannerlord.UIExtenderEx.2.8.0\lib\netstandard2.0\Bannerlord.UIExtenderEx.dll</HintPath>
+        </Reference>
         <Reference Include="Microsoft.CSharp" />
         <Reference Include="mscorlib" />
         <Reference Include="System" />
