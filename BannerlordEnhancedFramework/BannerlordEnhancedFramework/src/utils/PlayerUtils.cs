@@ -4,8 +4,13 @@ namespace BannerlordEnhancedFramework.utils;
 
 public static class PlayerUtils
 {
+    public static MobileParty PlayerParty()
+    {
+        return MobileParty.MainParty;
+    }
+    
     public static bool IsPlayerHostileToParty(MobileParty mobileParty)
     {
-        return MobileParty.MainParty.MapFaction.IsAtWarWith(mobileParty.MapFaction);
+        return PlayerParty().MapFaction.IsAtWarWith(mobileParty.MapFaction);
     }
 }
