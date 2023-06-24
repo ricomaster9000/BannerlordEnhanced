@@ -8,11 +8,23 @@ using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Library;
 using TaleWorlds.Core;
 using BannerlordEnhancedFramework.utils;
+using BannerlordEnhancedPartyRoles.Services;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace BannerlordEnhancedPartyRoles.Behaviors
 {
+
+
     class QuaterMasterDialog : CampaignBehaviorBase
     {
+		[CommandLineFunctionality.CommandLineArgumentFunction("quatermaster_give_best_items_to_companions", "debug")]
+		public static string DebugGiveBestItemsToCompanions(List<string> strings)
+		{
+			GiveBestItems();
+			return "Done";
+		}
+
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(AddDialogs));
@@ -26,11 +38,11 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
         // you can also add to show it in this example player must have quatermaster role to see that dialog
         private void AddDialogs(CampaignGameStarter starter)
         {
-            starter.AddPlayerLine("QauerMaster_Ontmoeting", "hero_main_options", "quatermaster_continue_conversation", "Give Companions best items from my inventory", isQuaterMaster, null);
-            starter.AddDialogLine("QauerMaster_Ontmoeting", "quatermaster_continue_conversation", "end", "Alright!", null, giveBestItems);
+            starter.AddPlayerLine("QauerMaster_Ontmoeting", "hero_main_options", "quatermaster_continue_conversation", "Give Companions best items from my inventory", IsQuaterMaster, null);
+            starter.AddDialogLine("QauerMaster_Ontmoeting", "quatermaster_continue_conversation", "end", "Alright!", null, GiveBestItems);
         }
 
-        public bool isQuaterMaster()
+        public bool IsQuaterMaster()
         {
             if (Campaign.Current.ConversationManager.OneToOneConversationCharacter == Campaign.Current.MainParty.EffectiveQuartermaster.CharacterObject)
             {
@@ -39,109 +51,82 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
             return false;
         }
 
-        public void giveBestItems()
+        public static void GiveBestItems()
         {
-            //Campaign.Current.InventoryManager
-            MobileParty mainParty = MobileParty.MainParty;
-            Hero leaderHero = mainParty.LeaderHero;
+			MobileParty mainParty = MobileParty.MainParty;
 
-            MBList<TroopRosterElement> troopsRoster = mainParty.Party.MemberRoster.GetTroopRoster();
+			ItemRoster itemRoster = mainParty.ItemRoster;
+			List<Hero> allCompanions = EnhancedQuaterMasterService.GetCompanions(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
 
-            foreach (TroopRosterElement troop in troopsRoster)
-            {
-                if (troop.Character.IsHero && troop.Character.HeroObject != leaderHero)
-                {
+			List<ItemRosterElement> removeEquipmentElement = EnhancedQuaterMasterService.GiveBestArmor(itemRoster.ToList(), allCompanions);
 
-                    InventoryLogic inventoryLogic = InventoryManager.InventoryLogic;
-                    /*
-                    IEnumerable<ItemRosterElement> allItemRosterElement = inventoryLogic.GetElementsInRoster(InventoryLogic.InventorySide.PlayerInventory);
- 
-                    foreach (var itemRosterElement in allItemRosterElement)
-                    {
-                        DebugUtils.LogAndPrintInfo(itemRosterElement.ToString());
-                    }
-                    */
-                    Hero companion = troop.Character.HeroObject;
-                    Equipment battleEquipment = companion.BattleEquipment;
-
-                    DebugUtils.LogAndPrintInfo("Found Hero " + troop.Character.ToString());
-                    DebugUtils.LogAndPrintInfo("ArmArmorSum = " + battleEquipment.GetArmArmorSum());
-                    DebugUtils.LogAndPrintInfo("HeadArmorSum = " + battleEquipment.GetHeadArmorSum());
-                    DebugUtils.LogAndPrintInfo("HorseArmorSum = " + battleEquipment.GetHorseArmorSum());
-                    DebugUtils.LogAndPrintInfo("HumanBodyArmorSum = " + battleEquipment.GetHumanBodyArmorSum());
-                    DebugUtils.LogAndPrintInfo("LegArmorSum = " + battleEquipment.GetLegArmorSum());
-                    DebugUtils.LogAndPrintInfo("TotalWeightOfArmor = " + battleEquipment.GetTotalWeightOfArmor(true));
-
-                    battleEquipment[10] = leaderHero.BattleEquipment[10];
-                    break;
-                }
-            }
-            InformationManager.DisplayMessage(new InformationMessage("Quatermaster is giving best items to companions.", Color.White));
-        }
+			// TODO add swapped ItemRosterElement back into Players ItemRoster
+			foreach (ItemRosterElement itemRosterElement in removeEquipmentElement)
+			{
+				itemRoster.Remove(itemRosterElement);
+			}
+		}
 
     }
 }
 
-
-
-
-
-
-
-// Will delete later
-
+// TODO
 /*
- *         starter.AddDialogLine("QauerMaster_Ontmoeting", "start", "continue_conversation", "Yes me lord?", isQuaterMaster, null);
-            starter.AddPlayerLine(
-                "QauerMaster_Vraag",
-                "continue_conversation",
-                "respond_give_best_items",
-                "Give Companions best items from my inventory",
-                null,
-                null
-             );
-            starter.AddDialogLine("QauerMaster_Ontmoeting", "respond_give_best_items", "end", "Alright!", null, giveBestItems);
+ * Find item type if apparel or weapon or mount & saddle
+ * 
+ * 
  */
 
+
+//Campaign.Current.InventoryManager
+
+
+
+
+// TODO Will delete later
+
 /*
-public bool showInformationMessage(out TextObject explanation)
-{
-    InformationManager.DisplayMessage(new InformationMessage("Giving best items to companions.", Color.White));
-    explanation = TextObject.Empty;
-    return true;
-}
-*/
+ * 
+ * 
+ * 
+    DebugUtils.LogAndPrintInfo("Found Hero " + troop.Character.ToString());
+    DebugUtils.LogAndPrintInfo("ArmArmorSum = " + battleEquipment.GetArmArmorSum());
+    DebugUtils.LogAndPrintInfo("HeadArmorSum = " + battleEquipment.GetHeadArmorSum());
+    DebugUtils.LogAndPrintInfo("HorseArmorSum = " + battleEquipment.GetHorseArmorSum());
+    DebugUtils.LogAndPrintInfo("HumanBodyArmorSum = " + battleEquipment.GetHumanBodyArmorSum());
+    DebugUtils.LogAndPrintInfo("LegArmorSum = " + battleEquipment.GetLegArmorSum());
+    DebugUtils.LogAndPrintInfo("TotalWeightOfArmor = " + battleEquipment.GetTotalWeightOfArmor(true));
+
+	IEnumerator<ItemRosterElement> enumerator = itemRoster.GetEnumerator();
+	while (enumerator.MoveNext())
+	{
+		//DebugUtils.LogAndPrintInfo(enumerator.Current.ToString());
+	}
+
+	foreach(ItemRosterElement itemRosterElement in itemRoster)
+	{
+		//DebugUtils.LogAndPrintInfo("Item Name: "+ itemRosterElement.EquipmentElement.Item.Name + " - Effectiveness: "+ itemRosterElement.EquipmentElement.Item.Effectiveness + " Modified Body Armor: "+ itemRosterElement.EquipmentElement.GetModifiedBodyArmor());
+		// DebugUtils.LogAndPrintInfo(itemRosterElement.ToString());
+	}
+
+	// Look for _data it contains array of ItemRosterElement
+	InventoryLogic inventoryLogic = InventoryManager.InventoryLogic;
+   
+	IEnumerable<ItemRosterElement> allItemRosterElement = inventoryLogic.GetElementsInRoster(InventoryLogic.InventorySide.PlayerInventory);
+
+	foreach (var itemRosterElement in allItemRosterElement)
+	{
+		DebugUtils.LogAndPrintInfo(itemRosterElement.ToString());
+	}
+	*/
 
 
 /*
-public ConversationSentence AddPlayerLine(
-    string id,
-    string inputToken,
-    string outputToken,
-    string text,
-    ConversationSentence.OnConditionDelegate conditionDelegate,  // Condition that will know which Character to show Dialog
-    ConversationSentence.OnConsequenceDelegate consequenceDelegate, // Function to call after click dialog
-    int priority = 100,
-    ConversationSentence.OnClickableConditionDelegate clickableConditionDelegate = null,
-    ConversationSentence.OnPersuasionOptionDelegate persuasionOptionDelegate = null
-    )
+foreach (ItemRosterElement itemRosterElement in sortedItemRosterElement)
 {
-    return this.AddDialogLine(new ConversationSentence(id,
-        new TextObject(text, null),
-        inputToken, outputToken,
-        conditionDelegate,
-        clickableConditionDelegate,
-        consequenceDelegate,
-        1U,
-        priority,
-        0,
-        0,
-        null,
-        false,
-        null,
-        null,
-        persuasionOptionDelegate
-        )
-     );
+	DebugUtils.LogAndPrintInfo("Item Name: " + itemRosterElement.EquipmentElement.Item.Name + " - Effectiveness: " + itemRosterElement.EquipmentElement.Item.Effectiveness + " Modified Body Armor: " + itemRosterElement.EquipmentElement.GetModifiedBodyArmor());
 }
+
+Equipment battleEquipment = companion.BattleEquipment;
+battleEquipment[10] = leaderHero.BattleEquipment[10];
 */
