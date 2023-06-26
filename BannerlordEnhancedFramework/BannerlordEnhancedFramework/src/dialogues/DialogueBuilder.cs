@@ -11,32 +11,28 @@ namespace BannerlordEnhancedFramework.dialogues;
 /// </summary>
 public class DialogueBuilder
 {
-    private readonly string _dialogueId;
-    private readonly List<CustomConversationSentence> _dialogueLinesToAdd = new();
+    private readonly List<ConversationPart> _dialogueLinesToAdd = new();
 
-    public DialogueBuilder(string dialogueId)
-    {
-        _dialogueId = dialogueId;
-    }
+    public DialogueBuilder() {}
 
     public DialogueBuilder AddCloseWindow(string tokenId, string text = "Close Window")
     {
-        return WithDialogueLine(new CustomConversationSentence(
+        return WithDialogueLine(new SimpleConversationPart(
             tokenId,
-            text, CustomConversationSentenceType.DialogueTreeRootEnd
+            text, ConversationSentenceType.DialogueTreeRootEnd
         ).WithInGameName("Close Window"));
     }
 
     public DialogueBuilder AddEnd(string tokenId, string text = "Finish")
     {
-        return WithDialogueLine(new CustomConversationSentence(
+        return WithDialogueLine(new SimpleConversationPart(
             tokenId,
-            text, CustomConversationSentenceType.DialogueTreeRootEnd
+            text, ConversationSentenceType.DialogueTreeRootEnd
         ).WithInGameName("Finish"));
     }
 
     public DialogueBuilder WithDialogueLine(
-        CustomConversationSentence dialogueLine,
+        ConversationPart dialogueLine,
         AppliedDialogueLineRelation appliedDialogueLineRelation = AppliedDialogueLineRelation.ManuallyLinked,
         DialogueLineRelationParams dialogueLineRelationParams = null
     )
@@ -50,29 +46,73 @@ public class DialogueBuilder
     /// Method <c>Build</c> Constructs and ADDS the dialogues to the game
     /// (it becomes more relevant in very complex big dialogues).
     /// </summary>
-    public List<CustomConversationSentence> Build(CampaignGameStarter starter)
+    public List<ConversationPart> Build(CampaignGameStarter starter)
     {
-        foreach (var conversationSentence in _dialogueLinesToAdd)
+        foreach (ConversationPart conversationSentence in _dialogueLinesToAdd)
         {
-            foreach (var toConversationSentence in conversationSentence.To)
+            if (conversationSentence.Type() == ConversationSentenceType.DialogueTreeRootStart) {
+                starter.AddPlayerLine(
+                    conversationSentence.DialogueId() + "start",
+                    conversationSentence.LinkedCoreInputToken().TokenName(),
+                    conversationSentence.TokenId(),
+                    conversationSentence.Text,
+                    conversationSentence.Condition,
+                    conversationSentence.Consequence);
+                
+                starter.AddDialogLine(
+                    conversationSentence.DialogueId(),
+                    conversationSentence.DialogueId(),
+                    conversationSentence.TokenId() + "group",
+                    conversationSentence.Text,
+                    conversationSentence.Condition,
+                    conversationSentence.Consequence);
+            }
+
+            foreach (ConversationPart toConversationSentence in conversationSentence.To())
             {
                 if (toConversationSentence.IsStartOfDialogueTreeOrBranch())
                 {
-                    starter.AddPlayerLine(_dialogueId, conversationSentence.Id, toConversationSentence.Id,
-                        "Go Back To '"+toConversationSentence.InGameName+"'", toConversationSentence.Condition,
+                    starter.AddPlayerLine(conversationSentence.TokenId()+"group",
+                        conversationSentence.TokenId()+"group",
+                        toConversationSentence.TokenId() + "start",
+                        toConversationSentence.Text, toConversationSentence.Condition,
+                        toConversationSentence.Consequence);
+                    starter.AddDialogLine(
+                        toConversationSentence.TokenId() + "start",
+                        toConversationSentence.TokenId() + "start",
+                        toConversationSentence.TokenId() + "group",
+                        toConversationSentence.Text,
+                        toConversationSentence.Condition,
+                        toConversationSentence.Consequence);
+                    starter.AddPlayerLine(toConversationSentence.TokenId() + "group", toConversationSentence.TokenId() + "group",
+                        conversationSentence.DialogueId(),
+                        "Go Back To '" + conversationSentence.InGameName() + "'", toConversationSentence.Condition,
                         toConversationSentence.Consequence);
                 } else {
-                    starter.AddPlayerLine(_dialogueId, conversationSentence.Id, toConversationSentence.Id,
+                    /*starter.AddPlayerLine(toConversationSentence.DialogueId(), conversationSentence.TokenId(),
+                        conversationSentence.TokenId(),
+                        "Go Back To '" + conversationSentence.InGameName + "'", toConversationSentence.Condition,
+                        toConversationSentence.Consequence);*/
+                    starter.AddPlayerLine(conversationSentence.TokenId()+"group", conversationSentence.TokenId()+"group",
+                        conversationSentence.TokenId()+"start",
                         toConversationSentence.Text, toConversationSentence.Condition,
                         toConversationSentence.Consequence);
                 }
+            }
+
+            // if only one choice exists then the game bypasses choices and selects that one choice so add a blank choice
+            if (conversationSentence.To().Count == 1)
+            {
+                starter.AddPlayerLine(conversationSentence.DialogueId(), conversationSentence.TokenId(),
+                    CoreInputToken.End.CloseWindow.TokenName(),
+                    "Exit", null, null);
             }
         }
         return _dialogueLinesToAdd;
     }
 
     private void ApplyDialogueLineRelation(
-        CustomConversationSentence customConversationSentence,
+        ConversationPart conversationPart,
         AppliedDialogueLineRelation appliedDialogueLineRelation,
         DialogueLineRelationParams dialogueLineRelationParams)
     {
@@ -80,18 +120,18 @@ public class DialogueBuilder
         {
             case AppliedDialogueLineRelation.LinkToPrevious:
                 var previous = _dialogueLinesToAdd.Last();
-                previous.To.Add(customConversationSentence);
-                customConversationSentence.From = new List<CustomConversationSentence> { previous };
+                previous.To().Add(conversationPart);
+                conversationPart.From().Add(previous);
                 break;
             case AppliedDialogueLineRelation.LinkToPreviousStart:
                 var start = _dialogueLinesToAdd.FindLast(val => val.IsStartOfDialogueTreeOrBranch());
-                start.From.Add(customConversationSentence);
-                customConversationSentence.To.Add(start);
+                start.To().Add(conversationPart);
+                conversationPart.From().Add(start);
                 break;
             case AppliedDialogueLineRelation.LinkToPreviousEnd:
                 var end = _dialogueLinesToAdd.FindLast(val => val.IsEndOfDialogueTreeOrBranch());
-                end.From.Add(customConversationSentence);
-                customConversationSentence.To.Add(end);
+                end.To().Add(conversationPart);
+                conversationPart.From().Add(end);
                 break;
         }
     }

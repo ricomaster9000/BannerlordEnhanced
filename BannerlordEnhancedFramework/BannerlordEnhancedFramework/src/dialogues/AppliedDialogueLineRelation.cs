@@ -19,13 +19,13 @@ public class DialogueLineRelationParams
         IndexParam = indexParam;
     }
 
-    public DialogueLineRelationParams(int indexParam, CustomConversationSentence conversationSentenceParam)
+    public DialogueLineRelationParams(int indexParam, ConversationPart conversationPartParam)
     {
         IndexParam = indexParam;
-        ConversationSentenceParam = conversationSentenceParam;
+        ConversationPartParam = conversationPartParam;
     }
 
     public int IndexParam { get; set; }
 
-    public CustomConversationSentence ConversationSentenceParam { get; set; }
+    public ConversationPart ConversationPartParam { get; set; }
 }

@@ -6,7 +6,7 @@ namespace BannerlordEnhancedFramework.extendedtypes;
 public class ExtendedTimer : Timer
 {
     private bool _timerJobActive;
-    private readonly Action _timerJobDoCallback;
+    protected readonly Action _timerJobDoCallback;
 
     public bool Active = false;
 
@@ -19,7 +19,7 @@ public class ExtendedTimer : Timer
         Elapsed += BaseTimerJob;
     }
 
-    private void BaseTimerJob(object source, ElapsedEventArgs e)
+    protected virtual void BaseTimerJob(object source, ElapsedEventArgs e)
     {
         if (!_timerJobActive)
         {
@@ -27,5 +27,15 @@ public class ExtendedTimer : Timer
             _timerJobDoCallback();
             _timerJobActive = false;
         }
+    }
+
+    public void StartTimer()
+    {
+        base.Start();
+    }
+    
+    public void StopTimer()
+    {
+        base.Stop();
     }
 }
