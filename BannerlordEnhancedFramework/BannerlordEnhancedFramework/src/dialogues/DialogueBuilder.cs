@@ -99,14 +99,6 @@ public class DialogueBuilder
                         toConversationSentence.Consequence);
                 }
             }
-
-            // if only one choice exists then the game bypasses choices and selects that one choice so add a blank choice
-            if (conversationSentence.To().Count == 1)
-            {
-                starter.AddPlayerLine(conversationSentence.DialogueId(), conversationSentence.TokenId(),
-                    CoreInputToken.End.CloseWindow.TokenName(),
-                    "Exit", null, null);
-            }
         }
         return _dialogueLinesToAdd;
     }
