@@ -16,8 +16,8 @@ namespace BannerlordEnhancedFramework.dialogues
 
         private ConversationSentence.OnConsequenceDelegate _consequence;
         private ConversationSentence.OnConditionDelegate _condition;
-        private List<ConversationPart> _from = new List<ConversationPart>();
-        private List<ConversationPart> _to = new List<ConversationPart>();
+        private readonly List<ConversationPart> _from = new List<ConversationPart>();
+        private readonly List<ConversationPart> _to = new List<ConversationPart>();
 
         protected ConversationPart() {}
 
