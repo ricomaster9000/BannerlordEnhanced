@@ -1,6 +1,6 @@
 ﻿namespace BannerlordEnhancedFramework.dialogues;
 
-public enum CustomConversationSentenceType
+public enum ConversationSentenceType
 {
     DialogueTreeRootStart,
     DialogueTreeRootEnd,

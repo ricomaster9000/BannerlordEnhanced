@@ -302,6 +302,8 @@
         <Compile Include="src\*" />
         <Compile Include="src\dialogues\*" />
         <Compile Include="src\extendedtypes\*" />
+        <Compile Include="src\extendedtypes\asynchronous\ExtendedTimer.cs" />
+        <Compile Include="src\extendedtypes\asynchronous\OneTimeJob.cs" />
         <Compile Include="src\models\*" />
         <Compile Include="src\utils\*" />
     </ItemGroup>
