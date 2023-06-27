@@ -93,17 +93,17 @@ public static class EnhancedScoutService
     {
         bool partyInVicinityOfPlayer = party.IsVisible && party.IsSpotted();
         //DebugUtils.LogAndPrintInfo("partyInVicinityOfPlayer"+partyInVicinityOfPlayer);
-        if (!partyInVicinityOfPlayer)
+        if (!partyInVicinityOfPlayer || PlayerUtils.PlayerParty().TargetParty == party)
         {
             return false;
         }
 
         bool partyWillInterceptOrLikelyToInterceptPlayer = party.IsMoving &&
+                                                           PlayerUtils.IsPlayerHostileToParty(party) &&
                                                            (
-                                                               (party.Ai.MoveTargetParty == PlayerUtils.PlayerParty() && PlayerUtils.IsPlayerHostileToParty(party)) || 
-                                                               PlayerUtils.IsPlayerWeakerThanParty(party)
-                                                           ) &&
-                                                           party.Position2D.Distance(PlayerUtils.PlayerParty().Position2D) < 10f;
+                                                               (party.Ai.MoveTargetParty == PlayerUtils.PlayerParty() && party.Position2D.Distance(PlayerUtils.PlayerParty().Position2D) < 10f) || 
+                                                               (PlayerUtils.IsPlayerWeakerThanParty(party) && party.Position2D.Distance(PlayerUtils.PlayerParty().Position2D) < 1.5f)
+                                                           );
         //DebugUtils.LogAndPrintInfo("partyWillInterceptOrLikelyToInterceptPlayer"+partyWillInterceptOrLikelyToInterceptPlayer);
         return partyWillInterceptOrLikelyToInterceptPlayer;
     }
