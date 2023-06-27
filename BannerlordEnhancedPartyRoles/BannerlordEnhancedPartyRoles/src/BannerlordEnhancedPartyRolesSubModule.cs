@@ -39,6 +39,11 @@ public class BannerlordEnhancedPartyRolesSubModule : MBSubModuleBase
     {
         base.OnGameStart(game, gameStarterObject);
         if (!(game.GameType is Campaign)) return;
-        if (gameStarterObject != null)  (gameStarterObject as CampaignGameStarter).AddBehavior(new QuaterMasterDialog());
+        if (gameStarterObject != null && gameStarterObject is CampaignGameStarter campaignGameStarter)
+        {
+            campaignGameStarter.AddBehavior(new QuaterMasterDialog());
+            campaignGameStarter.AddBehavior(new EnhancedScoutBehavior());
+            DebugUtils.LogAndPrintInfo("Behaviors applied");
+        }
     }
 }
