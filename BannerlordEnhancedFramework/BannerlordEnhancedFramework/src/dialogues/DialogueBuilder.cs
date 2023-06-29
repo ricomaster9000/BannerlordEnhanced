@@ -1,7 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BannerlordEnhancedFramework.utils;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Conversation;
+using TaleWorlds.CampaignSystem.Encounters;
+using TaleWorlds.CampaignSystem.GameMenus;
+using TaleWorlds.CampaignSystem.Inventory;
+using TaleWorlds.Core;
 
 namespace BannerlordEnhancedFramework.dialogues;
 
@@ -52,26 +57,56 @@ public class DialogueBuilder
         {
             if (conversationSentence.Type() == ConversationSentenceType.DialogueTreeRootStart) {
                 starter.AddPlayerLine(
-                    conversationSentence.DialogueId() + "start",
+                    conversationSentence.DialogueId() + "group",
                     conversationSentence.LinkedCoreInputToken().TokenName(),
-                    conversationSentence.TokenId(),
+                    conversationSentence.TokenId() + "start",
                     conversationSentence.Text,
                     conversationSentence.Condition,
                     conversationSentence.Consequence);
                 
                 starter.AddDialogLine(
-                    conversationSentence.DialogueId(),
-                    conversationSentence.DialogueId(),
+                    conversationSentence.DialogueId()+"start",
+                    conversationSentence.TokenId() + "start",
                     conversationSentence.TokenId() + "group",
                     conversationSentence.Text,
                     conversationSentence.Condition,
                     conversationSentence.Consequence);
             }
 
+            if (conversationSentence.IsStartOfDialogueTreeOrBranch())
+            {
+                starter.AddPlayerLine(
+                    conversationSentence.TokenId() + "group",
+                    conversationSentence.TokenId() + "group",
+                    CoreInputToken.End.CloseWindow.TokenName(),
+                    "Exit",
+                    null,
+                    null,
+              10
+                );
+                starter.AddPlayerLine(
+                    conversationSentence.TokenId() + "group",
+                    conversationSentence.TokenId() + "group",
+                    CoreInputToken.End.ToStart.TokenName(),
+                    "Back To Start",
+                    null,
+                    null,
+                    5
+                );
+            }
+
             foreach (ConversationPart toConversationSentence in conversationSentence.To())
             {
                 if (toConversationSentence.IsStartOfDialogueTreeOrBranch())
                 {
+                    starter.AddPlayerLine(
+                        toConversationSentence.TokenId() + "group",
+                        toConversationSentence.TokenId() + "group",
+                        conversationSentence.DialogueId()+"start",
+                        "Go Back To '" + conversationSentence.InGameName() + "'",
+                        toConversationSentence.Condition,
+                        toConversationSentence.Consequence,
+                        25);
                     starter.AddPlayerLine(conversationSentence.TokenId()+"group",
                         conversationSentence.TokenId()+"group",
                         toConversationSentence.TokenId() + "start",
@@ -84,15 +119,7 @@ public class DialogueBuilder
                         toConversationSentence.Text,
                         toConversationSentence.Condition,
                         toConversationSentence.Consequence);
-                    starter.AddPlayerLine(toConversationSentence.TokenId() + "group", toConversationSentence.TokenId() + "group",
-                        conversationSentence.DialogueId(),
-                        "Go Back To '" + conversationSentence.InGameName() + "'", toConversationSentence.Condition,
-                        toConversationSentence.Consequence);
                 } else {
-                    /*starter.AddPlayerLine(toConversationSentence.DialogueId(), conversationSentence.TokenId(),
-                        conversationSentence.TokenId(),
-                        "Go Back To '" + conversationSentence.InGameName + "'", toConversationSentence.Condition,
-                        toConversationSentence.Consequence);*/
                     starter.AddPlayerLine(conversationSentence.TokenId()+"group", conversationSentence.TokenId()+"group",
                         conversationSentence.TokenId()+"start",
                         toConversationSentence.Text, toConversationSentence.Condition,
