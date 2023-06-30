@@ -11,6 +11,16 @@ namespace BannerlordEnhancedPartyRoles.Services;
 
 public static class EnhancedScoutService
 {
+    
+    public static void ToggleScoutAlertsNearbyEnemies()
+    {
+        if (GetScoutAlertsNearbyEnemies()) {
+            SetScoutAlertsNearbyEnemies(false);
+        } else {
+            SetScoutAlertsNearbyEnemies(true);
+        }
+    }
+    
     public static void SetIsActive(bool active)
     {
         EnhancedScoutData.Active = active;

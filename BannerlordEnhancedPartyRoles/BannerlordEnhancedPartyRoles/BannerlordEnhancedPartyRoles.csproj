@@ -37,6 +37,9 @@
 		<BannerlordGameVersionToUse>1.1</BannerlordGameVersionToUse>
 	</PropertyGroup>
 	<ItemGroup>
+		<Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+		  <HintPath>..\..\packages\Bannerlord.Lib.Harmony.2.2.2\lib\net472\0Harmony.dll</HintPath>
+		</Reference>
 		<Reference Include="System" />
 		<Reference Include="System.Core" />
 		<Reference Include="System.Data" />
@@ -208,6 +211,14 @@
 		<None Include="packages.config" />
 	</ItemGroup>
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+	<Target Name="PreBuildClean"
+			BeforeTargets="Build">
+		<Message Text="### Start Clean before build"
+				 Importance="high" />
+		<CallTarget Targets="Clean" />
+		<Message Text="### Finished Clean before build"
+				 Importance="high" />
+	</Target>
 	<UsingTask TaskName="GetBannerlordModulesInstallationDirectory" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
 		<ParameterGroup>
 			<BannerlordModulesInstallationDirectory ParameterType="System.String" Output="true" />
