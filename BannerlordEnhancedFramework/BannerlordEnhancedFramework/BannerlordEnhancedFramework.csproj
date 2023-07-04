@@ -39,7 +39,7 @@
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\..\packages\Bannerlord.Lib.Harmony.2.2.2\lib\net472\0Harmony.dll</HintPath>
+          <HintPath>packages\Bannerlord.Lib.Harmony.2.2.2\lib\net472\0Harmony.dll</HintPath>
         </Reference>
         <Reference Include="Bannerlord.UIExtenderEx, Version=2.8.0.0, Culture=neutral, processorArchitecture=MSIL">
           <HintPath>..\packages\Bannerlord.UIExtenderEx.2.8.0\lib\netstandard2.0\Bannerlord.UIExtenderEx.dll</HintPath>
