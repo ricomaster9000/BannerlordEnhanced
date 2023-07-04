@@ -27,7 +27,7 @@ public class DialogueBuilder
         AppliedDialogueLineRelation appliedDialogueLineRelation = AppliedDialogueLineRelation.ManuallyLinked,
         DialogueLineRelationParams dialogueLineRelationParams = null
     ) {
-        if (conversationPart.Consequence.Method.GetParameters().Length > 0) {
+        if (conversationPart.Consequence != null && conversationPart.Consequence.Method.GetParameters().Length > 0) {
             throw new Exception("You can only pass in a consequence method with zero params, " +
                                 "when this method is used it assumes you are using a toggle method " +
                                 "rather than a method were you specify true or false as a parameter");

@@ -17,6 +17,7 @@ public static class DebugUtils
         if (ApplicationInformation.CompileDate.AddMinutes(10) > System.DateTime.UtcNow)
         {
             DebugModeActive = true;
+            LogAndPrintInfo("Debug Mode Active");
         }
     }
     public static bool IsDebugModeActive()

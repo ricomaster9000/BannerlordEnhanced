@@ -1,4 +1,6 @@
-﻿namespace BannerlordEnhancedFramework.utils;
+﻿using System.Reflection;
+
+namespace BannerlordEnhancedFramework.utils;
 
 public static class ApplicationInformation
 {
@@ -31,7 +33,7 @@ public static class ApplicationInformation
         get
         {
             if (!compileDate.HasValue)
-                compileDate = RetrieveLinkerTimestamp(ExecutingAssembly.Location);
+                compileDate = RetrieveLinkerTimestamp(Assembly.GetCallingAssembly().Location);
             return compileDate ?? new System.DateTime();
         }
     }
