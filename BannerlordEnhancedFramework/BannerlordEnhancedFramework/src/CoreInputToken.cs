@@ -44,7 +44,7 @@ namespace BannerlordEnhancedFramework
             // generic, can apply anywhere, name pretty self explantory
             public static readonly InputToken CloseWindow = new InputToken("close_window");
 
-            public static readonly InputToken Exit = new InputToken("end");
+            public static readonly InputToken ToStart = new InputToken("start");
 
             public static readonly InputToken HeroReturnToStart = new InputToken("lord_pretalk");
 

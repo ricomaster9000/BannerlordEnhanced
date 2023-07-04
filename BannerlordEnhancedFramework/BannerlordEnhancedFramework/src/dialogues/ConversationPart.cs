@@ -21,6 +21,20 @@ namespace BannerlordEnhancedFramework.dialogues
 
         protected ConversationPart() {}
 
+        public ConversationPart(ConversationPart conversationPart)
+        {
+            this._dialogueId = conversationPart._dialogueId;
+            this._tokenId = conversationPart._tokenId;
+            this._inGameName = conversationPart._inGameName;
+            this._text = conversationPart._text;
+            this._type = conversationPart._type;
+            this._linkedCoreInputToken = conversationPart._linkedCoreInputToken;
+            this._consequence = conversationPart._consequence;
+            this._condition = conversationPart._condition;
+            this._from = conversationPart._from;
+            this._to = conversationPart._to;
+        }
+
         public ConversationPart(string dialogueId)
         {
             this._dialogueId = dialogueId;
@@ -72,7 +86,7 @@ namespace BannerlordEnhancedFramework.dialogues
 
         public ConversationPart WithConsequence(ConversationSentence.OnConsequenceDelegate consequence)
         {
-            Consequence = consequence;
+            //Consequence = testTrueFalse;
             return this;
         }
 
@@ -80,6 +94,11 @@ namespace BannerlordEnhancedFramework.dialogues
         {
             Condition = condition;
             return this;
+        }
+
+        private void testTrueFalse(bool boolvar)
+        {
+            
         }
 
         public ConversationPart WithLinkedTo(ConversationPart to)
@@ -102,6 +121,11 @@ namespace BannerlordEnhancedFramework.dialogues
         public string TokenId()
         {
             return this._tokenId;
+        }
+        
+        public void SetTokenId(string tokenId)
+        {
+            this._tokenId = tokenId;
         }
 
         public InputToken LinkedCoreInputToken()

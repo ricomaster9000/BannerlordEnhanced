@@ -38,6 +38,9 @@
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>..\..\packages\Bannerlord.Lib.Harmony.2.2.2\lib\net472\0Harmony.dll</HintPath>
+        </Reference>
         <Reference Include="Bannerlord.UIExtenderEx, Version=2.8.0.0, Culture=neutral, processorArchitecture=MSIL">
           <HintPath>..\packages\Bannerlord.UIExtenderEx.2.8.0\lib\netstandard2.0\Bannerlord.UIExtenderEx.dll</HintPath>
         </Reference>
@@ -140,10 +143,6 @@
         <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
             <Private>false</Private>
             <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-        </Reference>
-        <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
-            <Private>false</Private>
-            <HintPath>..\packages\Bannerlord.Lib.Harmony.2.2.2\lib\net472\0Harmony.dll</HintPath>
         </Reference>
         <Reference Include="Bannerlord.ButterLib, Version=2.8.0.0, Culture=neutral, processorArchitecture=MSIL">
             <Private>false</Private>
@@ -309,7 +308,6 @@
     </ItemGroup>
     <ItemGroup>
         <Folder Include="Properties" />
-        <Folder Include="src\models" />
     </ItemGroup>
     <ItemGroup>
         <None Include="App.config" />
@@ -323,6 +321,14 @@
     <Target Name="AfterBuild">
     </Target>
     -->
+    <!--<Target Name="PreBuild" AfterTargets="BeforeBuild">
+        <Exec Command="devenv BannerlordEnhancedFramework.csproj /Clean" />
+    </Target>-->
+    <Target Name="PreBuildClean" BeforeTargets="Build">
+        <Message Text="### Start Clean before build" Importance="high" />
+        <CallTarget Targets="Clean" />
+        <Message Text="### Finished Clean before build" Importance="high" />
+    </Target>
 
     <UsingTask TaskName="GetFileVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
 

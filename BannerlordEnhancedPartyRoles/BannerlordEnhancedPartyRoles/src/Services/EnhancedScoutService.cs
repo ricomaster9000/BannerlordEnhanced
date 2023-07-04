@@ -11,6 +11,16 @@ namespace BannerlordEnhancedPartyRoles.Services;
 
 public static class EnhancedScoutService
 {
+    
+    public static void ToggleScoutAlertsNearbyEnemies()
+    {
+        if (GetScoutAlertsNearbyEnemies()) {
+            SetScoutAlertsNearbyEnemies(false);
+        } else {
+            SetScoutAlertsNearbyEnemies(true);
+        }
+    }
+    
     public static void SetIsActive(bool active)
     {
         EnhancedScoutData.Active = active;
@@ -92,7 +102,7 @@ public static class EnhancedScoutService
     public static bool PartyInInterceptPathToPlayerParty(MobileParty party)
     {
         bool partyInVicinityOfPlayer = party.IsVisible && party.IsSpotted();
-        //DebugUtils.LogAndPrintInfo("partyInVicinityOfPlayer"+partyInVicinityOfPlayer);
+        DebugUtils.LogAndPrintInfo("partyInVicinityOfPlayer"+partyInVicinityOfPlayer);
         if (!partyInVicinityOfPlayer || PlayerUtils.PlayerParty().TargetParty == party)
         {
             return false;
@@ -104,7 +114,7 @@ public static class EnhancedScoutService
                                                                (party.Ai.MoveTargetParty == PlayerUtils.PlayerParty() && party.Position2D.Distance(PlayerUtils.PlayerParty().Position2D) < 10f) || 
                                                                (PlayerUtils.IsPlayerWeakerThanParty(party) && party.Position2D.Distance(PlayerUtils.PlayerParty().Position2D) < 1.5f)
                                                            );
-        //DebugUtils.LogAndPrintInfo("partyWillInterceptOrLikelyToInterceptPlayer"+partyWillInterceptOrLikelyToInterceptPlayer);
+        DebugUtils.LogAndPrintInfo("partyWillInterceptOrLikelyToInterceptPlayer"+partyWillInterceptOrLikelyToInterceptPlayer);
         return partyWillInterceptOrLikelyToInterceptPlayer;
     }
 }
