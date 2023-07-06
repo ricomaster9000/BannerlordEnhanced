@@ -11,7 +11,7 @@ namespace BannerlordEnhancedPartyRoles.Services;
 
 public static class EnhancedScoutService
 {
-    
+
     public static void ToggleScoutAlertsNearbyEnemies()
     {
         if (GetScoutAlertsNearbyEnemies()) {
@@ -60,30 +60,36 @@ public static class EnhancedScoutService
         {
             return;
         }
-        List<String> hostilePartiesInfo = FindAnyNearbyHostilePartiesPotentiallyTargetingPlayer().Select(party => party.Name + " with " + party.MemberRoster.TotalHealthyCount + " soldiers").ToList();
-        if (hostilePartiesInfo.Count > 0)
+
+        MobileParty hostileParty = FindFirstNearbyHostilePartyPotentiallyTargetingPlayer();
+        //List<String> hostilePartiesInfo = FindFirstNearbyHostilePartyPotentiallyTargetingPlayer().Select(party => party.Name + " with " + party.MemberRoster.TotalHealthyCount + " soldiers").ToList();
+        if (hostileParty != null)
         {
+            // we assume player is aware of being targeted and is trying to get away
+            if (EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer != null &&
+                EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer == hostileParty &&
+                PlayerUtils.IsPlayerTargetingOppositeDirectionOfPartyDirection(hostileParty))
+            {
+                return;
+            }
+            EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer = hostileParty;
+
             PlayerUtils.PauseGame();
             SetScoutAlertsNearbyEnemiesFrozen(true);
+
             WindowUtils.PopupSimpleInquiry(
                 "Enemies Approaching",
-                string.Join( ","+Environment.NewLine, hostilePartiesInfo),
-                () => {
-                    new OneTimeJob(
-                        EnhancedScoutData.ScoutAlertsNearbyEnemiesAutoDisabledDurationInMillis,
-                        () =>
-                        {
-                            SetScoutAlertsNearbyEnemiesFrozen(false);
-                        }
-                    ).StartJobImmediately();
-                }
+                hostileParty.Name + " with " + hostileParty.MemberRoster.TotalHealthyCount + " soldiers",
+                () => new OneTimeJob(
+                        EnhancedScoutData.ScoutAlertsNearbyEnemiesAutoDisabledDurationInMillis, 
+                        () => SetScoutAlertsNearbyEnemiesFrozen(false)).StartJobImmediately()
             );
         }
     }
 
-    public static List<MobileParty> FindAnyNearbyHostilePartiesPotentiallyTargetingPlayer()
+    public static MobileParty FindFirstNearbyHostilePartyPotentiallyTargetingPlayer()
     {
-        List<MobileParty> hostileParties = new List<MobileParty>();
+        MobileParty hostileParty = null;
         List<MobileParty> partiesToCheck = MobileParty.AllLordParties
             .Concat(MobileParty.AllBanditParties)
             .Concat(MobileParty.AllMilitiaParties)
@@ -91,30 +97,11 @@ public static class EnhancedScoutService
 
         foreach (MobileParty party in partiesToCheck)
         {
-            if (PartyInInterceptPathToPlayerParty(party)) {
-                hostileParties.Add(party);
+            if (PartyUtils.WillOrCouldPartyBeAttackedByParty(party, PlayerUtils.PlayerParty())) {
+                hostileParty = party;
                 break;
             }
         }
-        return hostileParties;
-    }
-
-    public static bool PartyInInterceptPathToPlayerParty(MobileParty party)
-    {
-        bool partyInVicinityOfPlayer = party.IsVisible && party.IsSpotted();
-        DebugUtils.LogAndPrintInfo("partyInVicinityOfPlayer"+partyInVicinityOfPlayer);
-        if (!partyInVicinityOfPlayer || PlayerUtils.PlayerParty().TargetParty == party)
-        {
-            return false;
-        }
-
-        bool partyWillInterceptOrLikelyToInterceptPlayer = party.IsMoving &&
-                                                           PlayerUtils.IsPlayerHostileToParty(party) &&
-                                                           (
-                                                               (party.Ai.MoveTargetParty == PlayerUtils.PlayerParty() && party.Position2D.Distance(PlayerUtils.PlayerParty().Position2D) < 10f) || 
-                                                               (PlayerUtils.IsPlayerWeakerThanParty(party) && party.Position2D.Distance(PlayerUtils.PlayerParty().Position2D) < 1.5f)
-                                                           );
-        DebugUtils.LogAndPrintInfo("partyWillInterceptOrLikelyToInterceptPlayer"+partyWillInterceptOrLikelyToInterceptPlayer);
-        return partyWillInterceptOrLikelyToInterceptPlayer;
+        return hostileParty;
     }
 }
