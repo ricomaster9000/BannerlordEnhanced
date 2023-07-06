@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="packages\Obfuscar.2.2.37\build\obfuscar.props" Condition="Exists('packages\Obfuscar.2.2.37\build\obfuscar.props')" />
 	<Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
 	<PropertyGroup>
 		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -33,8 +34,7 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<PropertyGroup>
-		<DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
-		<BannerlordEnhancedFrameworkVersion>0.1.3.6</BannerlordEnhancedFrameworkVersion>
+		<BannerlordEnhancedFrameworkVersion>0.1.3.5</BannerlordEnhancedFrameworkVersion>
 		<BannerlordGameVersionToUse>1.1</BannerlordGameVersionToUse>
 	</PropertyGroup>
 	<ItemGroup>
@@ -211,7 +211,24 @@
 		<None Include="App.config" />
 		<None Include="packages.config" />
 	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Obfuscar">
+			<Version>2.2.20</Version>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="obfuscar.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+	<Target Name="PreBuildClean" BeforeTargets="Build">
+		<Message Text="### Start Clean before build" Importance="high" />
+		<CallTarget Targets="Clean" />
+		<Message Text="### Finished Clean before build" Importance="high" />
+	</Target>
 	<UsingTask TaskName="GetBannerlordModulesInstallationDirectory" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
 		<ParameterGroup>
 			<BannerlordModulesInstallationDirectory ParameterType="System.String" Output="true" />
@@ -235,9 +252,13 @@
 		</Task>
 	</UsingTask>
 	<Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+		<Exec Command="$(Obfuscar) obfuscar.xml"/>
 		<GetBannerlordModulesInstallationDirectory>
 			<Output TaskParameter="BannerlordModulesInstallationDirectory" PropertyName="BannerlordModulesInstallationDir" />
 		</GetBannerlordModulesInstallationDirectory>
+		<!--<Copy SourceFiles="Obfuscator_Output\BannerlordEnhancedFramework.dll" DestinationFolder="..\..\Modules\BannerlordEnhancedPartyRoles\bin\Win64_Shipping_Client" />
+		<Copy SourceFiles="Obfuscator_Output\BannerlordEnhancedPartyRoles.dll" DestinationFolder="..\..\Modules\BannerlordEnhancedPartyRoles\bin\Win64_Shipping_Client" />
+		-->
 		<Copy SourceFiles="bin\Debug\BannerlordEnhancedFramework.dll" DestinationFolder="..\..\Modules\BannerlordEnhancedPartyRoles\bin\Win64_Shipping_Client" />
 		<Copy SourceFiles="bin\Debug\BannerlordEnhancedPartyRoles.dll" DestinationFolder="..\..\Modules\BannerlordEnhancedPartyRoles\bin\Win64_Shipping_Client" />
 		<ItemGroup>
