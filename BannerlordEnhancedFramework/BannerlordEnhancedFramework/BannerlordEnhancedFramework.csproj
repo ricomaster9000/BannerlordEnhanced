@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="packages\Obfuscar.2.2.37\build\obfuscar.props" Condition="Exists('packages\Obfuscar.2.2.37\build\obfuscar.props')" />
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -39,7 +40,7 @@
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\..\packages\Bannerlord.Lib.Harmony.2.2.2\lib\net472\0Harmony.dll</HintPath>
+          <HintPath>packages\Bannerlord.Lib.Harmony.2.2.2\lib\net472\0Harmony.dll</HintPath>
         </Reference>
         <Reference Include="Bannerlord.UIExtenderEx, Version=2.8.0.0, Culture=neutral, processorArchitecture=MSIL">
           <HintPath>..\packages\Bannerlord.UIExtenderEx.2.8.0\lib\netstandard2.0\Bannerlord.UIExtenderEx.dll</HintPath>
@@ -313,6 +314,18 @@
         <None Include="App.config" />
         <None Include="packages.config" />
     </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Obfuscar">
+            <Version>2.2.20</Version>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="obfuscar.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
@@ -324,12 +337,6 @@
     <!--<Target Name="PreBuild" AfterTargets="BeforeBuild">
         <Exec Command="devenv BannerlordEnhancedFramework.csproj /Clean" />
     </Target>-->
-    <Target Name="PreBuildClean" BeforeTargets="Build">
-        <Message Text="### Start Clean before build" Importance="high" />
-        <CallTarget Targets="Clean" />
-        <Message Text="### Finished Clean before build" Importance="high" />
-    </Target>
-
     <UsingTask TaskName="GetFileVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
 
         <ParameterGroup>
@@ -349,10 +356,12 @@
     </UsingTask>
 
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
+        <Exec Command="$(Obfuscar) obfuscar.xml"/>
         <GetFileVersion AssemblyPath="$(TargetPath)">
             <Output TaskParameter="Version" PropertyName="MyAssemblyFileVersion" />
         </GetFileVersion>
         <Copy SourceFiles="bin\Debug\BannerlordEnhancedFramework.dll" DestinationFolder="..\Releases\$(MyAssemblyFileVersion)" />
+        <Copy SourceFiles="Obfuscator_Output\BannerlordEnhancedFramework.dll" DestinationFolder="..\Releases\$(MyAssemblyFileVersion)\obfuscated" />
     </Target>
 
 </Project>
