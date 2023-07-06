@@ -337,12 +337,6 @@
     <!--<Target Name="PreBuild" AfterTargets="BeforeBuild">
         <Exec Command="devenv BannerlordEnhancedFramework.csproj /Clean" />
     </Target>-->
-    <Target Name="PreBuildClean" BeforeTargets="Build">
-        <Message Text="### Start Clean before build" Importance="high" />
-        <CallTarget Targets="Clean" />
-        <Message Text="### Finished Clean before build" Importance="high" />
-    </Target>
-
     <UsingTask TaskName="GetFileVersion" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
 
         <ParameterGroup>
