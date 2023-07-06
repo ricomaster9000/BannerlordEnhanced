@@ -33,7 +33,8 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<PropertyGroup>
-		<BannerlordEnhancedFrameworkVersion>0.1.3.5</BannerlordEnhancedFrameworkVersion>
+		<DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
+		<BannerlordEnhancedFrameworkVersion>0.1.3.6</BannerlordEnhancedFrameworkVersion>
 		<BannerlordGameVersionToUse>1.1</BannerlordGameVersionToUse>
 	</PropertyGroup>
 	<ItemGroup>
@@ -211,14 +212,6 @@
 		<None Include="packages.config" />
 	</ItemGroup>
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-	<Target Name="PreBuildClean"
-			BeforeTargets="Build">
-		<Message Text="### Start Clean before build"
-				 Importance="high" />
-		<CallTarget Targets="Clean" />
-		<Message Text="### Finished Clean before build"
-				 Importance="high" />
-	</Target>
 	<UsingTask TaskName="GetBannerlordModulesInstallationDirectory" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
 		<ParameterGroup>
 			<BannerlordModulesInstallationDirectory ParameterType="System.String" Output="true" />
