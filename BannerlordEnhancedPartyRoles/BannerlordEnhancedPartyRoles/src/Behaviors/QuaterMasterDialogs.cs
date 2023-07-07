@@ -11,11 +11,12 @@ using BannerlordEnhancedFramework.utils;
 using BannerlordEnhancedPartyRoles.Services;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using BannerlordEnhancedPartyRoles.src.Services;
 
 namespace BannerlordEnhancedPartyRoles.Behaviors
 {
 
-
+	// TODO fix horses shouldn't wear camel saddle.
     class QuaterMasterDialog : CampaignBehaviorBase
     {
 		[CommandLineFunctionality.CommandLineArgumentFunction("quatermaster_give_best_items_to_companions", "debug")]
@@ -49,25 +50,47 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
                 return true;
             }
             return false;
-        }
+		}
 
-        public static void GiveBestItems()
-        {
+		public static void GiveBestItems()
+		{
 			MobileParty mainParty = MobileParty.MainParty;
 
 			ItemRoster itemRoster = mainParty.ItemRoster;
-			List<Hero> allCompanions = EnhancedQuaterMasterService.GetCompanions(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
+			List<Hero> allCompanionsHeros = EnhancedQuaterMasterService.GetCompanionsHeros(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
+			var tuple = EnhancedQuaterMasterService.UpdateCompanionsArmour(itemRoster.ToList(), allCompanionsHeros);
 
-			List<ItemRosterElement> removeEquipmentElement = EnhancedQuaterMasterService.GiveBestArmor(itemRoster.ToList(), allCompanions);
+			List<ItemRosterElement> removeEquipmentElement = tuple.Item1;
+			List<ItemRosterElement> swappedItemRosterElement = tuple.Item2;
 
-			// TODO add swapped ItemRosterElement back into Players ItemRoster
+			List<TroopRosterElement> troopRosterElementList = mainParty.Party.MemberRoster.GetTroopRoster().ToList();
+			List<TroopRosterElement> companionTroopRosterElement = EnhancedQuaterMasterService.OrderByCompanions(troopRosterElementList);
+
+			List<TroopRosterElement> orderedTroopRosterElement = WeaponsManager.OrderBySkillValue(companionTroopRosterElement, DefaultSkills.OneHanded);
+
+			foreach (TroopRosterElement troopRosterElement in orderedTroopRosterElement)
+			{
+				DebugUtils.LogAndPrintInfo(troopRosterElement.Character.Name.ToString() + " OneHanded skill value -> " + troopRosterElement.Character.GetSkillValue(DefaultSkills.OneHanded));
+			}
+
+			InformationManager.DisplayMessage(new InformationMessage("Quatermaster updated companions inventory.", Colors.Yellow));
+
+			foreach (ItemRosterElement itemRosterElement in swappedItemRosterElement)
+			{
+				itemRoster.Add(itemRosterElement);
+			}
 			foreach (ItemRosterElement itemRosterElement in removeEquipmentElement)
 			{
 				itemRoster.Remove(itemRosterElement);
 			}
+
+			List<TroopRosterElement> allCompanionsTroopRosterElement = EnhancedQuaterMasterService.GetCompanionsTroopRosterElement(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
+			WeaponsManager.UpdateCompanionWeapons(itemRoster, allCompanionsTroopRosterElement);
+			WeaponsManager.UpdateCompanionBanners(itemRoster, allCompanionsTroopRosterElement);
+			// WeaponsManager.GiveWeaponsBySkillAndEffectiveness();
 		}
 
-    }
+	}
 }
 
 // TODO

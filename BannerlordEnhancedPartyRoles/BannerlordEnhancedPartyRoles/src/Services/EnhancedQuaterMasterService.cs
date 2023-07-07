@@ -1,31 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using BannerlordEnhancedFramework.utils;
-using TaleWorlds.CampaignSystem;
+using BannerlordEnhancedPartyRoles.src.Services;
 using Helpers;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
-using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
+using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
-using TaleWorlds.LinQuick;
-using TaleWorlds.Localization;
-using TaleWorlds.Library.NewsManager;
-using TaleWorlds.Core.ViewModelCollection;
-using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
-using System.Windows.Forms;
-using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Library;
-using TaleWorlds.MountAndBlade;
-using static BannerlordEnhancedPartyRoles.Services.EnhancedQuaterMasterService;
-using System.Collections;
+using TaleWorlds.Library.NewsManager;
+using TaleWorlds.Localization;
 
 namespace BannerlordEnhancedPartyRoles.Services
 {
 	public class EnhancedQuaterMasterService
 	{
+
 		public class EquipmentListData
 		{	
 			public List<ItemRosterElement> sortedItemRosterElement = new List<ItemRosterElement>();
@@ -39,18 +30,27 @@ namespace BannerlordEnhancedPartyRoles.Services
 			}
 			public EquipmentListData() { }
 		}
-		public static List<ItemRosterElement> GiveBestArmor(List<ItemRosterElement> itemRosterElement, List<Hero> allCompanions)
+
+		public static Tuple<List<ItemRosterElement>, List<ItemRosterElement>> UpdateCompanionsArmour(List<ItemRosterElement> itemRosterElement, List<Hero> allCompanions)
 		{
-			TaleWorlds.Core.Extensions.Shuffle(allCompanions);
+			// TaleWorlds.Core.Extensions.Shuffle(allCompanions); 
 
 			List<ItemRosterElement> swappedItemRosterElement = new List<ItemRosterElement>();
 			List<ItemRosterElement> removeItemRosterElement = new List<ItemRosterElement>();
 
+			EquipmentListData equipmentListData;
+
+			itemRosterElement = EnhancedQuaterMasterService.OrderByArmorHorseAndSaddle(itemRosterElement);
+			itemRosterElement = EnhancedQuaterMasterService.OrderItemRosterByMostEffective(itemRosterElement);
+			itemRosterElement = RemoveLockedItems(itemRosterElement);
+			// itemRosterElement = RemoveItemsWithFlags(itemRosterElement, ItemFlags.Civilian);
+
 			foreach (Hero companion in allCompanions)
 			{
-				IOrderedEnumerable<ItemRosterElement> orderedItemRosterElement = EnhancedQuaterMasterService.OrderItemRosterByMostEffective(itemRosterElement);
-				List<ItemRosterElement> sortedItemRosterElement = EnhancedQuaterMasterService.KeepArmorHorseAndSaddle(orderedItemRosterElement);
-				EquipmentListData equipmentListData = EnhancedQuaterMasterService.GiveItemBasedOnEffectiveness(sortedItemRosterElement, companion);
+				if (itemRosterElement.Count == 0) break;
+				equipmentListData = new EquipmentListData();
+				equipmentListData.sortedItemRosterElement = itemRosterElement;
+				equipmentListData = EnhancedQuaterMasterService.GiveItemBasedOnEffectiveness(equipmentListData, companion);
 				itemRosterElement = equipmentListData.sortedItemRosterElement;
 				swappedItemRosterElement.AddRange(equipmentListData.swappedItemRosterElement);
 				removeItemRosterElement.AddRange(equipmentListData.removeItemRosterElement);
@@ -58,86 +58,153 @@ namespace BannerlordEnhancedPartyRoles.Services
 
 			if (swappedItemRosterElement.Count > 0)
 			{
-				removeItemRosterElement.AddRange(GiveBestArmor(swappedItemRosterElement, allCompanions));
+				var tuple = UpdateCompanionsArmour(swappedItemRosterElement, allCompanions);
+				removeItemRosterElement.AddRange(tuple.Item1);
+				swappedItemRosterElement.AddRange(tuple.Item2);
 			}
 
-			return removeItemRosterElement;
+			return new Tuple<List<ItemRosterElement>, List<ItemRosterElement>> (removeItemRosterElement, swappedItemRosterElement);
 		}
 
-		public static EquipmentListData GiveItemBasedOnEffectiveness(List<ItemRosterElement> sortedItemRosterElement, Hero companion)
+		public static EquipmentListData GiveItemBasedOnEffectiveness(EquipmentListData equipmentListData, Hero companion)
 		{
-			List<ItemRosterElement> removeItemRosterElement = new List<ItemRosterElement>();
-			List<ItemRosterElement> swappedItemRosterElement = new List<ItemRosterElement>(); 
+			List<ItemRosterElement> removeItemRosterElement = equipmentListData.removeItemRosterElement;
+			List<ItemRosterElement> swappedItemRosterElement = equipmentListData.swappedItemRosterElement;
+			List<ItemRosterElement> sortedItemRosterElement = equipmentListData.sortedItemRosterElement;
 
 			Equipment battleEquipment = companion.BattleEquipment;
-			IEnumerator<ItemRosterElement> iEnumerator = sortedItemRosterElement.GetEnumerator();
 
-			InformationManager.DisplayMessage(new InformationMessage("Quatermaster updated companions inventory.", Colors.Yellow));
-
-			while (iEnumerator.MoveNext())
+			foreach(ItemRosterElement itemRosterElement in sortedItemRosterElement)
 			{
-				ItemRosterElement itemRosterElement = iEnumerator.Current;
 				EquipmentElement newEquipmentElement = itemRosterElement.EquipmentElement;
+				ItemObject newItem = newEquipmentElement.Item;
 
-				if (!IsAllowedToEquip(companion.CharacterObject, newEquipmentElement))
+				if (!IsAllowedToEquip(companion.CharacterObject, newEquipmentElement) || (!companion.IsFemale && IsFemaleClothing(newItem)))
 				{
 					continue;
 				}
-				
-				ItemObject newItem = newEquipmentElement.Item;
+
 				EquipmentIndex equipmentIndex = GetItemTypeWithItemObject(newItem);
+
+				if(equipmentIndex == EquipmentIndex.HorseHarness && CanEquipHorseHarness(battleEquipment, newItem) == false)
+				{
+					continue;
+				}
+
 				EquipmentElement currentEquipmentElement = battleEquipment[equipmentIndex];
 
-				DebugUtils.LogAndPrintInfo("Item Name: " + itemRosterElement.EquipmentElement.Item.Name + " - Effectiveness: " + itemRosterElement.EquipmentElement.Item.Effectiveness + " Modified Body Armor: " + itemRosterElement.EquipmentElement.GetModifiedBodyArmor());
+				DebugUtils.LogAndPrintInfo("Item Name: " + itemRosterElement.EquipmentElement.Item.Name 
+					+ " - Effectiveness: " + itemRosterElement.EquipmentElement.Item.Effectiveness 
+					+ " Body Armor: " + itemRosterElement.EquipmentElement.GetModifiedBodyArmor()
+					+ " Head Armour " + itemRosterElement.EquipmentElement.GetModifiedHeadArmor()
+					+ " Leg Armour " + itemRosterElement.EquipmentElement.GetModifiedLegArmor()
+					+ " Arm Armour " + itemRosterElement.EquipmentElement.GetModifiedArmArmor());
 
-				bool isOpenSlot = Object.ReferenceEquals(currentEquipmentElement, null) || currentEquipmentElement.IsEmpty; // IsEmpty is there if item is there. For example if you remove all body armor from character it won't have Item but still have an EquipmentElement.
+				bool isOpenSlot = WeaponsManager.IsItemEquipped(currentEquipmentElement) == false; // IsEmpty is there if item is there. For example if you remove all body armor from character it won't have Item but still have an EquipmentElement.
 				bool canGive = isOpenSlot;
-				if (isOpenSlot == false && itemRosterElement.Amount > 0 && newItem.Effectiveness > currentEquipmentElement.Item.Effectiveness)
+
+				/* CalculateArmourEffectiveness is added because there is I believe a bug that causes items that is same but different variantions to get same effectiveness. 
+				   Although we order items based on effectiveness we then atleast check here. */
+				if (isOpenSlot == false && itemRosterElement.Amount > 0)
 				{
-					canGive = true;
-					swappedItemRosterElement.Add(new ItemRosterElement(currentEquipmentElement, 1));
+					bool isHorseHarness = newItem.Type == ItemObject.ItemTypeEnum.HorseHarness;
+					float effectiveness = newItem.HasArmorComponent && !isHorseHarness ? CalculateArmourEffectiveness(newItem) : CalculateHorseOrSaddleEffectiveness(newItem);
+					if (effectiveness  > currentEquipmentElement.Item.Effectiveness)
+					{
+						canGive = true;
+						AddEquipmentElement(swappedItemRosterElement, currentEquipmentElement);
+					}
 				}
 				if (canGive)
 				{
-					InformationManager.DisplayMessage(new InformationMessage(companion.Name + " received: " + newItem.Name, Color.White));
 					battleEquipment[equipmentIndex] = newEquipmentElement;
-					// itemRosterElement.Amount -= 1; // maybe not needed
-
-					Predicate<ItemRosterElement> getItemRosterElement = itemRE =>
-					{
-						return itemRE.EquipmentElement.IsEqualTo(newEquipmentElement);
-					};
-					ItemRosterElement foundItemRosterElement = removeItemRosterElement.Find(getItemRosterElement);
-					if (foundItemRosterElement.Amount > 0)
-					{
-						foundItemRosterElement.Amount += 1;
-					}
-					else
-					{
-						removeItemRosterElement.Add(new ItemRosterElement(newEquipmentElement, 1));
-					}
+					AddEquipmentElement(removeItemRosterElement, newEquipmentElement);
 				}
 			}
-			sortedItemRosterElement.ForEach(itemRosterElement =>
+
+			equipmentListData.sortedItemRosterElement = RemoveItemRosterElement(sortedItemRosterElement, removeItemRosterElement);
+
+			return equipmentListData;
+		}
+
+		public static float CalculateArmourEffectiveness(ItemObject item)
+		{
+			ArmorComponent armorComponent = item.ArmorComponent;
+			float result;
+			if (item.Type == ItemObject.ItemTypeEnum.HorseHarness)
 			{
-				foreach (ItemRosterElement toRemove in removeItemRosterElement)
+				result = (float)armorComponent.BodyArmor * 1.67f;
+			}
+			else
+			{
+				result = ((float)armorComponent.HeadArmor * 34f + (float)armorComponent.BodyArmor * 42f + (float)armorComponent.LegArmor * 12f + (float)armorComponent.ArmArmor * 12f) * 0.03f;
+			}
+			return result;
+		}
+
+		public static float CalculateHorseOrSaddleEffectiveness(ItemObject item)
+		{
+			ArmorComponent armorComponent = item.ArmorComponent;
+			HorseComponent horseComponent = item.HorseComponent;
+			float result;
+			if (item.Type == ItemObject.ItemTypeEnum.HorseHarness)
+			{
+				result = (float)armorComponent.BodyArmor * 1.67f;
+			}else
+			{
+				result = ((float)(horseComponent.ChargeDamage * horseComponent.Speed + horseComponent.Maneuver * horseComponent.Speed) + (float)horseComponent.BodyLength * item.Weight * 0.025f) * (float)(horseComponent.HitPoints + horseComponent.HitPointBonus) * 0.0001f;
+			}
+			return result;
+		}
+		public static List<ItemRosterElement> AddEquipmentElement(List<ItemRosterElement> targetItemRosterElement, EquipmentElement equipmentElement)
+		{
+			Predicate<ItemRosterElement> getItemRosterElement = (itemRE) => {
+				return itemRE.EquipmentElement.IsEqualTo(equipmentElement);
+			};
+
+			int newAmount = 1;
+
+			ItemRosterElement foundItemRosterElement = targetItemRosterElement.Find(getItemRosterElement);
+
+			if (foundItemRosterElement.Amount > 0) {
+				targetItemRosterElement.Remove(foundItemRosterElement);
+				newAmount = foundItemRosterElement.Amount + 1;
+			}
+
+			targetItemRosterElement.Add(new ItemRosterElement(equipmentElement, newAmount));
+
+			return targetItemRosterElement;
+		}
+
+		public static List<ItemRosterElement> RemoveItemRosterElement(List<ItemRosterElement> targetItemRosterElement, List<ItemRosterElement> toRemoveItemRosterElement)
+		{
+			List<ItemRosterElement> newItemRosterElement = new List<ItemRosterElement>();
+			foreach (ItemRosterElement itemRosterElement in targetItemRosterElement)
+			{
+				bool isInRemoveList = false;
+				foreach (ItemRosterElement toRemove in toRemoveItemRosterElement)
 				{
-					if (itemRosterElement.IsEqualTo(toRemove))
+					if (itemRosterElement.EquipmentElement.IsEqualTo(toRemove.EquipmentElement))
 					{
-						itemRosterElement.Amount -= toRemove.Amount;
-						if (itemRosterElement.Amount == 0)
+						isInRemoveList = true;
+						int newAmount = itemRosterElement.Amount - toRemove.Amount;
+						if (newAmount > 0)
 						{
-							itemRosterElement.Clear();
+							newItemRosterElement.Add(new ItemRosterElement(itemRosterElement.EquipmentElement, newAmount));
 						}
 						break;
 					}
-				}
-			});
 
-			return new EquipmentListData(sortedItemRosterElement, swappedItemRosterElement, removeItemRosterElement);
+				}
+				if (isInRemoveList == false) 
+				{
+					newItemRosterElement.Add(new ItemRosterElement(itemRosterElement.EquipmentElement, itemRosterElement.Amount));
+				}
+			}
+			return newItemRosterElement;
 		}
 
-		public static List<Hero> GetCompanions(MBList<TroopRosterElement> troopsRosterElement, Hero playerHero)
+		public static List<Hero> GetCompanionsHeros(MBList<TroopRosterElement> troopsRosterElement, Hero playerHero)
 		{
 			List<Hero> companions = new List<Hero>();
 
@@ -151,15 +218,115 @@ namespace BannerlordEnhancedPartyRoles.Services
 			return companions;
 		}
 
-		public static IOrderedEnumerable<ItemRosterElement> OrderItemRosterByMostEffective(List<ItemRosterElement> itemRosterElementList)
+		public static List<TroopRosterElement> GetCompanionsTroopRosterElement(MBList<TroopRosterElement> troopsRosterElement, Hero playerHero)
 		{
-			return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Effectiveness, new CompareEffectiveness());
+			List<TroopRosterElement> companions = new List<TroopRosterElement>();
+
+			foreach (TroopRosterElement troop in troopsRosterElement)
+			{
+				Hero hero = troop.Character.HeroObject;
+
+				if (troop.Character.IsHero && hero != playerHero)
+				{
+					companions.Add(troop);
+				}
+			}
+
+			return companions;
 		}
 
-		public static List<ItemRosterElement> KeepArmorHorseAndSaddle(IOrderedEnumerable<ItemRosterElement> itemRosterElementList)
+
+		public static List<ItemRosterElement> OrderItemRosterByMostEffective(List<ItemRosterElement> itemRosterElementList)
 		{
-			List<ItemRosterElement> sortedItemRosterElement = itemRosterElementList.Where(IsItemArmorHorseOrSaddle).ToList();
-			return sortedItemRosterElement;
+			return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Effectiveness, new CompareEffectiveness()).ToList();
+		}
+
+		public static List<ItemRosterElement> OrderByArmorHorseAndSaddle(List<ItemRosterElement> itemRosterElementList)
+		{
+			return itemRosterElementList.Where(IsItemArmorHorseOrSaddle).ToList();
+		}
+
+		public static List<ItemRosterElement> OrderByWeapons(List<ItemRosterElement> itemRosterElementList)
+		{
+			return itemRosterElementList.Where(IsItemWeapon).ToList();
+		}
+		public static List<ItemRosterElement> OrderByBanners(List<ItemRosterElement> itemRosterElementList)
+		{
+			return itemRosterElementList.Where(IsItemBanner).ToList();
+		}
+
+		public static List<ItemRosterElement> OrderBannersByLevel(List<ItemRosterElement> itemRosterElementList)
+		{
+			return itemRosterElementList.OrderByDescending(itemRosterElement => itemRosterElement.EquipmentElement.Item.BannerComponent.BannerLevel).ToList();
+		}
+
+		public static List<TroopRosterElement> OrderByHeros(List<TroopRosterElement> troopRosterElementist)
+		{
+			return troopRosterElementist.Where((troopRosterElement) => {
+				return troopRosterElement.Character.IsHero;
+			}).ToList();
+		}
+		public static List<TroopRosterElement> OrderByCompanions(List<TroopRosterElement> troopRosterElementMBList)
+		{
+			return troopRosterElementMBList.Where((troopRosterElement) => {
+				return troopRosterElement.Character.IsHero && troopRosterElement.Character.HeroObject.IsPlayerCompanion;
+			}).ToList();
+		}
+
+
+		public static List<ItemRosterElement> RemoveLockedItems(List<ItemRosterElement> itemRosterElementList)
+		{
+			return itemRosterElementList.Where((currentItemRosterElement) => {
+				return IsItemLocked(currentItemRosterElement.EquipmentElement) == false;
+			}).ToList();
+		}
+
+		public static List<ItemRosterElement> RemoveItemsWithFlags(List<ItemRosterElement> itemRosterElementList, ItemFlags itemFlags)
+		{
+			return itemRosterElementList.Where((currentItemRosterElement) => {
+				return currentItemRosterElement.EquipmentElement.Item.ItemFlags.HasAnyFlag(itemFlags) == false;
+			}).ToList();
+		}
+
+		// Maybe there is beter way to do this but so far I don't find IsLocked on ItemObject from SPItemVM
+		// TODO to improve performance maybe let's make iViewDataTracker a static field.
+		public static bool IsItemLocked(EquipmentElement equipmentElement)
+		{
+			IViewDataTracker iViewDataTracker = Campaign.Current.GetCampaignBehavior<IViewDataTracker>();
+			IEnumerable<string> lockIds = iViewDataTracker.GetInventoryLocks();
+			string targetItemId = CampaignUIHelper.GetItemLockStringID(equipmentElement);
+
+			foreach (string id in lockIds)
+			{
+				if (targetItemId == id)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public static bool IsFemaleClothing(ItemObject item)
+		{
+			TextObject name = item.Name;
+			if (name.Contains("Dress") || item.StringId.Contains("female") || name.Contains("Female") || name.Contains("Ladies"))
+			{
+				return true;
+			}
+			return false;
+		}
+		public static bool CanUseItemByGender(bool isFemale, ItemObject item)
+		{
+			// TODO refactore to be troopRosterElement then use TroopRosterElement in other functions bool isMale = troopRosterElement.Character.IsFemale;
+			if (isFemale && item.ItemFlags.HasAnyFlag(ItemFlags.NotUsableByFemale) == false)
+			{
+				return true;
+			}
+			else if (!isFemale && item.ItemFlags.HasAnyFlag(ItemFlags.NotUsableByMale) == false)
+			{
+				return true;
+			}
+			return false;
 		}
 
 		public static bool IsItemArmorHorseOrSaddle(ItemRosterElement itemRosterElement) {
@@ -170,7 +337,13 @@ namespace BannerlordEnhancedPartyRoles.Services
 		public static bool IsItemWeapon(ItemRosterElement itemRosterElement)
 		{
 			ItemObject item = itemRosterElement.EquipmentElement.Item;
-			return (item.HasWeaponComponent) ? true : false;
+			return (item.HasWeaponComponent && item.IsBannerItem == false) ? true : false;
+		}
+
+		public static bool IsItemBanner(ItemRosterElement itemRosterElement)
+		{
+			ItemObject item = itemRosterElement.EquipmentElement.Item;
+			return (item.IsBannerItem) ? true : false;
 		}
 
 		public static bool IsAllowedToEquip(CharacterObject character, EquipmentElement equipmentElement)
@@ -178,8 +351,19 @@ namespace BannerlordEnhancedPartyRoles.Services
 			ItemObject item = equipmentElement.Item;
 			bool hasEnoughSkills = CharacterHelper.CanUseItemBasedOnSkill(character, equipmentElement);
 			bool isUsable = !item.HasHorseComponent || item.HorseComponent.IsRideable;
-
+			isUsable = isUsable && equipmentElement.IsQuestItem == false;
 			return hasEnoughSkills && isUsable;
+		}
+
+		public static bool CanEquipHorseHarness(Equipment equipment, ItemObject item)
+		{
+			EquipmentElement equipmentElement = equipment[EquipmentIndex.Horse];
+			bool hasHorseEquipped = WeaponsManager.IsItemEquipped(equipmentElement);
+			if (hasHorseEquipped && equipmentElement.Item.HorseComponent.Monster.FamilyType == item.ArmorComponent.FamilyType)
+			{
+				return true;
+			}
+			return false;
 		}
 
 		// TODO add as util in framework
@@ -252,6 +436,9 @@ namespace BannerlordEnhancedPartyRoles.Services
 
 
 
+/*foreach(string id in lockIds) {
+	DebugUtils.LogAndPrintInfo("Lock string ID: " + id);
+}*/
 
 
 
@@ -282,7 +469,7 @@ namespace BannerlordEnhancedPartyRoles.Services
 			return (List<ItemRosterElement>)itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Effectiveness, new CompareEffectiveness());
 		}
 
-		public static List<ItemRosterElement> KeepArmorHorseAndSaddle(List<ItemRosterElement> itemRosterElementList)
+		public static List<ItemRosterElement> OrderByArmorHorseAndSaddle(List<ItemRosterElement> itemRosterElementList)
 		{
 			List<ItemRosterElement> sortedItemRosterElement = itemRosterElementList.Where(SortByArmorWeaponsHorseAndSaddle).ToList();
 			return sortedItemRosterElement;
@@ -410,3 +597,156 @@ namespace BannerlordEnhancedPartyRoles.Services
 				sortedItemRosterElement.Remove(itemRosterElement);
 			}
 */
+
+/*
+ 	public class EquipmentListData
+		{	
+			public List<ItemRosterElement> sortedItemRosterElement = new List<ItemRosterElement>();
+			public List<ItemRosterElement> swappedItemRosterElement = new List<ItemRosterElement>();
+			public List<ItemRosterElement> removeItemRosterElement = new List<ItemRosterElement>();
+			public EquipmentListData(List<ItemRosterElement> sortedItemRosterElement, List<ItemRosterElement> swappedItemRosterElement, List<ItemRosterElement> removeItemRosterElement)
+			{
+				this.sortedItemRosterElement = sortedItemRosterElement;
+				this.swappedItemRosterElement = swappedItemRosterElement;
+				this.removeItemRosterElement = removeItemRosterElement;
+			}
+			public EquipmentListData() { }
+		}
+		public static List<ItemRosterElement> GiveBestArmor(List<ItemRosterElement> itemRosterElement, List<Hero> allCompanions)
+		{
+			TaleWorlds.Core.Extensions.Shuffle(allCompanions);
+
+			List<ItemRosterElement> swappedItemRosterElement = new List<ItemRosterElement>();
+			List<ItemRosterElement> removeItemRosterElement = new List<ItemRosterElement>();
+
+			EquipmentListData equipmentListData = new EquipmentListData();
+
+			foreach (Hero companion in allCompanions)
+			{
+				IOrderedEnumerable<ItemRosterElement> orderedItemRosterElement = EnhancedQuaterMasterService.OrderItemRosterByMostEffective(itemRosterElement);
+				equipmentListData.sortedItemRosterElement = EnhancedQuaterMasterService.OrderByArmorHorseAndSaddle(orderedItemRosterElement);
+				equipmentListData = EnhancedQuaterMasterService.GiveItemBasedOnEffectiveness(equipmentListData, companion);
+				itemRosterElement = equipmentListData.sortedItemRosterElement;
+				swappedItemRosterElement.AddRange(equipmentListData.swappedItemRosterElement);
+				removeItemRosterElement.AddRange(equipmentListData.removeItemRosterElement);
+			}
+
+			if (swappedItemRosterElement.Count > 0)
+			{
+				removeItemRosterElement.AddRange(GiveBestArmor(swappedItemRosterElement, allCompanions));
+			}
+
+			return removeItemRosterElement;
+		}
+
+		public static EquipmentListData GiveItemBasedOnEffectiveness(EquipmentListData equipmentListData, Hero companion)
+		{
+			List<ItemRosterElement> removeItemRosterElement = equipmentListData.removeItemRosterElement;
+			List<ItemRosterElement> swappedItemRosterElement = equipmentListData.swappedItemRosterElement;
+			List<ItemRosterElement> sortedItemRosterElement = equipmentListData.sortedItemRosterElement;
+
+			Equipment battleEquipment = companion.BattleEquipment;
+
+			InformationManager.DisplayMessage(new InformationMessage("Quatermaster updated companions inventory.", Colors.Yellow));
+
+			IEnumerator<ItemRosterElement> iEnumerator = sortedItemRosterElement.GetEnumerator();
+
+			while (iEnumerator.MoveNext())
+			{
+				ItemRosterElement itemRosterElement = iEnumerator.Current;
+				EquipmentElement newEquipmentElement = itemRosterElement.EquipmentElement;
+
+				if (!IsAllowedToEquip(companion.CharacterObject, newEquipmentElement))
+				{
+					continue;
+				}
+				
+				ItemObject newItem = newEquipmentElement.Item;
+				EquipmentIndex equipmentIndex = GetItemTypeWithItemObject(newItem);
+				EquipmentElement currentEquipmentElement = battleEquipment[equipmentIndex];
+
+				DebugUtils.LogAndPrintInfo("Item Name: " + itemRosterElement.EquipmentElement.Item.Name + " - Effectiveness: " + itemRosterElement.EquipmentElement.Item.Effectiveness + " Modified Body Armor: " + itemRosterElement.EquipmentElement.GetModifiedBodyArmor());
+
+				bool isOpenSlot = Object.ReferenceEquals(currentEquipmentElement, null) || currentEquipmentElement.IsEmpty; // IsEmpty is there if item is there. For example if you remove all body armor from character it won't have Item but still have an EquipmentElement.
+				bool canGive = isOpenSlot;
+				if (isOpenSlot == false && itemRosterElement.Amount > 0 && newItem.Effectiveness > currentEquipmentElement.Item.Effectiveness)
+				{
+					canGive = true;
+					swappedItemRosterElement.Add(new ItemRosterElement(currentEquipmentElement, 1));
+				}
+				if (canGive)
+				{
+					InformationManager.DisplayMessage(new InformationMessage(companion.Name + " received: " + newItem.Name, Color.White));
+					battleEquipment[equipmentIndex] = newEquipmentElement;
+
+					Predicate<ItemRosterElement> getItemRosterElement = itemRE =>
+					{
+						return itemRE.EquipmentElement.IsEqualTo(newEquipmentElement);
+					};
+					// Does not remove Amount value because it is value type it gets copied after getting Find.
+					ItemRosterElement foundItemRosterElement = removeItemRosterElement.Find(getItemRosterElement);
+					if (foundItemRosterElement.Amount > 0)
+					{
+						foundItemRosterElement.Amount += 1;
+					}
+					else
+					{
+						removeItemRosterElement.Add(new ItemRosterElement(newEquipmentElement, 1));
+					}
+				}
+			}
+
+			//List<ItemRosterElement> cloneSortedItemRosterElement = new List<ItemRosterElement>();
+			//sortedItemRosterElement.CopyTo(cloneSortedItemRosterElement);
+
+			//List<ItemRosterElement> copiedSortedItemRosterElement = new List<ItemRosterElement>(sortedItemRosterElement);
+
+			for(int i = 0; i < sortedItemRosterElement.Count; i++)
+			{
+				ItemRosterElement itemRosterElement = sortedItemRosterElement[i];
+
+				foreach (ItemRosterElement toRemove in removeItemRosterElement)
+				{
+					if (itemRosterElement.EquipmentElement.IsEqualTo(toRemove.EquipmentElement))
+					{
+						itemRosterElement.Amount -= toRemove.Amount;
+						if (itemRosterElement.Amount == 0)
+						{
+							sortedItemRosterElement[i].Clear();
+						}
+						break;
+					}
+				}
+			}
+			sortedItemRosterElement.ForEach(itemRosterElement =>
+			{
+				foreach (ItemRosterElement toRemove in removeItemRosterElement)
+				{
+					if (itemRosterElement.EquipmentElement.IsEqualTo(toRemove.EquipmentElement))
+					{
+						itemRosterElement.Amount -= toRemove.Amount;
+						if (itemRosterElement.Amount == 0)
+						{
+							itemRosterElement.Clear();
+						}
+						break;
+					}
+				}
+			});
+
+return equipmentListData;
+		}
+
+
+		public class MockItemRosterElement
+		{
+			EquipmentElement equipmentElement;
+			int Amount;
+			public MockItemRosterElement(EquipmentElement equipmentElement, int amount)
+			{
+				this.equipmentElement = equipmentElement;
+				Amount = amount;
+			}
+		}
+
+ */ 
