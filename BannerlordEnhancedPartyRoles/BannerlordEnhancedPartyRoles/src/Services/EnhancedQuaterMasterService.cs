@@ -10,6 +10,7 @@ using TaleWorlds.CampaignSystem.ViewModelCollection;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.Library.NewsManager;
+using TaleWorlds.LinQuick;
 using TaleWorlds.Localization;
 
 namespace BannerlordEnhancedPartyRoles.Services
@@ -40,9 +41,10 @@ namespace BannerlordEnhancedPartyRoles.Services
 
 			EquipmentListData equipmentListData;
 
-			itemRosterElement = EnhancedQuaterMasterService.OrderByArmorHorseAndSaddle(itemRosterElement);
+			itemRosterElement = EnhancedQuaterMasterService.OrderByArmor(itemRosterElement);
 			itemRosterElement = EnhancedQuaterMasterService.OrderItemRosterByMostEffective(itemRosterElement);
 			itemRosterElement = RemoveLockedItems(itemRosterElement);
+
 			// itemRosterElement = RemoveItemsWithFlags(itemRosterElement, ItemFlags.Civilian);
 
 			foreach (Hero companion in allCompanions)
@@ -50,7 +52,7 @@ namespace BannerlordEnhancedPartyRoles.Services
 				if (itemRosterElement.Count == 0) break;
 				equipmentListData = new EquipmentListData();
 				equipmentListData.sortedItemRosterElement = itemRosterElement;
-				equipmentListData = EnhancedQuaterMasterService.GiveItemBasedOnEffectiveness(equipmentListData, companion);
+				equipmentListData = EnhancedQuaterMasterService.GiveArmourBasedOnEffectiveness(equipmentListData, companion);
 				itemRosterElement = equipmentListData.sortedItemRosterElement;
 				swappedItemRosterElement.AddRange(equipmentListData.swappedItemRosterElement);
 				removeItemRosterElement.AddRange(equipmentListData.removeItemRosterElement);
@@ -66,7 +68,7 @@ namespace BannerlordEnhancedPartyRoles.Services
 			return new Tuple<List<ItemRosterElement>, List<ItemRosterElement>> (removeItemRosterElement, swappedItemRosterElement);
 		}
 
-		public static EquipmentListData GiveItemBasedOnEffectiveness(EquipmentListData equipmentListData, Hero companion)
+		public static EquipmentListData GiveArmourBasedOnEffectiveness(EquipmentListData equipmentListData, Hero companion)
 		{
 			List<ItemRosterElement> removeItemRosterElement = equipmentListData.removeItemRosterElement;
 			List<ItemRosterElement> swappedItemRosterElement = equipmentListData.swappedItemRosterElement;
@@ -235,17 +237,15 @@ namespace BannerlordEnhancedPartyRoles.Services
 			return companions;
 		}
 
-
 		public static List<ItemRosterElement> OrderItemRosterByMostEffective(List<ItemRosterElement> itemRosterElementList)
 		{
 			return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Effectiveness, new CompareEffectiveness()).ToList();
 		}
 
-		public static List<ItemRosterElement> OrderByArmorHorseAndSaddle(List<ItemRosterElement> itemRosterElementList)
+		public static List<ItemRosterElement> OrderByArmor(List<ItemRosterElement> itemRosterElementList)
 		{
-			return itemRosterElementList.Where(IsItemArmorHorseOrSaddle).ToList();
+			return itemRosterElementList.Where(IsItemArmour).ToList();
 		}
-
 		public static List<ItemRosterElement> OrderByWeapons(List<ItemRosterElement> itemRosterElementList)
 		{
 			return itemRosterElementList.Where(IsItemWeapon).ToList();
@@ -253,6 +253,10 @@ namespace BannerlordEnhancedPartyRoles.Services
 		public static List<ItemRosterElement> OrderByBanners(List<ItemRosterElement> itemRosterElementList)
 		{
 			return itemRosterElementList.Where(IsItemBanner).ToList();
+		}
+		public static List<ItemRosterElement> OrderByCondition(List<ItemRosterElement> itemRosterElementList, Func<ItemRosterElement, bool> condition)
+		{
+			return itemRosterElementList.Where(condition).ToList();
 		}
 
 		public static List<ItemRosterElement> OrderBannersByLevel(List<ItemRosterElement> itemRosterElementList)
@@ -329,9 +333,10 @@ namespace BannerlordEnhancedPartyRoles.Services
 			return false;
 		}
 
-		public static bool IsItemArmorHorseOrSaddle(ItemRosterElement itemRosterElement) {
+		public static bool IsItemArmour(ItemRosterElement itemRosterElement)
+		{
 			ItemObject item = itemRosterElement.EquipmentElement.Item;
-			return (item.HasArmorComponent || item.HasHorseComponent || item.HasSaddleComponent) ? true : false;
+			return (item.HasArmorComponent) ? true : false;
 		}
 
 		public static bool IsItemWeapon(ItemRosterElement itemRosterElement)
@@ -345,6 +350,14 @@ namespace BannerlordEnhancedPartyRoles.Services
 			ItemObject item = itemRosterElement.EquipmentElement.Item;
 			return (item.IsBannerItem) ? true : false;
 		}
+
+		public static bool IsItemHorse(ItemRosterElement itemRosterElement)
+		{
+			ItemObject item = itemRosterElement.EquipmentElement.Item;
+			return (item.HasHorseComponent) ? true : false;
+		}
+
+
 
 		public static bool IsAllowedToEquip(CharacterObject character, EquipmentElement equipmentElement)
 		{
@@ -417,6 +430,14 @@ namespace BannerlordEnhancedPartyRoles.Services
 				return EquipmentIndex.WeaponItemBeginSlot;
 			}
 			return EquipmentIndex.None;
+		}
+		public static bool IsQuaterMaster()
+		{
+			if (Campaign.Current.ConversationManager.OneToOneConversationCharacter == Campaign.Current.MainParty.EffectiveQuartermaster.CharacterObject)
+			{
+				return true;
+			}
+			return false;
 		}
 	}
 
@@ -625,7 +646,7 @@ namespace BannerlordEnhancedPartyRoles.Services
 			{
 				IOrderedEnumerable<ItemRosterElement> orderedItemRosterElement = EnhancedQuaterMasterService.OrderItemRosterByMostEffective(itemRosterElement);
 				equipmentListData.sortedItemRosterElement = EnhancedQuaterMasterService.OrderByArmorHorseAndSaddle(orderedItemRosterElement);
-				equipmentListData = EnhancedQuaterMasterService.GiveItemBasedOnEffectiveness(equipmentListData, companion);
+				equipmentListData = EnhancedQuaterMasterService.GiveArmourBasedOnEffectiveness(equipmentListData, companion);
 				itemRosterElement = equipmentListData.sortedItemRosterElement;
 				swappedItemRosterElement.AddRange(equipmentListData.swappedItemRosterElement);
 				removeItemRosterElement.AddRange(equipmentListData.removeItemRosterElement);
@@ -639,7 +660,7 @@ namespace BannerlordEnhancedPartyRoles.Services
 			return removeItemRosterElement;
 		}
 
-		public static EquipmentListData GiveItemBasedOnEffectiveness(EquipmentListData equipmentListData, Hero companion)
+		public static EquipmentListData GiveArmourBasedOnEffectiveness(EquipmentListData equipmentListData, Hero companion)
 		{
 			List<ItemRosterElement> removeItemRosterElement = equipmentListData.removeItemRosterElement;
 			List<ItemRosterElement> swappedItemRosterElement = equipmentListData.swappedItemRosterElement;

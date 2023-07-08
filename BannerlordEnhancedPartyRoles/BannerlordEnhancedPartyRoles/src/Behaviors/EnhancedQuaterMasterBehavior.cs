@@ -12,6 +12,7 @@ using BannerlordEnhancedPartyRoles.Services;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using BannerlordEnhancedPartyRoles.src.Services;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace BannerlordEnhancedPartyRoles.Behaviors
 {
@@ -22,7 +23,7 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
 		[CommandLineFunctionality.CommandLineArgumentFunction("quatermaster_give_best_items_to_companions", "debug")]
 		public static string DebugGiveBestItemsToCompanions(List<string> strings)
 		{
-			GiveBestItems();
+			GiveBestEquipmentFromItemRoster();
 			return "Done";
 		}
 
@@ -39,55 +40,81 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
         // you can also add to show it in this example player must have quatermaster role to see that dialog
         private void AddDialogs(CampaignGameStarter starter)
         {
-            starter.AddPlayerLine("QauerMaster_Ontmoeting", "hero_main_options", "quatermaster_continue_conversation", "Give Companions best items from my inventory", IsQuaterMaster, null);
-            starter.AddDialogLine("QauerMaster_Ontmoeting", "quatermaster_continue_conversation", "end", "Alright!", null, GiveBestItems);
+            starter.AddPlayerLine("QauerMaster_Ontmoeting", "hero_main_options", "quatermaster_continue_conversation", "Give Companions best items from my inventory", EnhancedQuaterMasterService.IsQuaterMaster, null);
+            starter.AddDialogLine("QauerMaster_Ontmoeting", "quatermaster_continue_conversation", "end", "Alright!", null, GiveBestEquipmentFromItemRoster);
         }
 
-        public bool IsQuaterMaster()
-        {
-            if (Campaign.Current.ConversationManager.OneToOneConversationCharacter == Campaign.Current.MainParty.EffectiveQuartermaster.CharacterObject)
-            {
-                return true;
-            }
-            return false;
+
+		public static string BuildQuaterMasterNotification(List<string> list)
+		{
+			string text = "";
+			int i = 0;
+			int size = list.Count;
+			foreach (var word in list)
+			{
+				i += 1;
+				if (i == size)
+				{
+					string addsPlural = word[word.Length - 1] != 'r' ? word + "s" : word;
+					text += addsPlural;
+				}
+				else if (i == size - 1)
+				{ 
+					text += word + " and ";
+				}
+				else
+				{
+					text += word + ", ";
+				}
+			}
+			return text;
 		}
 
-		public static void GiveBestItems()
+		public static void GiveBestEquipmentFromItemRoster()
 		{
 			MobileParty mainParty = MobileParty.MainParty;
 
 			ItemRoster itemRoster = mainParty.ItemRoster;
+
+			List<TroopRosterElement> allCompanionsTroopRosterElement = EnhancedQuaterMasterService.GetCompanionsTroopRosterElement(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
+			bool hasGivenWeapon = WeaponsManager.UpdateCompanionWeapons(itemRoster, allCompanionsTroopRosterElement);
+			bool hasGivenBanner = WeaponsManager.UpdateCompanionBanners(itemRoster, allCompanionsTroopRosterElement);
+
 			List<Hero> allCompanionsHeros = EnhancedQuaterMasterService.GetCompanionsHeros(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
+
 			var tuple = EnhancedQuaterMasterService.UpdateCompanionsArmour(itemRoster.ToList(), allCompanionsHeros);
 
-			List<ItemRosterElement> removeEquipmentElement = tuple.Item1;
+			List<ItemRosterElement> removeItemRosterElement = tuple.Item1;
 			List<ItemRosterElement> swappedItemRosterElement = tuple.Item2;
 
-			List<TroopRosterElement> troopRosterElementList = mainParty.Party.MemberRoster.GetTroopRoster().ToList();
-			List<TroopRosterElement> companionTroopRosterElement = EnhancedQuaterMasterService.OrderByCompanions(troopRosterElementList);
-
-			List<TroopRosterElement> orderedTroopRosterElement = WeaponsManager.OrderBySkillValue(companionTroopRosterElement, DefaultSkills.OneHanded);
-
-			foreach (TroopRosterElement troopRosterElement in orderedTroopRosterElement)
-			{
-				DebugUtils.LogAndPrintInfo(troopRosterElement.Character.Name.ToString() + " OneHanded skill value -> " + troopRosterElement.Character.GetSkillValue(DefaultSkills.OneHanded));
-			}
-
-			InformationManager.DisplayMessage(new InformationMessage("Quatermaster updated companions inventory.", Colors.Yellow));
+			bool hasGivenArmour = WeaponsManager.CountItems(removeItemRosterElement) > 0;
 
 			foreach (ItemRosterElement itemRosterElement in swappedItemRosterElement)
 			{
 				itemRoster.Add(itemRosterElement);
 			}
-			foreach (ItemRosterElement itemRosterElement in removeEquipmentElement)
+			foreach (ItemRosterElement itemRosterElement in removeItemRosterElement)
 			{
 				itemRoster.Remove(itemRosterElement);
 			}
 
-			List<TroopRosterElement> allCompanionsTroopRosterElement = EnhancedQuaterMasterService.GetCompanionsTroopRosterElement(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
-			WeaponsManager.UpdateCompanionWeapons(itemRoster, allCompanionsTroopRosterElement);
-			WeaponsManager.UpdateCompanionBanners(itemRoster, allCompanionsTroopRosterElement);
-			// WeaponsManager.GiveWeaponsBySkillAndEffectiveness();
+			if(hasGivenArmour || hasGivenWeapon || hasGivenBanner)
+			{
+				List<string> words = new List<string>();
+				if (hasGivenArmour)
+				{
+					words.Add("Armour");
+				}
+				if (hasGivenWeapon) 
+				{
+					words.Add("Weapon");
+				}
+				if (hasGivenBanner)
+				{
+					words.Add("Banner");
+				}
+				InformationManager.DisplayMessage(new InformationMessage("Quatermaster updated companions " + BuildQuaterMasterNotification(words), Colors.Yellow));
+			}
 		}
 
 	}

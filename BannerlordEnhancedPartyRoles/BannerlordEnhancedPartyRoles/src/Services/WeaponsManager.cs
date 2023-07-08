@@ -18,8 +18,10 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			DefaultSkills.TwoHanded,
 			DefaultSkills.Polearm,
 			DefaultSkills.Throwing,
+			DefaultSkills.Riding,
 			DefaultSkills.Crossbow,
 			DefaultSkills.Bow,
+
 		};
 
 		public static List<TroopRosterElement> OrderBySkillValue(List<TroopRosterElement> troopRosterElementList, SkillObject skillObject)
@@ -60,7 +62,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			return item1.WeaponComponent.PrimaryWeapon.WeaponClass == item2.WeaponComponent.PrimaryWeapon.WeaponClass;
 		}
 
-		public static EquipmentIndex GetEquipmentIndexWhere(Equipment equipment, Predicate<ItemObject> predicate)
+		public static EquipmentIndex GetWeaponEquipmentIndexWhere(Equipment equipment, Predicate<ItemObject> predicate)
 		{
 			EquipmentIndex equipmentIndex = EquipmentIndex.None;
 			for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.ExtraWeaponSlot; i++)
@@ -107,7 +109,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 
 		public static bool HasItemBySkillObject(ItemObject weaponItem, Equipment equipment)
 		{
-			EquipmentIndex equipmentIndex = GetEquipmentIndexWhere(equipment, (item) =>
+			EquipmentIndex equipmentIndex = GetWeaponEquipmentIndexWhere(equipment, (item) =>
 			{
 				return item != null && item.RelevantSkill == weaponItem.RelevantSkill;
 			});
@@ -116,7 +118,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 
 		public static EquipmentIndex FindOpenWeaponSlot(Equipment equipment)
 		{
-			return GetEquipmentIndexWhere(equipment, (item) =>
+			return GetWeaponEquipmentIndexWhere(equipment, (item) =>
 			{
 				return item == null;
 			});
@@ -131,21 +133,27 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			}
 			return total;
 		}
-		public static void UpdateCompanionBanners(ItemRoster itemRoster, List<TroopRosterElement> troopRosterElementList)
+		public static bool UpdateCompanionBanners(ItemRoster itemRoster, List<TroopRosterElement> troopRosterElementList)
 		{
 			List<ItemRosterElement> itemRosterElementList = itemRoster.ToList();
 			itemRosterElementList = EnhancedQuaterMasterService.OrderByBanners(itemRosterElementList);
 			itemRosterElementList = OrderBannersByLevel(itemRosterElementList);
-			GiveBannersByHighestLevel(itemRoster, itemRosterElementList, troopRosterElementList);
+			itemRosterElementList = RemoveLockedItems(itemRosterElementList);
+			bool hasGivenBanner = GiveBannersByHighestLevel(itemRoster, itemRosterElementList, troopRosterElementList);
+			return hasGivenBanner;
 		}
 
-		public static void UpdateCompanionWeapons(ItemRoster itemRoster, List<TroopRosterElement> troopRosterElementList)
+		public static bool UpdateCompanionWeapons(ItemRoster itemRoster, List<TroopRosterElement> troopRosterElementList)
 		{
-			List<ItemRosterElement> itemRosterElement = itemRoster.ToList();
-			itemRosterElement = EnhancedQuaterMasterService.OrderByWeapons(itemRosterElement);
-			itemRosterElement = EnhancedQuaterMasterService.OrderItemRosterByMostEffective(itemRosterElement);
-			itemRosterElement = RemoveLockedItems(itemRosterElement);
-			GiveWeaponsBySkillAndEffectiveness(itemRoster, itemRosterElement, troopRosterElementList);
+			List<ItemRosterElement> itemRosterElementList = itemRoster.ToList();
+			itemRosterElementList = EnhancedQuaterMasterService.OrderByCondition(itemRosterElementList, (ItemRosterElement) =>
+			{
+				return IsItemWeapon(ItemRosterElement) || IsItemHorse(ItemRosterElement);
+			});
+			itemRosterElementList = EnhancedQuaterMasterService.OrderItemRosterByMostEffective(itemRosterElementList);
+			itemRosterElementList = RemoveLockedItems(itemRosterElementList);
+			bool hasGivenWeapon = GiveWeaponsBySkillAndEffectiveness(itemRoster, itemRosterElementList, troopRosterElementList);
+			return hasGivenWeapon;
 		}
 
 		public static bool IsItemEquipped(EquipmentElement equipmentElement)
@@ -177,6 +185,10 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 
 		public static bool IsACombination(ItemObject weaponItem1, ItemObject weaponItem2)
 		{
+			if(Object.ReferenceEquals(weaponItem1.WeaponComponent, null) || Object.ReferenceEquals(weaponItem2.WeaponComponent, null))
+			{
+				return false;
+			}
 			SkillObject skill1 = weaponItem1.RelevantSkill;
 			SkillObject skill2 = weaponItem2.RelevantSkill;
 			WeaponComponentData primaryWeapon1 = weaponItem1.WeaponComponent.PrimaryWeapon;
@@ -205,17 +217,17 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			return false;
 		}
 
-		public static void GiveBannersByHighestLevel(ItemRoster itemRoster, List<ItemRosterElement> toGiveItemRosterElement, List<TroopRosterElement> troopRosterElementList)
+		public static bool GiveBannersByHighestLevel(ItemRoster itemRoster, List<ItemRosterElement> toGiveItemRosterElement, List<TroopRosterElement> troopRosterElementList)
 		{
 			List<ItemRosterElement> removeItemRosterElement = new List<ItemRosterElement>();
 			List<ItemRosterElement> swappedItemRosterElement = new List<ItemRosterElement>();
+
+			bool hasGivenBanner = false;
 
 			foreach (TroopRosterElement troopRosterElement in troopRosterElementList)
 			{
 				foreach (ItemRosterElement itemRosterElement in toGiveItemRosterElement)
 				{
-
-
 					EquipmentElement newEquipmentElement = itemRosterElement.EquipmentElement;
 					ItemObject newItem = newEquipmentElement.Item;
 
@@ -237,6 +249,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 					} 
 					if (canGive)
 					{
+						hasGivenBanner = true;
 						battleEquipment[EquipmentIndex.ExtraWeaponSlot] = newEquipmentElement;
 						itemRoster.Remove(new ItemRosterElement(newEquipmentElement, 1));
 						removeItemRosterElement.Add(new ItemRosterElement(newEquipmentElement, 1));
@@ -258,12 +271,16 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 				}
 				GiveBannersByHighestLevel(itemRoster, swappedItemRosterElement, troopRosterElementList);
 			}
+
+			return hasGivenBanner;
 		}
 
-		public static void GiveWeaponsBySkillAndEffectiveness(ItemRoster itemRoster, List<ItemRosterElement> toGiveItemRosterElement, List<TroopRosterElement> troopRosterElementList)
+		public static bool GiveWeaponsBySkillAndEffectiveness(ItemRoster itemRoster, List<ItemRosterElement> toGiveItemRosterElement, List<TroopRosterElement> troopRosterElementList)
 		{
 			List<ItemRosterElement> removeItemRosterElement = new List<ItemRosterElement>();
-			List<ItemRosterElement> swappedItemRosterElement = new List<ItemRosterElement>(); 
+			List<ItemRosterElement> swappedItemRosterElement = new List<ItemRosterElement>();
+
+			bool hasGivenWeapon = false;
 
 			for (int rank = 1; rank - 1 < CombatSkills.Length; rank++)
 			{
@@ -289,11 +306,13 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 							continue;
 						}
 
-						EquipmentIndex equipmentIndex = GetEquipmentIndexWhere(battleEquipment, (item) =>
+						bool isHorseItem = newItem.RelevantSkill == DefaultSkills.Riding;
+
+						// TODO Horse is not build into functions like FindOpenWeaponSlot or GetWeaponEquipmentIndexWhere
+						EquipmentIndex equipmentIndex = isHorseItem == true ? EquipmentIndex.Horse : GetWeaponEquipmentIndexWhere(battleEquipment, (item) =>
 						{
 							return item != null && item.RelevantSkill == newItem.RelevantSkill && !IsACombination(newItem, item);
 						});
-
 						EquipmentElement currentEquipmentElement = equipmentIndex != EquipmentIndex.None ? battleEquipment[equipmentIndex] : new EquipmentElement();
 
 						bool hasItemBySkill = IsItemEquipped(currentEquipmentElement);
@@ -304,7 +323,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 							AddEquipmentElement(swappedItemRosterElement, currentEquipmentElement);
 							canGive = true;
 						}
-						else if (hasItemBySkill == false)
+						else if (hasItemBySkill == false && !isHorseItem)
 						{
 							equipmentIndex = FindOpenWeaponSlot(battleEquipment);
 							canGive = equipmentIndex != EquipmentIndex.None;
@@ -319,9 +338,14 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 									AddEquipmentElement(swappedItemRosterElement, currentEquipmentElement);
 								};
 							}
+						}else if(hasItemBySkill == false && isHorseItem == true)
+						{
+							canGive = true;
 						}
+
 						if (canGive)
 						{
+							hasGivenWeapon = true;
 							battleEquipment[equipmentIndex] = newEquipmentElement;
 							itemRoster.Remove(new ItemRosterElement(newEquipmentElement, 1));
 							removeItemRosterElement.Add(new ItemRosterElement(newEquipmentElement, 1));
@@ -349,6 +373,8 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 				}
 				GiveWeaponsBySkillAndEffectiveness(itemRoster, swappedItemRosterElement, troopRosterElementList);
 			}
+
+			return hasGivenWeapon;
 		}
 	}
 }
