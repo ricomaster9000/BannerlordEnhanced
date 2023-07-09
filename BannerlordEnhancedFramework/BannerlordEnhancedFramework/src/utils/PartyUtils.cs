@@ -79,4 +79,18 @@ public static class PartyUtils
     public static bool IsPartyTargetedByParty(MobileParty partyTargeting, MobileParty targetParty) {
         return partyTargeting.IsMainParty ? targetParty == partyTargeting.TargetParty : targetParty == partyTargeting.Ai.MoveTargetParty;
     }
+
+    public static bool IsPartyFacingSameDirectionOfPartyDirection(MobileParty party, MobileParty party2, float precisionFactor = 0.90f) {
+        // x and y works between 0.00 and 1.00, works with bearing which is already pre-calculated at this point
+        // TODO - not very optimized, there is a potential for a better quicker and efficient way to do this
+        precisionFactor = 1.00f - precisionFactor;
+        float xMinAllowed = party2.Bearing.x - precisionFactor;
+        float xMaxAllowed = party2.Bearing.x + precisionFactor;
+        float yMinAllowed = party2.Bearing.y - precisionFactor;
+        float yMaxAllowed = party2.Bearing.y + precisionFactor;
+        return party.Bearing.x > xMinAllowed &&
+               party.Bearing.x < xMaxAllowed &&
+               party.Bearing.y > yMinAllowed &&
+               party.Bearing.y < yMaxAllowed;
+    }
 }

@@ -315,6 +315,9 @@
         <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json">
+          <Version>13.0.3</Version>
+        </PackageReference>
         <PackageReference Include="Obfuscar">
             <Version>2.2.20</Version>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -356,7 +359,7 @@
     </UsingTask>
 
     <Target Name="CopyCustomContent" AfterTargets="AfterBuild">
-        <Exec Command="$(Obfuscar) obfuscar.xml"/>
+        <Exec Command="$(Obfuscar) obfuscar.xml" />
         <GetFileVersion AssemblyPath="$(TargetPath)">
             <Output TaskParameter="Version" PropertyName="MyAssemblyFileVersion" />
         </GetFileVersion>
