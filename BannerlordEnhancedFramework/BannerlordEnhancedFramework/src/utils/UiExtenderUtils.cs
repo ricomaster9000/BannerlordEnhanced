@@ -1,5 +1,6 @@
 ﻿namespace BannerlordEnhancedFramework.utils;
 
-public class ButterLibUtils
+public class UiExtenderUtils
 {
+    
 }

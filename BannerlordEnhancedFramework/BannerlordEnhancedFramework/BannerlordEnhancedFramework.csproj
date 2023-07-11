@@ -297,9 +297,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\*" />
-    <Compile Include="src\extendedtypes\ExtendedTimer.cs">
+    <Compile Include="src\dialogues\*" />
+    <Compile Include="src\extendedtypes\*" />
+    <Compile Include="src\extendedtypes\asynchronous\ExtendedTimer.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="src\extendedtypes\asynchronous\OneTimeJob.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <!-- 
+	<Compile Include="src\extendedtypes\asynchronous\ExtendedTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\extendedtypes\asynchronous\OneTimeJob.cs">
+      <SubType>Component</SubType>
+    </Compile> 
+	 -->
     <Compile Include="src\models\*" />
     <Compile Include="src\utils\*" />
   </ItemGroup>

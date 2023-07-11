@@ -79,3 +79,4 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 /BannerlordEnhancedFramework/BannerlordEnhancedFramework/packages
 /MigrationBackup/7f768d6c/BannerlordEnhancedFramework
+/BannerlordEnhancedFramework/BannerlordEnhancedFramework/src/extendedtypes/EnhancedPartyRole.cs

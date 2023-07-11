@@ -13,6 +13,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using BannerlordEnhancedPartyRoles.src.Services;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
+using BannerlordEnhancedFramework.models;
 
 namespace BannerlordEnhancedPartyRoles.Behaviors
 {
@@ -43,7 +44,6 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
             starter.AddPlayerLine("QauerMaster_Ontmoeting", "hero_main_options", "quatermaster_continue_conversation", "Give Companions best items from my inventory", EnhancedQuaterMasterService.IsQuaterMaster, null);
             starter.AddDialogLine("QauerMaster_Ontmoeting", "quatermaster_continue_conversation", "end", "Alright!", null, GiveBestEquipmentFromItemRoster);
         }
-
 
 		public static string BuildQuaterMasterNotification(List<string> list)
 		{

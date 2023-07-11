@@ -1,6 +1,7 @@
 ﻿bin/
 obj/
 /packages/
+/Obfuscator_Output/
 riderModule.iml
 /_ReSharper.Caches/
 .idea/

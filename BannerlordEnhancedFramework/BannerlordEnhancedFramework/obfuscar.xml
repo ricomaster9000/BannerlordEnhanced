@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Obfuscator>
+    <AssemblySearchPath path="..\..\GameLibraries\1.1" />
+    <Var name="InPath" value=".\bin\debug" />
+    <Var name="OutPath" value=".\Obfuscator_Output" />
+    <Var name="KeyFile" value=".\sgKey.snk" />
+
+    <Var name="KeepPublicApi" value="false" />
+    <Var name="HidePrivateApi" value="true" />
+    <Var name="ReuseNames" value="false" />
+    <Var name="UseKoreanNames" value="true" />
+
+    <Module file="$(InPath)\BannerlordEnhancedFramework.dll"/>
+</Obfuscator>
