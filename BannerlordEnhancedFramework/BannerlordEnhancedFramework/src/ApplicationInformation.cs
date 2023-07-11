@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace BannerlordEnhancedFramework.utils;
 
@@ -63,5 +64,13 @@ public static class ApplicationInformation
         }
         var dt = new System.DateTime(1970, 1, 1, 0, 0, 0).AddSeconds(System.BitConverter.ToInt32(b, System.BitConverter.ToInt32(b, peHeaderOffset) + linkerTimestampOffset));
         return dt.AddHours(System.TimeZone.CurrentTimeZone.GetUtcOffset(dt).Hours);
+    }
+    
+    /// <summary>
+    /// Gets the executing assembly.
+    /// </summary>
+    /// <value>The executing assembly.</value>
+    public static String GetEnhancedFrameworkNamespaceName() {
+            return "BannerlordEnhancedFramework";
     }
 }

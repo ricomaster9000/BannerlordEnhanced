@@ -34,16 +34,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <BannerlordEnhancedFrameworkVersion>0.1.3.6</BannerlordEnhancedFrameworkVersion>
+    <BannerlordEnhancedFrameworkVersion>0.2.0.0</BannerlordEnhancedFrameworkVersion>
     <BannerlordGameVersionToUse>1.1</BannerlordGameVersionToUse>
     <DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.2.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Bannerlord.Lib.Harmony.2.2.2\lib\net472\0Harmony.dll</HintPath>
+      <HintPath>packages\Bannerlord.Lib.Harmony.2.2.2\lib\net472\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BannerlordEnhancedFramework">
-      <HintPath>..\..\BannerlordEnhancedFramework\BannerlordEnhancedFramework\bin\Debug\BannerlordEnhancedFramework.dll</HintPath>
+      <HintPath>..\..\BannerlordEnhancedFramework\Releases\$(BannerlordEnhancedFrameworkVersion)\BannerlordEnhancedFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

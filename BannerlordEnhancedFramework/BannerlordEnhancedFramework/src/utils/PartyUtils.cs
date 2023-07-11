@@ -1,4 +1,5 @@
-﻿using TaleWorlds.CampaignSystem.Party;
+﻿using System;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Library;
 
 namespace BannerlordEnhancedFramework.utils;
@@ -78,5 +79,24 @@ public static class PartyUtils
 
     public static bool IsPartyTargetedByParty(MobileParty partyTargeting, MobileParty targetParty) {
         return partyTargeting.IsMainParty ? targetParty == partyTargeting.TargetParty : targetParty == partyTargeting.Ai.MoveTargetParty;
+    }
+
+    public static bool IsPartyFacingSameDirectionOfPartyDirection(MobileParty party, MobileParty party2, float directionOffToleranceFactor = 0.10f) {
+        // Compute the bearing
+        double bearingDegreesParty1 = (Math.Atan2(party.Bearing.y, party.Bearing.x)) * (180.0 / Math.PI);
+        if (bearingDegreesParty1 < 0) {
+            bearingDegreesParty1 += 360;
+        }
+
+        double bearingDegreesParty2 = (Math.Atan2(party2.Bearing.y, party2.Bearing.x)) * (180.0 / Math.PI);
+        if (bearingDegreesParty2 < 0) {
+            bearingDegreesParty2 += 360;
+        }
+
+        double allowedBearingDifference = 360 * directionOffToleranceFactor;
+
+        return bearingDegreesParty1 > bearingDegreesParty2 ?
+            (bearingDegreesParty1 - bearingDegreesParty2) < allowedBearingDifference :
+            (bearingDegreesParty2 - bearingDegreesParty1) < allowedBearingDifference;
     }
 }
