@@ -13,7 +13,7 @@ public class SaveSystem
     private static readonly string WindowsUsername = Environment.UserName;
     
     public static void SaveData() {
-        IDictionary<String,JObject> listOfClassDataToSave = new IDictionary<String,JObject>();
+        IDictionary<String,JObject> listOfClassDataToSave = new Dictionary<String,JObject>();
         List<Type> relevantTypes = GetRelevantClassTypesForSyncingData();
 
         foreach(Type type in relevantTypes) {

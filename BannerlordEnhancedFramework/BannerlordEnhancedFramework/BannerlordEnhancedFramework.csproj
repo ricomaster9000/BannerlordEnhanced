@@ -34,8 +34,8 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <PropertyGroup>
-        <BannerlordEnhancedFrameworkVersion>0.1.0.0</BannerlordEnhancedFrameworkVersion>
         <BannerlordGameVersionToUse>1.1</BannerlordGameVersionToUse>
+        <DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="Properties\AssemblyInfo.cs" />
@@ -315,6 +315,9 @@
         <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="Bannerlord.Lib.Harmony">
+          <Version>2.2.2</Version>
+        </PackageReference>
         <PackageReference Include="Newtonsoft.Json">
           <Version>13.0.3</Version>
         </PackageReference>

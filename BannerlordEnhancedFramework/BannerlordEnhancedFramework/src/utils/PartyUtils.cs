@@ -1,4 +1,5 @@
-﻿using TaleWorlds.CampaignSystem.Party;
+﻿using System;
+using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.Library;
 
 namespace BannerlordEnhancedFramework.utils;
@@ -80,17 +81,22 @@ public static class PartyUtils
         return partyTargeting.IsMainParty ? targetParty == partyTargeting.TargetParty : targetParty == partyTargeting.Ai.MoveTargetParty;
     }
 
-    public static bool IsPartyFacingSameDirectionOfPartyDirection(MobileParty party, MobileParty party2, float precisionFactor = 0.90f) {
-        // x and y works between 0.00 and 1.00, works with bearing which is already pre-calculated at this point
-        // TODO - not very optimized, there is a potential for a better quicker and efficient way to do this
-        precisionFactor = 1.00f - precisionFactor;
-        float xMinAllowed = party2.Bearing.x - precisionFactor;
-        float xMaxAllowed = party2.Bearing.x + precisionFactor;
-        float yMinAllowed = party2.Bearing.y - precisionFactor;
-        float yMaxAllowed = party2.Bearing.y + precisionFactor;
-        return party.Bearing.x > xMinAllowed &&
-               party.Bearing.x < xMaxAllowed &&
-               party.Bearing.y > yMinAllowed &&
-               party.Bearing.y < yMaxAllowed;
+    public static bool IsPartyFacingSameDirectionOfPartyDirection(MobileParty party, MobileParty party2, float directionOffToleranceFactor = 0.10f) {
+        // Compute the bearing
+        double bearingDegreesParty1 = (Math.Atan2(party.Bearing.y, party.Bearing.x)) * (180.0 / Math.PI);
+        if (bearingDegreesParty1 < 0) {
+            bearingDegreesParty1 += 360;
+        }
+
+        double bearingDegreesParty2 = (Math.Atan2(party2.Bearing.y, party2.Bearing.x)) * (180.0 / Math.PI);
+        if (bearingDegreesParty2 < 0) {
+            bearingDegreesParty2 += 360;
+        }
+
+        double allowedBearingDifference = 360 * directionOffToleranceFactor;
+
+        return bearingDegreesParty1 > bearingDegreesParty2 ?
+            (bearingDegreesParty1 - bearingDegreesParty2) < allowedBearingDifference :
+            (bearingDegreesParty2 - bearingDegreesParty1) < allowedBearingDifference;
     }
 }
