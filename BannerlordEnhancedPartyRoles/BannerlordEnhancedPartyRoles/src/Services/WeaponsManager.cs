@@ -21,7 +21,6 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			DefaultSkills.Riding,
 			DefaultSkills.Crossbow,
 			DefaultSkills.Bow,
-
 		};
 
 		public static List<TroopRosterElement> OrderBySkillValue(List<TroopRosterElement> troopRosterElementList, SkillObject skillObject)
