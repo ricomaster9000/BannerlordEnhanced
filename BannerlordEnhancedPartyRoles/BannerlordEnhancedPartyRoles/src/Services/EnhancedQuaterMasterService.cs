@@ -357,8 +357,6 @@ namespace BannerlordEnhancedPartyRoles.Services
 			return (item.HasHorseComponent) ? true : false;
 		}
 
-
-
 		public static bool IsAllowedToEquip(CharacterObject character, EquipmentElement equipmentElement)
 		{
 			ItemObject item = equipmentElement.Item;

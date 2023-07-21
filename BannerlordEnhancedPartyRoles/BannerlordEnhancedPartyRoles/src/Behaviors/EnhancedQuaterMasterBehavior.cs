@@ -18,7 +18,6 @@ using BannerlordEnhancedFramework.models;
 namespace BannerlordEnhancedPartyRoles.Behaviors
 {
 
-	// TODO fix horses shouldn't wear camel saddle.
     class QuaterMasterDialog : CampaignBehaviorBase
     {
 		[CommandLineFunctionality.CommandLineArgumentFunction("quatermaster_give_best_items_to_companions", "debug")]
