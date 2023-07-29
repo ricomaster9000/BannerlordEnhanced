@@ -40,7 +40,7 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
         // you can also add to show it in this example player must have quatermaster role to see that dialog
         private void AddDialogs(CampaignGameStarter starter)
         {
-            starter.AddPlayerLine("QauerMaster_Ontmoeting", "hero_main_options", "quatermaster_continue_conversation", "Give Companions best items from my inventory", EnhancedQuaterMasterService.IsQuaterMaster, null);
+            starter.AddPlayerLine("QauerMaster_Ontmoeting", "hero_main_options", "quatermaster_continue_conversation", "Give Companions best items from my inventory", EnhancedQuaterMasterServicePreviousVersion.IsQuaterMaster, null);
             starter.AddDialogLine("QauerMaster_Ontmoeting", "quatermaster_continue_conversation", "end", "Alright!", null, GiveBestEquipmentFromItemRoster);
         }
 
@@ -75,13 +75,13 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
 
 			ItemRoster itemRoster = mainParty.ItemRoster;
 
-			List<TroopRosterElement> allCompanionsTroopRosterElement = EnhancedQuaterMasterService.GetCompanionsTroopRosterElement(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
+			List<TroopRosterElement> allCompanionsTroopRosterElement = EnhancedQuaterMasterServicePreviousVersion.GetCompanionsTroopRosterElement(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
 			bool hasGivenWeapon = WeaponsManager.UpdateCompanionWeapons(itemRoster, allCompanionsTroopRosterElement);
 			bool hasGivenBanner = WeaponsManager.UpdateCompanionBanners(itemRoster, allCompanionsTroopRosterElement);
 
-			List<Hero> allCompanionsHeros = EnhancedQuaterMasterService.GetCompanionsHeros(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
+			List<Hero> allCompanionsHeros = EnhancedQuaterMasterServicePreviousVersion.GetCompanionsHeros(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
 
-			var tuple = EnhancedQuaterMasterService.UpdateCompanionsArmour(itemRoster.ToList(), allCompanionsHeros);
+			var tuple = EnhancedQuaterMasterServicePreviousVersion.UpdateCompanionsArmour(itemRoster.ToList(), allCompanionsHeros);
 
 			List<ItemRosterElement> removeItemRosterElement = tuple.Item1;
 			List<ItemRosterElement> swappedItemRosterElement = tuple.Item2;

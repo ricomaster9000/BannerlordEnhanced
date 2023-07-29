@@ -12,6 +12,7 @@ using TaleWorlds.CampaignSystem;
 
 namespace BannerlordEnhancedPartyRoles;
 
+
 public class BannerlordEnhancedPartyRolesSubModule : MBSubModuleBase 
 {
     protected override void OnSubModuleLoad()
@@ -41,9 +42,9 @@ public class BannerlordEnhancedPartyRolesSubModule : MBSubModuleBase
         if (!(game.GameType is Campaign)) return;
         if (gameStarterObject != null && gameStarterObject is CampaignGameStarter campaignGameStarter)
         {
-			campaignGameStarter.AddBehavior(new QuaterMasterDialog());
+			// campaignGameStarter.AddBehavior(new QuaterMasterDialog());
 			campaignGameStarter.AddBehavior(new EnhancedQuaterMasterBehaviorNewVersion());
-			// campaignGameStarter.AddBehavior(new EnhancedScoutBehavior());
+			campaignGameStarter.AddBehavior(new EnhancedScoutBehavior());
             DebugUtils.LogAndPrintInfo("Behaviors applied");
         }
     }

@@ -7,7 +7,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade.Diamond.Ranked;
-using static BannerlordEnhancedPartyRoles.Services.EnhancedQuaterMasterService;
+using static BannerlordEnhancedPartyRoles.Services.EnhancedQuaterMasterServicePreviousVersion;
 
 namespace BannerlordEnhancedPartyRoles.src.Services
 {
@@ -135,7 +135,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		public static bool UpdateCompanionBanners(ItemRoster itemRoster, List<TroopRosterElement> troopRosterElementList)
 		{
 			List<ItemRosterElement> itemRosterElementList = itemRoster.ToList();
-			itemRosterElementList = EnhancedQuaterMasterService.OrderByBanners(itemRosterElementList);
+			itemRosterElementList = EnhancedQuaterMasterServicePreviousVersion.OrderByBanners(itemRosterElementList);
 			itemRosterElementList = OrderBannersByLevel(itemRosterElementList);
 			itemRosterElementList = RemoveLockedItems(itemRosterElementList);
 			bool hasGivenBanner = GiveBannersByHighestLevel(itemRoster, itemRosterElementList, troopRosterElementList);
@@ -145,11 +145,11 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		public static bool UpdateCompanionWeapons(ItemRoster itemRoster, List<TroopRosterElement> troopRosterElementList)
 		{
 			List<ItemRosterElement> itemRosterElementList = itemRoster.ToList();
-			itemRosterElementList = EnhancedQuaterMasterService.OrderByCondition(itemRosterElementList, (ItemRosterElement) =>
+			itemRosterElementList = EnhancedQuaterMasterServicePreviousVersion.OrderByCondition(itemRosterElementList, (ItemRosterElement) =>
 			{
 				return IsItemWeapon(ItemRosterElement) || IsItemHorse(ItemRosterElement);
 			});
-			itemRosterElementList = EnhancedQuaterMasterService.OrderItemRosterByMostEffective(itemRosterElementList);
+			itemRosterElementList = EnhancedQuaterMasterServicePreviousVersion.OrderItemRosterByMostEffective(itemRosterElementList);
 			itemRosterElementList = RemoveLockedItems(itemRosterElementList);
 			bool hasGivenWeapon = GiveWeaponsBySkillAndEffectiveness(itemRoster, itemRosterElementList, troopRosterElementList);
 			return hasGivenWeapon;
