@@ -27,7 +27,7 @@ public class DialogueBuilder
         AppliedDialogueLineRelation appliedDialogueLineRelation = AppliedDialogueLineRelation.ManuallyLinked,
         DialogueLineRelationParams dialogueLineRelationParams = null
     ) {
-        if (conversationPart.Consequence != null && conversationPart.Consequence.Method.GetParameters().Length > 0) {
+        if (conversationPart.Consequence != null && conversationPart.Consequence().Method.GetParameters().Length > 0) {
             throw new Exception("You can only pass in a consequence method with zero params, " +
                                 "when this method is used it assumes you are using a toggle method " +
                                 "rather than a method were you specify true or false as a parameter");
@@ -37,7 +37,7 @@ public class DialogueBuilder
             conversationPart,
             appliedDialogueLineRelation,
             dialogueLineRelationParams,
-            conversationPart.Consequence
+            conversationPart.Consequence()
         );
     }
 
@@ -48,7 +48,7 @@ public class DialogueBuilder
         ConversationSentence.OnConsequenceDelegate falseConsequence
     ) {
         ConversationPart conversationPartFalse = new ConversationPart(conversationPart)
-            .WithCondition(() => !conversationPart.Condition())
+            .WithCondition(() => !conversationPart.Condition().Invoke())
             .WithConsequence(falseConsequence);
         conversationPartFalse.SetTokenId(conversationPartFalse.TokenId()+"_false");
         conversationPartFalse.Text += " - Currently False";
@@ -107,8 +107,8 @@ public class DialogueBuilder
                     conversationSentence.LinkedCoreInputToken().TokenName(),
                     conversationSentence.TokenId()+"start",
                     conversationSentence.Text,
-                    conversationSentence.Condition,
-                    conversationSentence.Consequence
+                    conversationSentence.Condition(),
+                    conversationSentence.Consequence()
                 );
 
                 starter.AddDialogLine(
@@ -116,8 +116,8 @@ public class DialogueBuilder
                     conversationSentence.TokenId()+"start",
                     conversationSentence.TokenId()+"group",
                     conversationSentence.Text,
-                    conversationSentence.Condition,
-                    conversationSentence.Consequence
+                    conversationSentence.Condition(),
+                    conversationSentence.Consequence()
                 );
             }
 
@@ -149,8 +149,8 @@ public class DialogueBuilder
                         toConversationSentence.TokenId()+"group",
                         conversationSentence.DialogueId()+"start",
                         "Go Back To '"+conversationSentence.InGameName()+"'",
-                        toConversationSentence.Condition,
-                        toConversationSentence.Consequence,
+                        toConversationSentence.Condition(),
+                        toConversationSentence.Consequence(),
                         25
                     );
                     starter.AddPlayerLine(
@@ -158,16 +158,16 @@ public class DialogueBuilder
                         conversationSentence.TokenId()+"group",
                         toConversationSentence.TokenId()+"start",
                         toConversationSentence.Text,
-                        toConversationSentence.Condition,
-                        toConversationSentence.Consequence
+                        toConversationSentence.Condition(),
+                        toConversationSentence.Consequence()
                     );
                     starter.AddDialogLine(
                         toConversationSentence.TokenId()+"start",
                         toConversationSentence.TokenId()+"start",
                         toConversationSentence.TokenId()+"group",
                         toConversationSentence.Text,
-                        toConversationSentence.Condition,
-                        toConversationSentence.Consequence
+                        toConversationSentence.Condition(),
+                        toConversationSentence.Consequence()
                     );
                 } else {
                     starter.AddPlayerLine(
@@ -175,8 +175,8 @@ public class DialogueBuilder
                         conversationSentence.TokenId()+"group",
                         conversationSentence.TokenId()+"start",
                         toConversationSentence.Text,
-                        toConversationSentence.Condition,
-                        toConversationSentence.Consequence);
+                        toConversationSentence.Condition(),
+                        toConversationSentence.Consequence());
                 }
             }
         }
