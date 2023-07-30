@@ -86,13 +86,13 @@ namespace BannerlordEnhancedFramework.dialogues
 
         public ConversationPart WithConsequence(ConversationSentence.OnConsequenceDelegate consequence)
         {
-            //Consequence = testTrueFalse;
+            this._consequence = consequence;
             return this;
         }
 
         public ConversationPart WithCondition(ConversationSentence.OnConditionDelegate condition)
         {
-            Condition = condition;
+            this._condition = condition;
             return this;
         }
 
@@ -174,10 +174,6 @@ namespace BannerlordEnhancedFramework.dialogues
             return this._type.Equals(ConversationSentenceType.DialogueTreeRootEnd) ||
                    this._type.Equals(ConversationSentenceType.DialogueTreeBranchEnd);
         }
-
-        public ConversationSentence.OnConsequenceDelegate Consequence { get; set; }
-
-        public ConversationSentence.OnConditionDelegate Condition { get; set; }
     }
 
     public class SimpleConversationPart : ConversationPart

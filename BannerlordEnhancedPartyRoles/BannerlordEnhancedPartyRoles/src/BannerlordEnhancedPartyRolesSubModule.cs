@@ -43,7 +43,7 @@ public class BannerlordEnhancedPartyRolesSubModule : MBSubModuleBase
         {
 			campaignGameStarter.AddBehavior(new QuaterMasterDialog());
 			campaignGameStarter.AddBehavior(new EnhancedQuaterMasterBehaviorNewVersion());
-			// campaignGameStarter.AddBehavior(new EnhancedScoutBehavior());
+            campaignGameStarter.AddBehavior(new EnhancedScoutBehavior());
             DebugUtils.LogAndPrintInfo("Behaviors applied");
         }
     }
