@@ -38,4 +38,9 @@ public static class GameUtils
                 !Campaign.Current.TimeControlMode.Equals(CampaignTimeControlMode.FastForwardStop)
                 );
     }
+
+    public static bool IsPlayerImprisoned()
+    {
+        return (Hero.MainHero.IsPrisoner);
+    }
 }

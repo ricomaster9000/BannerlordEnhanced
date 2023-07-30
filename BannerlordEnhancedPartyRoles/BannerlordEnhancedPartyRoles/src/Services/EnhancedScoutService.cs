@@ -56,7 +56,7 @@ public static class EnhancedScoutService
 
     public static void AlertPlayerToNearbyHostileParties()
     {
-        if (IsScoutAlertsNearbyEnemiesFrozen() || !GameUtils.IsPlayerActiveInWorldMap())
+        if (IsScoutAlertsNearbyEnemiesFrozen() || !GameUtils.IsPlayerActiveInWorldMap() || GameUtils.IsPlayerImprisoned())
         {
             return;
         }
