@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <BannerlordEnhancedFrameworkVersion>0.2.0.1</BannerlordEnhancedFrameworkVersion>
+    <BannerlordEnhancedFrameworkVersion>0.2.0.3</BannerlordEnhancedFrameworkVersion>
     <BannerlordGameVersionToUse>1.1</BannerlordGameVersionToUse>
     <DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
   </PropertyGroup>
