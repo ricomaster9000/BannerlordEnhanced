@@ -7,7 +7,7 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade.Diamond.Ranked;
-using static BannerlordEnhancedPartyRoles.Services.EnhancedQuaterMasterServicePreviousVersion;
+using static BannerlordEnhancedPartyRoles.Services.EnhancedQuaterMasterService_Unused_Version;
 
 namespace BannerlordEnhancedPartyRoles.src.Services
 {
@@ -135,7 +135,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		public static bool UpdateCompanionBanners(ItemRoster itemRoster, List<TroopRosterElement> troopRosterElementList)
 		{
 			List<ItemRosterElement> itemRosterElementList = itemRoster.ToList();
-			itemRosterElementList = EnhancedQuaterMasterServicePreviousVersion.OrderByBanners(itemRosterElementList);
+			itemRosterElementList = EnhancedQuaterMasterService_Unused_Version.OrderByBanners(itemRosterElementList);
 			itemRosterElementList = OrderBannersByLevel(itemRosterElementList);
 			itemRosterElementList = RemoveLockedItems(itemRosterElementList);
 			bool hasGivenBanner = GiveBannersByHighestLevel(itemRoster, itemRosterElementList, troopRosterElementList);
@@ -145,11 +145,11 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		public static bool UpdateCompanionWeapons(ItemRoster itemRoster, List<TroopRosterElement> troopRosterElementList)
 		{
 			List<ItemRosterElement> itemRosterElementList = itemRoster.ToList();
-			itemRosterElementList = EnhancedQuaterMasterServicePreviousVersion.OrderByCondition(itemRosterElementList, (ItemRosterElement) =>
+			itemRosterElementList = EnhancedQuaterMasterService_Unused_Version.OrderByCondition(itemRosterElementList, (ItemRosterElement) =>
 			{
 				return IsItemWeapon(ItemRosterElement) || IsItemHorse(ItemRosterElement);
 			});
-			itemRosterElementList = EnhancedQuaterMasterServicePreviousVersion.OrderItemRosterByMostEffective(itemRosterElementList);
+			itemRosterElementList = EnhancedQuaterMasterService_Unused_Version.OrderItemRosterByMostEffective(itemRosterElementList);
 			itemRosterElementList = RemoveLockedItems(itemRosterElementList);
 			bool hasGivenWeapon = GiveWeaponsBySkillAndEffectiveness(itemRoster, itemRosterElementList, troopRosterElementList);
 			return hasGivenWeapon;

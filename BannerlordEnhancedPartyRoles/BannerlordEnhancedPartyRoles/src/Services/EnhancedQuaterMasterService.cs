@@ -15,8 +15,17 @@ internal class EnhancedQuaterMasterService
 {
 	public static void ToggleQuaterMasterAllowLockedItems()
 	{
-		InformationManager.DisplayMessage(new InformationMessage(!GetAllowLockedItems() == true ? "true" : "false", Colors.Yellow));
-		SetAllowLockedItems(!GetAllowLockedItems()); 
+		SetAllowLockedItems(GetAllowLockedItems());
+		if (GetAllowLockedItems())
+		{
+			InformationManager.DisplayMessage(new InformationMessage("false", Colors.Yellow));
+			SetAllowLockedItems(false);
+		}
+		else
+		{
+			InformationManager.DisplayMessage(new InformationMessage("true", Colors.Yellow));
+			SetAllowLockedItems(true);
+		}
 	}
 
 	public static bool IsPlayerTalkingToPlayerClanQauterMaster()

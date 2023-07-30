@@ -15,7 +15,7 @@ using TaleWorlds.Localization;
 
 namespace BannerlordEnhancedPartyRoles.Services
 {
-	public class EnhancedQuaterMasterServicePreviousVersion
+	public class EnhancedQuaterMasterService_Unused_Version
 	{
 
 		public class EquipmentListData
@@ -41,8 +41,8 @@ namespace BannerlordEnhancedPartyRoles.Services
 
 			EquipmentListData equipmentListData;
 
-			itemRosterElement = EnhancedQuaterMasterServicePreviousVersion.OrderByArmor(itemRosterElement);
-			itemRosterElement = EnhancedQuaterMasterServicePreviousVersion.OrderItemRosterByMostEffective(itemRosterElement);
+			itemRosterElement = EnhancedQuaterMasterService_Unused_Version.OrderByArmor(itemRosterElement);
+			itemRosterElement = EnhancedQuaterMasterService_Unused_Version.OrderItemRosterByMostEffective(itemRosterElement);
 			itemRosterElement = RemoveLockedItems(itemRosterElement);
 
 			// itemRosterElement = RemoveItemsWithFlags(itemRosterElement, ItemFlags.Civilian);
@@ -52,7 +52,7 @@ namespace BannerlordEnhancedPartyRoles.Services
 				if (itemRosterElement.Count == 0) break;
 				equipmentListData = new EquipmentListData();
 				equipmentListData.sortedItemRosterElement = itemRosterElement;
-				equipmentListData = EnhancedQuaterMasterServicePreviousVersion.GiveArmourBasedOnEffectiveness(equipmentListData, companion);
+				equipmentListData = EnhancedQuaterMasterService_Unused_Version.GiveArmourBasedOnEffectiveness(equipmentListData, companion);
 				itemRosterElement = equipmentListData.sortedItemRosterElement;
 				swappedItemRosterElement.AddRange(equipmentListData.swappedItemRosterElement);
 				removeItemRosterElement.AddRange(equipmentListData.removeItemRosterElement);

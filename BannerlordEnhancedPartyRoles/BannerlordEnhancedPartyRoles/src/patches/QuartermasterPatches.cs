@@ -10,6 +10,6 @@ public class QuartermasterPatches
     {
         DebugUtils.LogAndPrintInfo("DoneLogic_Postfix is working");
 		// Kenneth, DO YOUR SHIT
-		EnhancedQuaterMasterBehaviorNewVersion.GiveBestEquipmentFromItemRoster();
+		EnhancedQuaterMasterBehavior.GiveBestEquipmentFromItemRoster();
 	}
 }
