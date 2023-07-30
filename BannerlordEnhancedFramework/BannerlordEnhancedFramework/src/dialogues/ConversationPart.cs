@@ -174,6 +174,16 @@ namespace BannerlordEnhancedFramework.dialogues
             return this._type.Equals(ConversationSentenceType.DialogueTreeRootEnd) ||
                    this._type.Equals(ConversationSentenceType.DialogueTreeBranchEnd);
         }
+
+        public ConversationSentence.OnConsequenceDelegate Consequence()
+        {
+            return this._consequence;
+        }
+
+        public ConversationSentence.OnConditionDelegate Condition()
+        {
+            return this._condition;
+        }
     }
 
     public class SimpleConversationPart : ConversationPart
