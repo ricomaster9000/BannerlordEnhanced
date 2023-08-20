@@ -17,8 +17,8 @@ public class OneTimeJob : ExtendedTimer
 
     protected override void BaseTimerJob(object source, ElapsedEventArgs e)
     {
-        base._timerJobDoCallback();
-        base.StopTimer();
-        base.Dispose();
+        base.BaseTimerJob(source,e);
+        StopTimer();
+        Dispose();
     }
 }
