@@ -9,6 +9,8 @@ using TaleWorlds.Core;
 using TaleWorlds.CampaignSystem.ViewModelCollection.GameMenu.Overlay;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
+using BannerlordEnhancedPartyRoles.src.Behaviors;
 
 namespace BannerlordEnhancedPartyRoles;
 
@@ -22,11 +24,23 @@ public class BannerlordEnhancedPartyRolesSubModule : MBSubModuleBase
         HarmonyPatcher harmonyPatcher = new HarmonyPatcher("BannerlordEnhancedPartyRoles");
 
         DebugUtils.LogAndPrintInfo("add harmony patches - BEGIN");
-        harmonyPatcher.PatchMethodPostfix(
-            typeof(InventoryLogic).GetMethod("DoneLogic"),
-            typeof(QuartermasterPatches).GetMethod("DoneLogic_Postfix")
-        );
-        DebugUtils.LogAndPrintInfo("add harmony patches - END");
+		/*harmonyPatcher.PatchMethodPostfix(
+			typeof(InventoryLogic).GetMethod("DoneLogic"),
+			typeof(QuartermasterPatches).GetMethod("DoneLogic_Postfix")
+		);*/
+		harmonyPatcher.PatchMethod(
+			typeof(InventoryManager).GetMethod("CloseInventoryPresentation"),
+			typeof(QuartermasterPatches).GetMethod("CloseInventoryPresentation_Prefix")
+		);
+		harmonyPatcher.PatchMethodPostfix(
+			typeof(InventoryManager).GetMethod("CloseInventoryPresentation"),
+			typeof(QuartermasterPatches).GetMethod("CloseInventoryPresentation_Postfix")
+		);
+		harmonyPatcher.PatchMethodPostfix(
+			typeof(ClanManagementVM).GetMethod("ExecuteClose"),
+			typeof(QuartermasterPatches).GetMethod("ClanPresentationDone_Postfix")
+		);
+		DebugUtils.LogAndPrintInfo("add harmony patches - END");
     }
 
     public override void OnGameLoaded(Game game, object initializerObject)
@@ -42,10 +56,11 @@ public class BannerlordEnhancedPartyRolesSubModule : MBSubModuleBase
         if (!(game.GameType is Campaign)) return;
         if (gameStarterObject != null && gameStarterObject is CampaignGameStarter campaignGameStarter)
         {
-			campaignGameStarter.AddBehavior(new QuaterMasterDialog());
-			campaignGameStarter.AddBehavior(new EnhancedQuaterMasterBehaviorNewVersion());
+			// campaignGameStarter.AddBehavior(new QuaterMasterDialog());
+			campaignGameStarter.AddBehavior(new EnhancedQuaterMasterBehavior());
             campaignGameStarter.AddBehavior(new EnhancedScoutBehavior());
-            DebugUtils.LogAndPrintInfo("Behaviors applied");
+			campaignGameStarter.AddBehavior(new EnhancedEngineerBehavior());
+			DebugUtils.LogAndPrintInfo("Behaviors applied");
         }
     }
 }

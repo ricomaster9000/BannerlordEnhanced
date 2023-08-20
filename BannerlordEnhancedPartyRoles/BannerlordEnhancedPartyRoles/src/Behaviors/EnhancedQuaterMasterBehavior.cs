@@ -14,6 +14,7 @@ using BannerlordEnhancedFramework.src.utils;
 using TaleWorlds.Engine;
 using BannerlordEnhancedPartyRoles.src.Services;
 using BannerlordEnhancedPartyRoles.src.Storage;
+using TaleWorlds.CampaignSystem.Actions;
 
 namespace BannerlordEnhancedPartyRoles.Behaviors;
 class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
@@ -72,16 +73,106 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 			.WithConversationPart(
 				new SimpleConversationPart(
 					"enhanced_quatermaster_conv_menu_configure_equipment_settings",
-					"Equipment Update Settings",
+					"Equipment Filter Settings",
 					ConversationSentenceType.DialogueTreeBranchStart
 				), AppliedDialogueLineRelation.LinkToPreviousStart)
+			/*.WithConversationParts(
+				new SimpleConversationPart(
+					"enhanced_quatermaster_conv_menu_configure_equipment_type",
+					"Equipment Type Settings",
+					ConversationSentenceType.DialogueTreeBranchStart
+				),
+				new SimpleConversationPart(
+					"enhanced_quatermaster_conv_menu_configure_equipment_settings",
+					"Equipment Filter Settings",
+					ConversationSentenceType.DialogueTreeBranchStart
+				), AppliedDialogueLineRelation.LinkToPreviousStart)*/
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
-						"enhanced_quatermaster_conv_menu_configure_enemy_alerts_toggle_pause_game",
+						"enhanced_quatermaster_conv_menu_configure_equipment_settings_allow_locked_items",
 						"Allow Locked Items",
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.GetAllowLockedItems() == true)
 					.WithConsequence(EnhancedQuaterMasterService.ToggleQuaterMasterAllowLockedItems),
+				AppliedDialogueLineRelation.LinkToPreviousStart)
+			.WithTrueFalseConversationToggle(
+				new SimpleConversationPart(
+						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_any",
+						"Allow Any Equipment",
+						ConversationSentenceType.DialogueTreeBranchPart
+					).WithCondition(() => EnhancedQuaterMasterService.GetAllowAnyCulture() == true)
+					.WithConsequence(EnhancedQuaterMasterService.ToggleQuaterMasterAllow_AnyCulture),
+				AppliedDialogueLineRelation.LinkToPreviousStart)
+			.WithTrueFalseConversationToggle(
+				new SimpleConversationPart(
+						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_battania",
+						"Allow Battania Equipment",
+						ConversationSentenceType.DialogueTreeBranchPart
+					).WithCondition(() => EnhancedQuaterMasterService.GetAllowBattaniaCulture() == true)
+					.WithConsequence(EnhancedQuaterMasterService.ToggleQuaterMasterAllow_BattaniaCulture),
+				AppliedDialogueLineRelation.LinkToPreviousStart)
+			.WithTrueFalseConversationToggle(
+				new SimpleConversationPart(
+						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_sturgia",
+						"Allow Sturgia Equipment",
+						ConversationSentenceType.DialogueTreeBranchPart
+					).WithCondition(() => EnhancedQuaterMasterService.GetAllowSturgiaCulture() == true)
+					.WithConsequence(EnhancedQuaterMasterService.ToggleQuaterMasterAllow_SturgiaCulture),
+				AppliedDialogueLineRelation.LinkToPreviousStart)
+			.WithTrueFalseConversationToggle(
+				new SimpleConversationPart(
+						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_aserai",
+						"Allow Aserai Equipment",
+						ConversationSentenceType.DialogueTreeBranchPart
+					).WithCondition(() => EnhancedQuaterMasterService.GetAllowAseraiCulture() == true)
+					.WithConsequence(EnhancedQuaterMasterService.ToggleQuaterMasterAllow_AseraiCulture),
+				AppliedDialogueLineRelation.LinkToPreviousStart)
+			.WithTrueFalseConversationToggle(
+				new SimpleConversationPart(
+						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_khuzait",
+						"Allow Khuzait Equipment",
+						ConversationSentenceType.DialogueTreeBranchPart
+					).WithCondition(() => EnhancedQuaterMasterService.GetAllowKhuzaitCulture() == true)
+					.WithConsequence(EnhancedQuaterMasterService.ToggleQuaterMasterAllow_KhuzaitCulture),
+				AppliedDialogueLineRelation.LinkToPreviousStart)
+			.WithTrueFalseConversationToggle(
+				new SimpleConversationPart(
+						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_vlandia",
+						"Allow Vlandia Equipment",
+						ConversationSentenceType.DialogueTreeBranchPart
+					).WithCondition(() => EnhancedQuaterMasterService.GetAllowVlandiaCulture() == true)
+					.WithConsequence(EnhancedQuaterMasterService.ToggleQuaterMasterAllow_VlandiaCulture),
+				AppliedDialogueLineRelation.LinkToPreviousStart)
+			.WithTrueFalseConversationToggle(
+				new SimpleConversationPart(
+						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_empire",
+						"Allow Empire Equipment",
+						ConversationSentenceType.DialogueTreeBranchPart
+					).WithCondition(() => EnhancedQuaterMasterService.GetAllowEmpireCulture() == true)
+					.WithConsequence(EnhancedQuaterMasterService.ToggleQuaterMasterAllow_EmpireCulture),
+				AppliedDialogueLineRelation.LinkToPreviousStart)
+
+			/*.WithConversationPart(
+				new SimpleConversationPart(
+					"enhanced_quatermaster_conv_menu_configure_equipment_type",
+					"Equipment Type Settings",
+					ConversationSentenceType.DialogueTreeBranchStart
+				), AppliedDialogueLineRelation.LinkToPreviousStart)*/
+			.WithTrueFalseConversationToggle(
+				new SimpleConversationPart(
+						"enhanced_quatermaster_conv_menu_configure_equipment_type",
+						"Allow Battle Equipment",
+						ConversationSentenceType.DialogueTreeBranchPart
+					).WithCondition(() => EnhancedQuaterMasterService.GetAllowBattleEquipment() == true)
+					.WithConsequence(EnhancedQuaterMasterService.ToggleQuaterMasterAllow_BattleEquipment),
+				AppliedDialogueLineRelation.LinkToPreviousStart)
+			.WithTrueFalseConversationToggle(
+				new SimpleConversationPart(
+						"enhanced_quatermaster_conv_menu_configure_equipment_type_civilian_equipment",
+						"Allow Civilian Equipment",
+						ConversationSentenceType.DialogueTreeBranchPart
+					).WithCondition(() => EnhancedQuaterMasterService.GetAllowCivilianEquipment() == true)
+					.WithConsequence(EnhancedQuaterMasterService.ToggleQuaterMasterAllow_CivilianEquipment),
 				AppliedDialogueLineRelation.LinkToPreviousStart)
 			.Build(starter);
 	}
@@ -111,7 +202,6 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 		return text;
 	}
 
-
 	public static void updateItemRoster(ItemRoster itemRoster, List<ItemRosterElement> additions, List<ItemRosterElement> removals)
 	{
 		foreach (ItemRosterElement itemRosterElement in additions)
@@ -130,56 +220,54 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 
 		ItemRoster itemRoster = mainParty.ItemRoster;
 
+		// TODO move in util
 		List<TroopRosterElement> allCompanionsTroopRosterElement = EnhancedQuaterMasterService_Unused_Version.GetCompanionsTroopRosterElement(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
 		List<FighterClass> fighters = new List<FighterClass>();
-		List<CavalryRiderClass> cavalryRiders = new List<CavalryRiderClass>();
 
-		bool canRemoveLockedItems = EnhancedQuaterMasterService.GetAllowLockedItems();
+		bool canRemoveLockedItems = EnhancedQuaterMasterService.GetAllowLockedItems() == false;
 
+		CultureCode chosenCulture = EnhancedQuaterMasterService.GetChosenCulture();
+
+		HeroEquipmentCustomization heroEquipmentCustomization = new HeroEquipmentCustomizationByClass();
+
+		if (chosenCulture == CultureCode.Invalid)
+		{
+			return;
+		}
+		else if(chosenCulture != CultureCode.AnyOtherCulture)
+		{
+			heroEquipmentCustomization = new HeroEquipmentCustomizationByClassAndCulture(chosenCulture); 
+		}
 
 		foreach (TroopRosterElement troopCompanion in allCompanionsTroopRosterElement)
 		{
-			fighters.Add(new FighterClass(troopCompanion.Character.HeroObject, new HeroEquipmentCustomizationByClassAndCulture(CultureCode.Battania)));
-			cavalryRiders.Add(new CavalryRiderClass(troopCompanion.Character.HeroObject, new HeroEquipmentCustomizationByClassAndCulture(CultureCode.Battania)));
+			fighters.Add(new FighterClass(troopCompanion.Character.HeroObject, heroEquipmentCustomization));
 		}
 
 		List<string> categoriesChanged = new List<string>();
 
-		// Assigning horses first because saddles needs horse before it can be equipped
-		foreach (CavalryRiderClass cavalryRiderClass in cavalryRiders)
-		{
-			List<ItemRosterElement> items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-			updateItemRoster(itemRoster, cavalryRiderClass.removeRelavantBattleEquipment(items), new List<ItemRosterElement>());
-
-			items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-			var changes = cavalryRiderClass.assignBattleEquipment(items);
-            BannerlordEnhancedFramework.extendedtypes.ItemCategory.AddItemCategoryNamesFromItemList(changes.removals, cavalryRiderClass.MainItemCategories, categoriesChanged);
-			updateItemRoster(itemRoster, changes.additions, changes.removals);
-
-			items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-			updateItemRoster(itemRoster, cavalryRiderClass.removeRelavantCivilianEquipment(items), new List<ItemRosterElement>());
-			changes = cavalryRiderClass.assignCivilianEquipment(items);
-
-			BannerlordEnhancedFramework.extendedtypes.ItemCategory.AddItemCategoryNamesFromItemList(changes.removals, cavalryRiderClass.MainItemCategories, categoriesChanged);
-			updateItemRoster(itemRoster, changes.additions, changes.removals);
-		}
-
 		foreach (FighterClass fighterClass in fighters)
 		{
 			List<ItemRosterElement> items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-			updateItemRoster(itemRoster, fighterClass.removeRelavantBattleEquipment(items), new List<ItemRosterElement>());
-			
-			items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-			var changes = fighterClass.assignBattleEquipment(items);
-			BannerlordEnhancedFramework.extendedtypes.ItemCategory.AddItemCategoryNamesFromItemList(changes.removals, fighterClass.MainItemCategories, categoriesChanged);
-			updateItemRoster(itemRoster, changes.additions, changes.removals);
 
-			items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-			updateItemRoster(itemRoster, fighterClass.removeRelavantCivilianEquipment(items), new List<ItemRosterElement>());
-			changes = fighterClass.assignCivilianEquipment(items);
-			
-			BannerlordEnhancedFramework.extendedtypes.ItemCategory.AddItemCategoryNamesFromItemList(changes.removals, fighterClass.MainItemCategories, categoriesChanged);
-			updateItemRoster(itemRoster, changes.additions, changes.removals);
+			if (EnhancedQuaterMasterService.GetAllowBattleEquipment())
+			{
+				updateItemRoster(itemRoster, fighterClass.removeRelavantBattleEquipment(items), new List<ItemRosterElement>());
+
+				items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
+				var changes = fighterClass.assignBattleEquipment(items);
+				BannerlordEnhancedFramework.extendedtypes.ItemCategory.AddItemCategoryNamesFromItemList(changes.removals, fighterClass.MainItemCategories, categoriesChanged);
+				updateItemRoster(itemRoster, changes.additions, changes.removals);
+			}
+			if (EnhancedQuaterMasterService.GetAllowCivilianEquipment())
+			{
+				items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
+				updateItemRoster(itemRoster, fighterClass.removeRelavantCivilianEquipment(items), new List<ItemRosterElement>());
+				var changes = fighterClass.assignCivilianEquipment(items);
+
+				BannerlordEnhancedFramework.extendedtypes.ItemCategory.AddItemCategoryNamesFromItemList(changes.removals, fighterClass.MainItemCategories, categoriesChanged);
+				updateItemRoster(itemRoster, changes.additions, changes.removals);
+			}
 		}
 
 		if (categoriesChanged.Count > 0)
@@ -187,6 +275,36 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 			InformationManager.DisplayMessage(new InformationMessage("Quatermaster updated companions " + BuildQuaterMasterNotification(categoriesChanged), BannerlordEnhancedFramework.Colors.Yellow));
 		}
 	}
-
 }
 
+
+// List<CavalryRiderClass> cavalryRiders = new List<CavalryRiderClass>();
+// cavalryRiders.Add(new CavalryRiderClass(troopCompanion.Character.HeroObject, heroEquipmentCustomization));
+
+// Assigning horses first because saddles needs horse before it can be equipped
+/*
+foreach (CavalryRiderClass cavalryRiderClass in cavalryRiders)
+{
+	List<ItemRosterElement> items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
+
+	if (EnhancedQuaterMasterService.GetAllowBattleEquipment())
+	{
+		updateItemRoster(itemRoster, cavalryRiderClass.removeRelavantBattleEquipment(items), new List<ItemRosterElement>());
+
+		items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
+		var changes = cavalryRiderClass.assignBattleEquipment(items);
+		BannerlordEnhancedFramework.extendedtypes.ItemCategory.AddItemCategoryNamesFromItemList(changes.removals, cavalryRiderClass.MainItemCategories, categoriesChanged);
+		updateItemRoster(itemRoster, changes.additions, changes.removals);
+	}
+
+	if (EnhancedQuaterMasterService.GetAllowCivilianEquipment())
+	{
+		items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
+		updateItemRoster(itemRoster, cavalryRiderClass.removeRelavantCivilianEquipment(items), new List<ItemRosterElement>());
+		var changes = cavalryRiderClass.assignCivilianEquipment(items);
+
+		BannerlordEnhancedFramework.extendedtypes.ItemCategory.AddItemCategoryNamesFromItemList(changes.removals, cavalryRiderClass.MainItemCategories, categoriesChanged);
+		updateItemRoster(itemRoster, changes.additions, changes.removals);
+	}
+}
+*/

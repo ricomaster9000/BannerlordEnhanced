@@ -197,10 +197,14 @@ public class HeroEquipmentCustomizationByClass : HeroEquipmentCustomization
 	{
 		Predicate<EquipmentElement> canRemoveEquipment = (equipmentElement) =>
 		{
-			bool shouldRemove = canRemove != null ? canRemove(equipmentElement) : true;
+			if (canRemove != null && canRemove(equipmentElement) == true)
+			{
+				return true;
+			}
+			bool shouldRemove = true;
 			foreach (ItemCategory itemCategory in itemCategories)
 			{
-				if(itemCategory.isType(new ItemRosterElement(equipmentElement.Item)))
+				if (itemCategory.isType(new ItemRosterElement(equipmentElement.Item)))
 				{
 					shouldRemove = false;
 					break;
@@ -260,16 +264,15 @@ public abstract class BaseHeroClass
 	public abstract bool isClass(Hero hero);
 	public List<ItemRosterElement> removeEquipmentIfNoReplacementItemFound(List<ItemRosterElement> items)
 	{
-		// TODO fix civilian equipment gets replace with empty because normal equipment exist check EquipmentType
 		Predicate<EquipmentElement> canRemoveEquipment = (equipmentElement) =>
 		{
+			if (this.heroEquipmentCustomization.GetType() == typeof(HeroEquipmentCustomizationByClass)) return false;
+
 			bool canRemove = false;
 			foreach (ItemRosterElement itemRosterElement in items)
 			{
-				if (itemRosterElement.EquipmentElement.Item.ItemType == equipmentElement.Item.ItemType)
-				{
-					canRemove = true;
-				}
+				if (itemRosterElement.EquipmentElement.Item.ItemType == equipmentElement.Item.ItemType) canRemove = true;
+
 				if (canRemove && this.heroEquipmentCustomization is HeroEquipmentCustomizationByClassAndCulture)
 				{
 					HeroEquipmentCustomizationByClassAndCulture equipmentCustomization = ((HeroEquipmentCustomizationByClassAndCulture)this.heroEquipmentCustomization);
@@ -414,7 +417,7 @@ public abstract class ItemCategory
 public class MountItemCategory : ItemCategory
 {
 	public override string Name {
-		get { return "Mounts";  }
+		get { return "Mount";  }
 	}
 
 	public override bool isType(ItemRosterElement itemRosterElement)
@@ -713,6 +716,24 @@ public class CombatSkills : Skills
 	}
 }
 
+/*
+ public override List<ItemRosterElement> removeEquipment(List<ItemCategory> itemCategories, Hero hero, Predicate<EquipmentElement> canRemove = null)
+{
+	Predicate<EquipmentElement> canRemoveEquipment = (equipmentElement) =>
+	{
+		bool shouldRemove = canRemove != null ? canRemove(equipmentElement) : true;
+		foreach (ItemCategory itemCategory in itemCategories)
+		{
+			if(itemCategory.isType(new ItemRosterElement(equipmentElement.Item)))
+			{
+				shouldRemove = false;
+				break;
+			}
+		}
+		return shouldRemove;
+	};
+	return base.removeEquipment(itemCategories, hero, canRemoveEquipment);
+}*/
 
 // Battania Culture
 /*
