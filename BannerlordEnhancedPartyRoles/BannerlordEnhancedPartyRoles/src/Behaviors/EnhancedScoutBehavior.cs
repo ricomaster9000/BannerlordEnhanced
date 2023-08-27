@@ -61,7 +61,13 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
                         ).WithCondition(() => EnhancedScoutService.GetScoutAlertsNearbyEnemies() == true)
                         .WithConsequence(EnhancedScoutService.ToggleScoutAlertsNearbyEnemies),
                     AppliedDialogueLineRelation.LinkToPreviousStart)
-                .Build(starter);
+				.WithConversationPart(
+					new SimpleConversationPart(
+						"enhanced_scout_conv_menu_configure",
+						"Configurations",
+						ConversationSentenceType.DialogueTreeBranchStart
+					), AppliedDialogueLineRelation.LinkToPreviousStart)
+				.Build(starter);
         }
     }
 }
