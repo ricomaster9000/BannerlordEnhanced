@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BannerlordEnhancedFramework.extendedtypes;
+using BannerlordEnhancedFramework.src.extendedtypes;
 using BannerlordEnhancedFramework.src.utils;
-using Helpers;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Extensions;
-using TaleWorlds.CampaignSystem.ViewModelCollection.Inventory;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using static TaleWorlds.Core.Equipment;
@@ -246,11 +243,10 @@ public class HeroEquipmentCustomizationByClassAndCulture : HeroEquipmentCustomiz
 public abstract class BaseHeroClass
 {
 	protected Hero hero;
-	protected string heroClass;
 	public HeroEquipmentCustomization heroEquipmentCustomization;
 
 	protected List<ItemCategory> mainItemCategories = new List<ItemCategory>();
-	protected Skills skills;
+	protected CombatSkills combatSkills;
 
 	public List<ItemCategory> MainItemCategories
 	{
@@ -331,7 +327,7 @@ public class FighterClass : BaseHeroClass
 			ItemCategory.MountItemCategory,
 			ItemCategory.BannerItemCategory,
 		};
-		this.skills = new CombatSkills(hero);
+		this.combatSkills = new CombatSkills(HeroUtil.GetCombatSkills(hero));
 	}
 	public override bool isClass(Hero hero)
 	{
@@ -348,7 +344,7 @@ public class CavalryRiderClass : BaseHeroClass
 			ItemCategory.MountItemCategory,
 		};
 
-		this.skills = new CombatSkills(hero);
+		this.combatSkills = new CombatSkills(HeroUtil.GetCombatSkills(hero));
 	}
 	public override bool isClass(Hero hero)
 	{
@@ -508,7 +504,6 @@ public class LightArmorItemCategory : ArmorItemCategory
 	}
 }
 
-// TODO shield must also fall under OneHandedItemCategory
 public class OneHandedItemCategory : WeaponItemCategory
 {
 	public override string Name
@@ -660,418 +655,3 @@ public class HorseSaddleItemCategory : SaddleItemCategory
 	}
 }
 
-public struct Skill
-{
-	public int value { get; set; }
-	public SkillObject skillObject { get; set; }
-
-	public Skill(CharacterObject character, SkillObject skillObject)
-	{
-		value = character.GetSkillValue(skillObject);
-		this.skillObject = skillObject;
-	}
-}
-
-public abstract class Skills
-{
-	public List<Skill> allSkills = new List<Skill>();
-
-	protected Hero hero;
-
-	public Skills(Hero hero)
-	{
-		this.hero = hero;
-	}
-
-	public void OrderByDescending()
-	{
-		allSkills.OrderByDescending(skill => skill.value);
-	}
-
-	public void OrderByAscending()
-	{
-		allSkills.OrderBy(skill => skill.value);
-	}
-
-	public bool CompareSkillObjects(SkillObject skillObject1, SkillObject skillObject2)
-	{
-		return EquipmentUtil.CompareSkillObjects(hero.CharacterObject, skillObject1, skillObject2);
-	}
-}
-
-public class CombatSkills : Skills
-{
-	public CombatSkills(Hero hero): base(hero) {
-		CharacterObject character = hero.CharacterObject;
-		allSkills = new List<Skill>()
-		{
-		    new Skill(character, DefaultSkills.OneHanded),
-			new Skill(character, DefaultSkills.TwoHanded),
-			new Skill(character, DefaultSkills.Polearm),
-			new Skill(character, DefaultSkills.Throwing),
-			new Skill(character, DefaultSkills.Crossbow),
-			new Skill(character, DefaultSkills.Bow),
-		};
-		OrderByDescending();
-	}
-}
-
-/*
- public override List<ItemRosterElement> removeEquipment(List<ItemCategory> itemCategories, Hero hero, Predicate<EquipmentElement> canRemove = null)
-{
-	Predicate<EquipmentElement> canRemoveEquipment = (equipmentElement) =>
-	{
-		bool shouldRemove = canRemove != null ? canRemove(equipmentElement) : true;
-		foreach (ItemCategory itemCategory in itemCategories)
-		{
-			if(itemCategory.isType(new ItemRosterElement(equipmentElement.Item)))
-			{
-				shouldRemove = false;
-				break;
-			}
-		}
-		return shouldRemove;
-	};
-	return base.removeEquipment(itemCategories, hero, canRemoveEquipment);
-}*/
-
-// Battania Culture
-/*
-public static readonly ItemCategory BattaniaArmorItemCategory = new BattaniaArmorItemCategory();
-public static readonly ItemCategory BattaniaWeaponItemCategory = new BattaniaWeaponItemCategory();
-public static readonly ItemCategory BattaniaSaddleItemCategory = new BattaniaSaddleItemCategory();
-public static readonly ItemCategory BattaniaMountItemCategory = new BattaniaMountItemCategory();
-public static readonly ItemCategory BattaniaRangedWeaponItemCategory = new BattaniaRangedWeaponItemCategory();
-public static readonly ItemCategory BattaniaBannerItemCategory = new BattaniaBannerItemCategory();
-*/
-
-
-/*
-public class BattaniaArmorItemCategory : ArmorItemCategory
-{
-	public override string Name
-	{
-		get { return "Battania Armor"; }
-	}
-	public override bool isType(ItemRosterElement itemRosterElement)
-	{
-		return base.isType(itemRosterElement) && itemRosterElement.EquipmentElement.Item.Culture != null && itemRosterElement.EquipmentElement.Item.Culture.GetCultureCode() == CultureCode.Battania;
-	}
-}
-public class BattaniaWeaponItemCategory : WeaponItemCategory
-{
-	public override string Name
-	{
-		get { return "Battania Weapon"; }
-	}
-	public override bool isType(ItemRosterElement itemRosterElement)
-	{
-		return base.isType(itemRosterElement) && itemRosterElement.EquipmentElement.Item.Culture != null && itemRosterElement.EquipmentElement.Item.Culture.GetCultureCode() == CultureCode.Battania;
-	}
-}
-public class BattaniaMountItemCategory : MountItemCategory
-{
-	public override string Name
-	{
-		get { return "Battania Mount"; }
-	}
-	public override bool isType(ItemRosterElement itemRosterElement)
-	{
-		return base.isType(itemRosterElement) && itemRosterElement.EquipmentElement.Item.Culture != null && itemRosterElement.EquipmentElement.Item.Culture.GetCultureCode() == CultureCode.Battania;
-	}
-}
-
-public class BattaniaBannerItemCategory : BannerItemCategory
-{
-	public override string Name
-	{
-		get { return "Battania Banner"; }
-	}
-	public override bool isType(ItemRosterElement itemRosterElement)
-	{
-		return base.isType(itemRosterElement) && itemRosterElement.EquipmentElement.Item.Culture != null && itemRosterElement.EquipmentElement.Item.Culture.GetCultureCode() == CultureCode.Battania;
-	}
-}
-
-public class BattaniaSaddleItemCategory : SaddleItemCategory
-{
-	public override string Name
-	{
-		get { return "Battania Saddle"; }
-	}
-	public override bool isType(ItemRosterElement itemRosterElement)
-	{
-		return base.isType(itemRosterElement) && itemRosterElement.EquipmentElement.Item.Culture != null && itemRosterElement.EquipmentElement.Item.Culture.GetCultureCode() == CultureCode.Battania;
-	}
-}
-
-public class BattaniaRangedWeaponItemCategory : RangedWeaponItemCategory
-{
-	public override string Name
-	{
-		get { return "Battania Ranged Weapon"; }
-	}
-	public override bool isType(ItemRosterElement itemRosterElement)
-	{
-		return base.isType(itemRosterElement) && itemRosterElement.EquipmentElement.Item.Culture != null && itemRosterElement.EquipmentElement.Item.Culture.GetCultureCode() == CultureCode.Battania;
-	}
-}
-*/
-
-
-
-/*
-public class BattaniaClass : FighterClass
-{
-	public BattaniaClass(Hero hero) : base(hero)
-	{
-		cultureCode = CultureCode.Battania;
-	}
-	public override bool isClass(Hero hero)
-	{
-		return true;
-	}
-}*/
-
-/*
-public class BattaniaClass : BaseHeroClass
-{
-	public BattaniaClass(Hero hero) : base(hero)
-	{
-		this.mainItemCategories = new List<ItemCategory>() {
-			ItemCategory.BattaniaArmorItemCategory,
-			ItemCategory.BattaniaWeaponItemCategory,
-			ItemCategory.BattaniaSaddleItemCategory,
-			ItemCategory.BattaniaMountItemCategory,
-			ItemCategory.BattaniaBannerItemCategory,
-		};
-
-		this.skills = new CombatSkills(hero);
-	}
-	public override bool isClass(Hero hero)
-	{
-		return true;
-	}
-}*/
-
-/*
-Skill primarSkill = this.skills.allSkills.FirstOrDefault();
-				if (primarSkill.skillObject == newItem.RelevantSkill)
-				{
-
-				}
-				if (newItem.Effectiveness < currentEquipmentElement.Item.Effectiveness)
-{
-	continue;
-}*/
-
-/*
-public abstract class BaseHeroClass
-{
-	protected Hero hero;
-	protected string heroClass;
-	protected HeroEquipmentCustomization heroEquipmentCustomization;
-	// protected CultureCode cultureCode = CultureCode.AnyOtherCulture;
-
-	protected List<ItemCategory> mainItemCategories = new List<ItemCategory>();
-	protected Skills skills;
-	public BaseHeroClass(Hero hero)
-	{
-		this.hero = hero;
-	}
-	public abstract bool isClass(Hero hero);
-
-
-	public (List<ItemRosterElement> removals, List<ItemRosterElement> additions) assignCivilianEquipment(List<ItemRosterElement> items)
-	{
-		items = EquipmentUtil.FilterByItemFlags(items, ItemFlags.Civilian);
-		return assignEquipment(items, EquipmentType.Civilian);
-	}
-
-	public (List<ItemRosterElement> removals, List<ItemRosterElement> additions) assignBattleEquipment(List<ItemRosterElement> items)
-	{
-		return assignEquipment(items, EquipmentType.Battle);
-	}
-	private (List<ItemRosterElement> removals, List<ItemRosterElement> additions) assignEquipment(List<ItemRosterElement> items, EquipmentType equipmentType)
-	{
-		if (this.cultureCode != CultureCode.AnyOtherCulture)
-		{
-			items = getItemsByCulture(items, this.cultureCode);
-		}
-		items = getItemsByCategories(items, mainItemCategories);
-		items = ItemCategory.OrderItemRosterByEffectiveness(items);
-
-		List<ItemRosterElement> additionItems = new List<ItemRosterElement>();
-		List<ItemRosterElement> removalItems = new List<ItemRosterElement>();
-
-		foreach (ItemRosterElement itemRosterElement in items)
-		{
-			ItemObject newItem = itemRosterElement.EquipmentElement.Item;
-			Equipment equipment = equipmentType == EquipmentType.Battle ? hero.BattleEquipment : hero.CivilianEquipment;
-
-			if (newItem == null || !canUseItem(itemRosterElement.EquipmentElement) || itemRosterElement.EquipmentElement.IsEmpty || itemRosterElement.Amount <= 0)
-			{
-				continue;
-			}
-
-			EquipmentIndex equipmentIndex = EquipmentUtil.GetItemTypeWithItemObject(newItem);
-			EquipmentElement currentEquipmentElement = equipment[equipmentIndex];
-
-			bool isOpenSlot = EquipmentUtil.IsItemEquipped(currentEquipmentElement) == false; 
-			bool canReplace = false;
-
-			if (equipmentIndex == EquipmentIndex.HorseHarness && !EquipmentUtil.CanEquipHorseHarness(equipment, newItem))
-			{
-				continue;
-			}
-
-			if (!isOpenSlot)
-			{
-				if (EquipmentUtil.IsItemHorse(newItem))
-				{
-					if (EquipmentUtil.CalculateHorseEffectiveness(newItem) > EquipmentUtil.CalculateHorseEffectiveness(currentEquipmentElement.Item))
-					{
-						canReplace = true;
-					}
-				}
-				else if (EquipmentUtil.IsItemArmour(newItem))
-				{
-					if (EquipmentUtil.CalculateArmourEffectiveness(newItem) > EquipmentUtil.CalculateArmourEffectiveness(currentEquipmentElement.Item))
-					{
-						canReplace = true;
-					}
-				}
-				else if (EquipmentUtil.IsItemBanner(newItem))
-				{
-					if (newItem.BannerComponent.BannerLevel > currentEquipmentElement.Item.BannerComponent.BannerLevel)
-					{
-						canReplace = true;
-					}
-				}
-			}
-
-			if (EquipmentUtil.IsItemWeapon(newItem))
-			{
-				equipmentIndex = EquipmentUtil.GetWeaponEquipmentIndexWhere(equipment, (item) => {
-					return item != null && item.RelevantSkill == newItem.RelevantSkill && !EquipmentUtil.IsACombination(newItem, item);
-				});
-				EquipmentElement emptyEquipmentElement = new EquipmentElement();
-				currentEquipmentElement = equipmentIndex != EquipmentIndex.None ? equipment[equipmentIndex] : emptyEquipmentElement;
-
-				bool hasItemBySkill = EquipmentUtil.IsItemEquipped(currentEquipmentElement);
-
-				// TODO check scenario Ilani dispossed has onehanded as main polearm second then dagger(onehanded) third and shield last dagger should be update with thrown
-				// Remove double items
-				if (hasItemBySkill && newItem.Effectiveness > currentEquipmentElement.Item.Effectiveness)
-				{
-					canReplace = true;
-				}else if (!hasItemBySkill)
-				{
-					equipmentIndex = EquipmentUtil.GetOpenWeaponEquipmentIndex(equipment);
-					isOpenSlot = equipmentIndex != EquipmentIndex.None;
-					if (!isOpenSlot)
-					{
-						equipmentIndex = EquipmentUtil.GetLowestWeaponEquipmentIndexBySkillRank(equipment, this.hero.CharacterObject);
-						currentEquipmentElement = equipment[equipmentIndex]; 
-
-						if (this.skills.CompareSkillObjects(newItem.RelevantSkill, currentEquipmentElement.Item.RelevantSkill))
-						{
-							canReplace = true;
-						};
-					}
-				}
-			}
-
-			if (canReplace)
-			{
-				additionItems = EquipmentUtil.AddEquipmentElement(additionItems, currentEquipmentElement);
-			}
-
-			if (isOpenSlot || canReplace)
-			{
-				equipment[equipmentIndex] = itemRosterElement.EquipmentElement;
-				removalItems = EquipmentUtil.AddEquipmentElement(removalItems, itemRosterElement.EquipmentElement);
-			}
-		}
-		return (removalItems, additionItems);
-	}
-
-	public bool canUseItem(EquipmentElement equipmentElement)
-	{
-		ItemObject item = equipmentElement.Item;
-		bool canUseByGender = EquipmentUtil.CanUseItemByGender(this.hero.IsFemale, item);
-		if (canUseByGender == false) return false;
-
-		bool hasEnoughSkills = CharacterHelper.CanUseItemBasedOnSkill(this.hero.CharacterObject, equipmentElement);
-		if (hasEnoughSkills == false) return false;
-
-		bool isUsable = !item.HasHorseComponent || item.HorseComponent.IsRideable;
-		isUsable = isUsable && equipmentElement.IsQuestItem == false;
-		if (isUsable == false) return false;
-
-		return true;
-	}
-
-	public static List<ItemRosterElement> getItemsByCategories(List<ItemRosterElement> itemList, ItemCategory byItemCategory)
-	{
-		return getItemsByCategories(itemList, new List<ItemCategory>() { byItemCategory });
-	}
-
-	public static List<ItemRosterElement> getItemsByCategories(List<ItemRosterElement> itemList, List<ItemCategory> byItemCategories)
-	{
-		return itemList.FindAll(itemRosterElement =>
-		{
-			foreach (ItemCategory itemCategory in byItemCategories)
-			{
-				if (itemCategory.isType(itemRosterElement))
-				{
-					return true;
-				}
-			}
-			return false;
-		});
-	}
-
-	public static List<ItemRosterElement> getItemsByCulture(List<ItemRosterElement> itemList, CultureCode cultureCode)
-	{
-		return getItemsByCulture(itemList, new List<CultureCode>() { cultureCode });
-	}
-	public static List<ItemRosterElement> getItemsByCulture(List<ItemRosterElement> itemList, List<CultureCode> cultureCodes)
-	{
-		return itemList.FindAll(itemRosterElement =>
-		{
-			foreach (CultureCode cultureCode in cultureCodes)
-			{
-				ItemObject item = itemRosterElement.EquipmentElement.Item;
-				if (item.Culture != null && item.Culture.GetCultureCode() == cultureCode)
-				{
-					return true;
-				}
-			}
-			return false;
-		});
-	}
-
-	public List<string> AddItemCategoryNamesFromItemList(List<ItemRosterElement> itemList, List<string> categoryNames)
-	{
-		foreach (ItemRosterElement itemRosterElement in itemList)
-		{
-			foreach (ItemCategory itemCategory in this.mainItemCategories)
-			{
-				if (itemCategory.isType(itemRosterElement))
-				{
-					string hasName = categoryNames.Find((name) => {
-						return name == itemCategory.Name;
-					});
-					if (hasName == null)
-					{
-						categoryNames.Add(itemCategory.Name);
-					}
-					break;
-				}
-			}
-		};
-		return categoryNames;
-	}
-}
-*/

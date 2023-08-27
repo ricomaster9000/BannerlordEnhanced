@@ -1,5 +1,6 @@
 ﻿using BannerlordEnhancedFramework.utils;
 using BannerlordEnhancedPartyRoles.Behaviors;
+using BannerlordEnhancedPartyRoles.src.Behaviors;
 using BannerlordEnhancedPartyRoles.src.Services;
 using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.Party;
@@ -9,11 +10,14 @@ namespace BannerlordEnhancedPartyRoles.patches;
 
 public class QuartermasterPatches
 {
-    /*public static void DoneLogic_Postfix(InventoryLogic __instance, bool __result)
+    public static void DoneLogic_Postfix(InventoryLogic __instance, bool __result)
     {
         DebugUtils.LogAndPrintInfo("DoneLogic_Postfix is working");
-		EnhancedQuaterMasterBehavior.GiveBestEquipmentFromItemRoster();
-	}*/
+		if (InventoryManager.InventoryLogic.IsTrading)
+		{
+			SellingItems.SellItems();
+		}
+	}
 
 	public static void CloseInventoryPresentation_Prefix(bool fromCancel)
 	{

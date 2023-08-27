@@ -13,6 +13,10 @@ namespace BannerlordEnhancedFramework.src.utils
 {
 	public static class EquipmentUtil
 	{
+		public static bool IsItemFood(ItemObject item)
+		{
+			return (item.IsFood) ? true : false;
+		}
 		public static bool IsItemArmour(ItemObject item)
 		{
 			return (item.HasArmorComponent) ? true : false;

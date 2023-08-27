@@ -1,20 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using BannerlordEnhancedFramework.utils;
 using BannerlordEnhancedPartyRoles.src.Storage;
-using BannerlordEnhancedPartyRoles.Storage;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 
 namespace BannerlordEnhancedPartyRoles.src.Services;
 
 internal class EnhancedQuaterMasterService
 {
+
+	public static void updateItemRoster(ItemRoster itemRoster, List<ItemRosterElement> additions, List<ItemRosterElement> removals)
+	{
+		foreach (ItemRosterElement itemRosterElement in additions)
+		{
+			itemRoster.Add(itemRosterElement);
+		}
+		foreach (ItemRosterElement itemRosterElement in removals)
+		{
+			itemRoster.Remove(itemRosterElement);
+		}
+	}
 	public static void ToggleQuaterMasterAllowLockedItems()
 	{
 		SetAllowLockedItems(GetAllowLockedItems() == false ? true : false);

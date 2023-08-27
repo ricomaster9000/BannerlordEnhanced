@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Library;
 
 namespace BannerlordEnhancedFramework.utils;
@@ -99,4 +102,30 @@ public static class PartyUtils
             (bearingDegreesParty1 - bearingDegreesParty2) < allowedBearingDifference :
             (bearingDegreesParty2 - bearingDegreesParty1) < allowedBearingDifference;
     }
+
+	public static List<TroopRosterElement> GetHerosExcludePlayerHero(MBList<TroopRosterElement> troopsRosterElement, Hero playerHero)
+	{
+		List<TroopRosterElement> heros = new List<TroopRosterElement>();
+		foreach (TroopRosterElement troop in troopsRosterElement)
+		{
+			if (troop.Character.IsHero && troop.Character.HeroObject != playerHero)
+			{
+				heros.Add(troop);
+			}
+		}
+		return heros;
+	}
+
+	public static List<TroopRosterElement> GetHeros(MBList<TroopRosterElement> troopsRosterElement)
+	{
+		List<TroopRosterElement> heros = new List<TroopRosterElement>();
+		foreach (TroopRosterElement troop in troopsRosterElement)
+		{
+			if (troop.Character.IsHero)
+			{
+				heros.Add(troop);
+			}
+		}
+		return heros;
+	}
 }

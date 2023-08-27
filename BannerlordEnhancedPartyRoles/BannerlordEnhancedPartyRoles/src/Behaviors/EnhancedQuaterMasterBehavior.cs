@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using BannerlordEnhancedFramework;
 using BannerlordEnhancedFramework.dialogues;
-using BannerlordEnhancedPartyRoles.Services;
 using BannerlordEnhancedFramework.extendedtypes;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
@@ -11,10 +10,8 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using BannerlordEnhancedFramework.src.utils;
-using TaleWorlds.Engine;
 using BannerlordEnhancedPartyRoles.src.Services;
-using BannerlordEnhancedPartyRoles.src.Storage;
-using TaleWorlds.CampaignSystem.Actions;
+using BannerlordEnhancedFramework.utils;
 
 namespace BannerlordEnhancedPartyRoles.Behaviors;
 class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
@@ -26,15 +23,6 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 		return "Done";
 	}
 
-	// Not needed in debug ` there is option for config.cheat_mode 1 to activate 0 to disable
-	[CommandLineFunctionality.CommandLineArgumentFunction("on_config_text_file_changed", "debug")]
-	public static string OnConfigTextFileChanged(List<string> strings)
-	{
-		NativeConfig.OnConfigChanged();
-		return "Done";
-	}
-
-
 	public override void RegisterEvents()
 	{
 		CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(AddDialogs));
@@ -43,16 +31,6 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 	public override void SyncData(IDataStore dataStore)
 	{
 	}
-
-	// How dialogs work my understanding so far. is the outputToken arguments you can go from there when adding it as inputToken in next dialogs
-	// you can also add to show it in this example player must have quatermaster role to see that dialog
-	/*
-	private void AddDialogs(CampaignGameStarter starter)
-	{
-		starter.AddPlayerLine("QauerMaster_Ontmoeting", "hero_main_options", "quatermaster_continue_conversation", "Give Companions best items from my inventory", EnhancedQuaterMasterService.IsQuaterMaster, null);
-		starter.AddDialogLine("QauerMaster_Ontmoeting", "quatermaster_continue_conversation", "end", "Alright!", null, GiveBestEquipmentFromItemRoster);
-	}
-	*/
 
 	private void AddDialogs(CampaignGameStarter starter)
 	{
@@ -76,17 +54,6 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 					"Equipment Filter Settings",
 					ConversationSentenceType.DialogueTreeBranchStart
 				), AppliedDialogueLineRelation.LinkToPreviousStart)
-			/*.WithConversationParts(
-				new SimpleConversationPart(
-					"enhanced_quatermaster_conv_menu_configure_equipment_type",
-					"Equipment Type Settings",
-					ConversationSentenceType.DialogueTreeBranchStart
-				),
-				new SimpleConversationPart(
-					"enhanced_quatermaster_conv_menu_configure_equipment_settings",
-					"Equipment Filter Settings",
-					ConversationSentenceType.DialogueTreeBranchStart
-				), AppliedDialogueLineRelation.LinkToPreviousStart)*/
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_allow_locked_items",
@@ -151,13 +118,6 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 					).WithCondition(() => EnhancedQuaterMasterService.GetAllowEmpireCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.ToggleQuaterMasterAllow_EmpireCulture),
 				AppliedDialogueLineRelation.LinkToPreviousStart)
-
-			/*.WithConversationPart(
-				new SimpleConversationPart(
-					"enhanced_quatermaster_conv_menu_configure_equipment_type",
-					"Equipment Type Settings",
-					ConversationSentenceType.DialogueTreeBranchStart
-				), AppliedDialogueLineRelation.LinkToPreviousStart)*/
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_type",
@@ -202,26 +162,13 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 		return text;
 	}
 
-	public static void updateItemRoster(ItemRoster itemRoster, List<ItemRosterElement> additions, List<ItemRosterElement> removals)
-	{
-		foreach (ItemRosterElement itemRosterElement in additions)
-		{
-			itemRoster.Add(itemRosterElement);
-		}
-		foreach (ItemRosterElement itemRosterElement in removals)
-		{
-			itemRoster.Remove(itemRosterElement);
-		}
-	}
-
 	public static void GiveBestEquipmentFromItemRoster()
 	{
 		MobileParty mainParty = MobileParty.MainParty;
 
 		ItemRoster itemRoster = mainParty.ItemRoster;
 
-		// TODO move in util
-		List<TroopRosterElement> allCompanionsTroopRosterElement = EnhancedQuaterMasterService_Unused_Version.GetCompanionsTroopRosterElement(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
+		List<TroopRosterElement> allCompanionsTroopRosterElement = PartyUtils.GetHerosExcludePlayerHero(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
 		List<FighterClass> fighters = new List<FighterClass>();
 
 		bool canRemoveLockedItems = EnhancedQuaterMasterService.GetAllowLockedItems() == false;
@@ -252,21 +199,21 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 
 			if (EnhancedQuaterMasterService.GetAllowBattleEquipment())
 			{
-				updateItemRoster(itemRoster, fighterClass.removeRelavantBattleEquipment(items), new List<ItemRosterElement>());
+				EnhancedQuaterMasterService.updateItemRoster(itemRoster, fighterClass.removeRelavantBattleEquipment(items), new List<ItemRosterElement>());
 
 				items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
 				var changes = fighterClass.assignBattleEquipment(items);
 				BannerlordEnhancedFramework.extendedtypes.ItemCategory.AddItemCategoryNamesFromItemList(changes.removals, fighterClass.MainItemCategories, categoriesChanged);
-				updateItemRoster(itemRoster, changes.additions, changes.removals);
+				EnhancedQuaterMasterService.updateItemRoster(itemRoster, changes.additions, changes.removals);
 			}
 			if (EnhancedQuaterMasterService.GetAllowCivilianEquipment())
 			{
 				items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-				updateItemRoster(itemRoster, fighterClass.removeRelavantCivilianEquipment(items), new List<ItemRosterElement>());
+				EnhancedQuaterMasterService.updateItemRoster(itemRoster, fighterClass.removeRelavantCivilianEquipment(items), new List<ItemRosterElement>());
 				var changes = fighterClass.assignCivilianEquipment(items);
 
 				BannerlordEnhancedFramework.extendedtypes.ItemCategory.AddItemCategoryNamesFromItemList(changes.removals, fighterClass.MainItemCategories, categoriesChanged);
-				updateItemRoster(itemRoster, changes.additions, changes.removals);
+				EnhancedQuaterMasterService.updateItemRoster(itemRoster, changes.additions, changes.removals);
 			}
 		}
 
@@ -277,34 +224,3 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 	}
 }
 
-
-// List<CavalryRiderClass> cavalryRiders = new List<CavalryRiderClass>();
-// cavalryRiders.Add(new CavalryRiderClass(troopCompanion.Character.HeroObject, heroEquipmentCustomization));
-
-// Assigning horses first because saddles needs horse before it can be equipped
-/*
-foreach (CavalryRiderClass cavalryRiderClass in cavalryRiders)
-{
-	List<ItemRosterElement> items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-
-	if (EnhancedQuaterMasterService.GetAllowBattleEquipment())
-	{
-		updateItemRoster(itemRoster, cavalryRiderClass.removeRelavantBattleEquipment(items), new List<ItemRosterElement>());
-
-		items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-		var changes = cavalryRiderClass.assignBattleEquipment(items);
-		BannerlordEnhancedFramework.extendedtypes.ItemCategory.AddItemCategoryNamesFromItemList(changes.removals, cavalryRiderClass.MainItemCategories, categoriesChanged);
-		updateItemRoster(itemRoster, changes.additions, changes.removals);
-	}
-
-	if (EnhancedQuaterMasterService.GetAllowCivilianEquipment())
-	{
-		items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-		updateItemRoster(itemRoster, cavalryRiderClass.removeRelavantCivilianEquipment(items), new List<ItemRosterElement>());
-		var changes = cavalryRiderClass.assignCivilianEquipment(items);
-
-		BannerlordEnhancedFramework.extendedtypes.ItemCategory.AddItemCategoryNamesFromItemList(changes.removals, cavalryRiderClass.MainItemCategories, categoriesChanged);
-		updateItemRoster(itemRoster, changes.additions, changes.removals);
-	}
-}
-*/
