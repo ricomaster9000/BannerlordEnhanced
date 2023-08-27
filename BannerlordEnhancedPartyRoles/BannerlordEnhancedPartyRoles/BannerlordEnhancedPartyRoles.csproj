@@ -203,10 +203,15 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\*" />
+    <Compile Include="src\Behaviors\SellingItems.cs" />
     <Compile Include="src\patches\*" />
-    <Compile Include="src\Behaviors\*" />
+    <Compile Include="src\Behaviors\EnhancedEngineerBehavior.cs" />
+    <Compile Include="src\Behaviors\EnhancedQuaterMasterBehavior.cs" />
+    <Compile Include="src\Behaviors\EnhancedScoutBehavior.cs" />
     <Compile Include="src\Storage\*" />
-    <Compile Include="src\Services\*" />
+    <Compile Include="src\Services\EnhancedEngineerService.cs" />
+    <Compile Include="src\Services\EnhancedQuaterMasterService.cs" />
+    <Compile Include="src\Services\EnhancedScoutService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

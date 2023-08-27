@@ -6,11 +6,17 @@ using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.Library;
+using BannerlordEnhancedFramework.extendedtypes;
+using Helpers;
 
 namespace BannerlordEnhancedFramework.src.utils
 {
 	public static class EquipmentUtil
 	{
+		public static bool IsItemFood(ItemObject item)
+		{
+			return (item.IsFood) ? true : false;
+		}
 		public static bool IsItemArmour(ItemObject item)
 		{
 			return (item.HasArmorComponent) ? true : false;
@@ -28,7 +34,12 @@ namespace BannerlordEnhancedFramework.src.utils
 
 		public static bool IsItemHorse(ItemObject item)
 		{
-			return (item.HasHorseComponent) ? true : false;
+			return (item.HasHorseComponent && item.HorseComponent.Monster.FamilyType == (int)HorseFamilyType.Horse) ? true : false;
+		}
+
+		public static bool IsItemCamel(ItemObject item)
+		{
+			return (item.HasHorseComponent && item.HorseComponent.Monster.FamilyType == (int)HorseFamilyType.Camel) ? true : false;
 		}
 
 		public static bool IsFemaleClothing(ItemObject item)
@@ -41,7 +52,67 @@ namespace BannerlordEnhancedFramework.src.utils
 			return false;
 		}
 
+		public static bool IsCombinationWeapon(ItemObject item)
+		{
+			if (item.RelevantSkill == DefaultSkills.OneHanded)
+			{
+				if (item.WeaponComponent.PrimaryWeapon.IsShield)
+				{
+					return true;
+				}
+				else if (item.WeaponComponent.PrimaryWeapon.IsMeleeWeapon)
+				{
+					return true;
+				}
+			}
+			else if (item.RelevantSkill == DefaultSkills.Bow || item.RelevantSkill == DefaultSkills.Crossbow)
+			{
+				if (item.WeaponComponent.PrimaryWeapon.IsAmmo || item.WeaponComponent.PrimaryWeapon.IsRangedWeapon)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public static bool IsACombination(ItemObject weaponItem1, ItemObject weaponItem2)
+		{
+			if (Object.ReferenceEquals(weaponItem1.WeaponComponent, null) || Object.ReferenceEquals(weaponItem2.WeaponComponent, null))
+			{
+				return false;
+			}
+			SkillObject skill1 = weaponItem1.RelevantSkill;
+			SkillObject skill2 = weaponItem2.RelevantSkill;
+			WeaponComponentData primaryWeapon1 = weaponItem1.WeaponComponent.PrimaryWeapon;
+			WeaponComponentData primaryWeapon2 = weaponItem2.WeaponComponent.PrimaryWeapon;
+
+			if (skill1 == DefaultSkills.OneHanded && skill2 == DefaultSkills.OneHanded)
+			{
+				if (primaryWeapon1.IsShield && primaryWeapon2.IsMeleeWeapon)
+				{
+					return true;
+				}
+				else if (primaryWeapon1.IsMeleeWeapon && primaryWeapon2.IsShield)
+				{
+					return true;
+				}
+			}
+			else if ((skill1 == DefaultSkills.Bow || skill2 == DefaultSkills.Bow) || (skill1 == DefaultSkills.Crossbow || skill2 == DefaultSkills.Crossbow))
+			{
+				if (primaryWeapon1.IsAmmo && primaryWeapon2.IsRangedWeapon)
+				{
+					return true;
+				}
+				else if (primaryWeapon1.IsRangedWeapon && primaryWeapon2.IsAmmo)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		// IsEmpty is there if item is there. For example if you remove all body armor from character it won't have Item but still have an EquipmentElement.
+		// If equipmentElement is null it means it is also not equipped
 		public static bool IsItemEquipped(EquipmentElement equipmentElement)
 		{
 			return !(Object.ReferenceEquals(equipmentElement, null) || equipmentElement.IsEmpty);
@@ -63,6 +134,10 @@ namespace BannerlordEnhancedFramework.src.utils
 				}
 			}
 			return false;
+		}
+		public static bool CompareSkillObjects(CharacterObject character, SkillObject skillObject1, SkillObject skillObject2)
+		{
+			return character.GetSkillValue(skillObject1) > character.GetSkillValue(skillObject2);
 		}
 		public static bool CanEquipHorseHarness(Equipment equipment, ItemObject item)
 		{
@@ -94,6 +169,22 @@ namespace BannerlordEnhancedFramework.src.utils
 			return false;
 		}
 
+		public static bool CanUseItem(Hero hero, EquipmentElement equipmentElement)
+		{
+			ItemObject item = equipmentElement.Item;
+			bool canUseByGender = EquipmentUtil.CanUseItemByGender(hero.IsFemale, item);
+			if (canUseByGender == false) return false;
+
+			bool hasEnoughSkills = CharacterHelper.CanUseItemBasedOnSkill(hero.CharacterObject, equipmentElement);
+			if (hasEnoughSkills == false) return false;
+
+			bool isUsable = !item.HasHorseComponent || item.HorseComponent.IsRideable;
+			isUsable = isUsable && equipmentElement.IsQuestItem == false;
+			if (isUsable == false) return false;
+
+			return true;
+		}
+
 		public static List<ItemRosterElement> RemoveLockedItems(List<ItemRosterElement> itemRosterElementList)
 		{
 			return itemRosterElementList.Where((currentItemRosterElement) => {
@@ -123,7 +214,6 @@ namespace BannerlordEnhancedFramework.src.utils
 			return ((float)(horseComponent.ChargeDamage * horseComponent.Speed + horseComponent.Maneuver * horseComponent.Speed) + (float)horseComponent.BodyLength * item.Weight * 0.025f) * (float)(horseComponent.HitPoints + horseComponent.HitPointBonus) * 0.0001f;
 
 		}
-
 		public static List<ItemRosterElement> AddEquipmentElement(List<ItemRosterElement> targetItemRosterElement, EquipmentElement equipmentElement)
 		{
 			Predicate<ItemRosterElement> getItemRosterElement = (itemRosterElement) => {
@@ -186,6 +276,55 @@ namespace BannerlordEnhancedFramework.src.utils
 			{
 				return itemRosterElement.EquipmentElement.Item.ItemFlags.HasAnyFlag(itemFlags) == false;
 			}).ToList();
+		}
+
+		public static EquipmentIndex GetWeaponEquipmentIndexWhere(Equipment equipment, Predicate<ItemObject> predicate)
+		{
+			EquipmentIndex equipmentIndex = EquipmentIndex.None;
+			for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.ExtraWeaponSlot; i++)
+			{
+				EquipmentElement equipmentElement = equipment[(int)i];
+				ItemObject item = equipmentElement.Item;
+				if (predicate(item))
+				{
+					equipmentIndex = i;
+					break;
+				}
+			}
+			return equipmentIndex;
+		}
+
+		public static EquipmentIndex GetOpenWeaponEquipmentIndex(Equipment equipment)
+		{
+			return GetWeaponEquipmentIndexWhere(equipment, (item) =>
+			{
+				return item == null;
+			});
+		}
+
+
+		public static EquipmentIndex GetLowestWeaponEquipmentIndexBySkillRank(Equipment equipment, CharacterObject character)
+		{
+			EquipmentIndex equipmentIndex = EquipmentIndex.None;
+			int skillValue = 9000;
+
+			for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.ExtraWeaponSlot; i++)
+			{
+				EquipmentElement equipmentElement = equipment[(int)i];
+				if (Object.ReferenceEquals(equipmentElement, null) || equipmentElement.IsEmpty)
+				{
+					continue;
+				}
+				ItemObject item = equipmentElement.Item;
+
+				int itemSkillValue = character.GetSkillValue(item.RelevantSkill);
+				if (itemSkillValue < skillValue)
+				{
+					skillValue = itemSkillValue;
+					equipmentIndex = i;
+				}
+			}
+			return equipmentIndex;
 		}
 
 		public static EquipmentIndex GetItemTypeWithItemObject(ItemObject item)
