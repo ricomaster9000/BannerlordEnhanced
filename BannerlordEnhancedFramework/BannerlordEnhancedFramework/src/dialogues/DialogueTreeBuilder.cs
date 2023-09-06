@@ -64,6 +64,18 @@ public class DialogueTreeBuilder
         );
     }
 
+    public DialogueTreeBuilder WithConversationPart(
+        ConversationPart conversationPart,
+        AppliedDialogueLineRelation appliedDialogueLineRelation = AppliedDialogueLineRelation.ManuallyLinked,
+        DialogueLineRelationParams dialogueLineRelationParams = null
+    ) {
+        return WithConversationParts(
+            new List<ConversationPart>{conversationPart},
+            appliedDialogueLineRelation,
+            dialogueLineRelationParams
+        );
+    }
+
     public DialogueTreeBuilder WithConversationParts(
         ConversationPart conversationPart,
         ConversationPart conversationPart2,
@@ -83,6 +95,19 @@ public class DialogueTreeBuilder
         DialogueLineRelationParams dialogueLineRelationParams = null
     ) {
         addConversationPart(conversationParts,appliedDialogueLineRelation,dialogueLineRelationParams);
+        return this;
+    }
+
+    public DialogueTreeBuilder MoveBackToParentBranch()
+    {
+        _currentTreeBranchStart = _dialogueLinesToAdd[--_currentTreeBranchDepthIndex].First();
+        return this;
+    }
+    
+    public DialogueTreeBuilder MoveBackToRoot()
+    {
+        _currentTreeBranchDepthIndex = 0;
+        _currentTreeBranchStart = _dialogueLinesToAdd[_currentTreeBranchDepthIndex].First();
         return this;
     }
 

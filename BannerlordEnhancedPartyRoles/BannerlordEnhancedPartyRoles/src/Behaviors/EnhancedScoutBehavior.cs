@@ -33,7 +33,7 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
 
         private void AddDialogs(CampaignGameStarter starter)
         {
-            new DialogueBuilder()
+            new DialogueTreeBuilder()
                 .WithConversationPart(
                     new SimpleConversationPart(
                         "enhanced_scout_conv_start",
@@ -46,13 +46,13 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
                         "enhanced_scout_conv_menu_configure",
                         "Configurations",
                         ConversationSentenceType.DialogueTreeBranchStart
-                    ), AppliedDialogueLineRelation.LinkToPreviousStart)
+                    ), AppliedDialogueLineRelation.LinkToParentBranch)
                 .WithConversationPart(
                     new SimpleConversationPart(
                         "enhanced_scout_conv_menu_configure_enemy_alerts",
                         "Enemy Alert Settings",
                         ConversationSentenceType.DialogueTreeBranchStart
-                    ), AppliedDialogueLineRelation.LinkToPreviousStart)
+                    ), AppliedDialogueLineRelation.LinkToParentBranch)
                 .WithTrueFalseConversationToggle(
                     new SimpleConversationPart(
                             "enhanced_scout_conv_menu_configure_enemy_alerts_toggle_pause_game",
@@ -60,13 +60,7 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
                             ConversationSentenceType.DialogueTreeBranchPart
                         ).WithCondition(() => EnhancedScoutService.GetScoutAlertsNearbyEnemies() == true)
                         .WithConsequence(EnhancedScoutService.ToggleScoutAlertsNearbyEnemies),
-                    AppliedDialogueLineRelation.LinkToPreviousStart)
-				.WithConversationPart(
-					new SimpleConversationPart(
-						"enhanced_scout_conv_menu_configure",
-						"Configurations",
-						ConversationSentenceType.DialogueTreeBranchStart
-					), AppliedDialogueLineRelation.LinkToPreviousStart)
+                    AppliedDialogueLineRelation.LinkToParentBranch)
 				.Build(starter);
         }
     }
