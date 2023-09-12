@@ -13,6 +13,10 @@ namespace BannerlordEnhancedFramework.src.utils
 {
 	public static class EquipmentUtil
 	{
+		public static bool IsItemAnimal(ItemObject item)
+		{
+			return item.IsAnimal;
+		}
 		public static bool IsItemFood(ItemObject item)
 		{
 			return (item.IsFood) ? true : false;
@@ -40,6 +44,10 @@ namespace BannerlordEnhancedFramework.src.utils
 		public static bool IsItemCamel(ItemObject item)
 		{
 			return (item.HasHorseComponent && item.HorseComponent.Monster.FamilyType == (int)HorseFamilyType.Camel) ? true : false;
+		}
+		public static bool IsItemMule(ItemObject item)
+		{
+			return EquipmentUtil.IsItemHorse(item) && item.HorseComponent.Monster.StringId == "mule" ? true : false;
 		}
 
 		public static bool IsFemaleClothing(ItemObject item)

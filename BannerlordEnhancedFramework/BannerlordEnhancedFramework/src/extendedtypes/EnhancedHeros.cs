@@ -6,6 +6,7 @@ using BannerlordEnhancedFramework.src.utils;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static BannerlordEnhancedFramework.extendedtypes.ExtendedItemCategory;
 using static TaleWorlds.Core.Equipment;
 
 namespace BannerlordEnhancedFramework.extendedtypes;
@@ -14,9 +15,9 @@ public abstract class HeroEquipmentCustomization
 {
 	public EquipmentType equipmentType = EquipmentType.Battle;
 	public HeroEquipmentCustomization() { }
-	public virtual (List<ItemRosterElement> removals, List<ItemRosterElement> additions) customizeAndAssignEquipment(List<ItemRosterElement> items, List<ItemCategory> itemCategories, Hero hero)
+	public virtual (List<ItemRosterElement> removals, List<ItemRosterElement> additions) customizeAndAssignEquipment(List<ItemRosterElement> items, List<ExtendedItemCategory> itemCategories, Hero hero)
 	{
-		items = ItemCategory.OrderItemRosterByEffectiveness(items);
+		items = ExtendedItemCategory.OrderItemRosterByEffectiveness(items);
 
 		List<ItemRosterElement> additionItems = new List<ItemRosterElement>();
 		List<ItemRosterElement> removalItems = new List<ItemRosterElement>();
@@ -117,7 +118,7 @@ public abstract class HeroEquipmentCustomization
 		return (removalItems, additionItems);
 	}
 
-	public virtual List<ItemRosterElement> removeEquipment(List<ItemCategory> itemCategories, Hero hero, Predicate<EquipmentElement> canRemove = null)
+	public virtual List<ItemRosterElement> removeEquipment(List<ExtendedItemCategory> itemCategories, Hero hero, Predicate<EquipmentElement> canRemove = null)
 	{
 		List<ItemRosterElement> additionItems = new List<ItemRosterElement>();
 		Equipment equipment = equipmentType == EquipmentType.Battle ? hero.BattleEquipment : hero.CivilianEquipment;
@@ -135,16 +136,16 @@ public abstract class HeroEquipmentCustomization
 		}
 		return additionItems;
 	}
-	public static List<ItemRosterElement> getItemsByCategories(List<ItemRosterElement> itemList, ItemCategory byItemCategory)
+	public static List<ItemRosterElement> getItemsByCategories(List<ItemRosterElement> itemList, ExtendedItemCategory byItemCategory)
 	{
-		return getItemsByCategories(itemList, new List<ItemCategory>() { byItemCategory });
+		return getItemsByCategories(itemList, new List<ExtendedItemCategory>() { byItemCategory });
 	}
 
-	public static List<ItemRosterElement> getItemsByCategories(List<ItemRosterElement> itemList, List<ItemCategory> byItemCategories)
+	public static List<ItemRosterElement> getItemsByCategories(List<ItemRosterElement> itemList, List<ExtendedItemCategory> byItemCategories)
 	{
 		return itemList.FindAll(itemRosterElement =>
 		{
-			foreach (ItemCategory itemCategory in byItemCategories)
+			foreach (ExtendedItemCategory itemCategory in byItemCategories)
 			{
 				if (itemCategory.isType(itemRosterElement))
 				{
@@ -183,14 +184,14 @@ public abstract class HeroEquipmentCustomization
 
 public class HeroEquipmentCustomizationByClass : HeroEquipmentCustomization
 {
-	public override (List<ItemRosterElement> removals, List<ItemRosterElement> additions) customizeAndAssignEquipment(List<ItemRosterElement> items, List<ItemCategory> itemCategories, Hero hero)
+	public override (List<ItemRosterElement> removals, List<ItemRosterElement> additions) customizeAndAssignEquipment(List<ItemRosterElement> items, List<ExtendedItemCategory> itemCategories, Hero hero)
 	{
 		items = getItemsByCategories(items, itemCategories);
 		return base.customizeAndAssignEquipment(items, itemCategories, hero);
 	}
 
 	// Remove equipment that is item is not by this class
-	public override List<ItemRosterElement> removeEquipment(List<ItemCategory> itemCategories, Hero hero, Predicate<EquipmentElement> canRemove = null)
+	public override List<ItemRosterElement> removeEquipment(List<ExtendedItemCategory> itemCategories, Hero hero, Predicate<EquipmentElement> canRemove = null)
 	{
 		Predicate<EquipmentElement> canRemoveEquipment = (equipmentElement) =>
 		{
@@ -199,7 +200,7 @@ public class HeroEquipmentCustomizationByClass : HeroEquipmentCustomization
 				return true;
 			}
 			bool shouldRemove = true;
-			foreach (ItemCategory itemCategory in itemCategories)
+			foreach (ExtendedItemCategory itemCategory in itemCategories)
 			{
 				if (itemCategory.isType(new ItemRosterElement(equipmentElement.Item)))
 				{
@@ -219,7 +220,7 @@ public class HeroEquipmentCustomizationByClassAndCulture : HeroEquipmentCustomiz
 	{
 		this.cultureCode = cultureCode;
 	}
-	public override (List<ItemRosterElement> removals, List<ItemRosterElement> additions) customizeAndAssignEquipment(List<ItemRosterElement> items, List<ItemCategory> itemCategories, Hero hero)
+	public override (List<ItemRosterElement> removals, List<ItemRosterElement> additions) customizeAndAssignEquipment(List<ItemRosterElement> items, List<ExtendedItemCategory> itemCategories, Hero hero)
 	{
 		if (this.cultureCode != CultureCode.AnyOtherCulture)
 		{
@@ -228,7 +229,7 @@ public class HeroEquipmentCustomizationByClassAndCulture : HeroEquipmentCustomiz
 		return base.customizeAndAssignEquipment(items, itemCategories, hero);
 	}
 	// Remove equipment item that is this class culture
-	public override List<ItemRosterElement> removeEquipment(List<ItemCategory> itemCategories, Hero hero, Predicate<EquipmentElement> canRemove = null)
+	public override List<ItemRosterElement> removeEquipment(List<ExtendedItemCategory> itemCategories, Hero hero, Predicate<EquipmentElement> canRemove = null)
 	{
 		Predicate<EquipmentElement> canRemoveEquipment = (equipmentElement) =>
 		{
@@ -245,10 +246,10 @@ public abstract class BaseHeroClass
 	protected Hero hero;
 	public HeroEquipmentCustomization heroEquipmentCustomization;
 
-	protected List<ItemCategory> mainItemCategories = new List<ItemCategory>();
+	protected List<ExtendedItemCategory> mainItemCategories = new List<ExtendedItemCategory>();
 	protected CombatSkills combatSkills;
 
-	public List<ItemCategory> MainItemCategories
+	public List<ExtendedItemCategory> MainItemCategories
 	{
 		get { return mainItemCategories; }
 	}
@@ -320,12 +321,12 @@ public class FighterClass : BaseHeroClass
 {
 	public FighterClass(Hero hero, HeroEquipmentCustomization heroEquipmentCustomization) : base(hero, heroEquipmentCustomization)
 	{
-		this.mainItemCategories = new List<ItemCategory>() {
-			ItemCategory.ArmorItemCategory,
-			ItemCategory.WeaponItemCategory,
-			ItemCategory.SaddleItemCategory,
-			ItemCategory.MountItemCategory,
-			ItemCategory.BannerItemCategory,
+		this.mainItemCategories = new List<ExtendedItemCategory>() {
+			ExtendedItemCategory.ArmorItemCategory,
+			ExtendedItemCategory.WeaponItemCategory,
+			ExtendedItemCategory.SaddleItemCategory,
+			ExtendedItemCategory.MountItemCategory,
+			ExtendedItemCategory.BannerItemCategory,
 		};
 		this.combatSkills = new CombatSkills(HeroUtil.GetCombatSkills(hero));
 	}
@@ -340,8 +341,8 @@ public class CavalryRiderClass : BaseHeroClass
 {
 	public CavalryRiderClass(Hero hero, HeroEquipmentCustomization heroEquipmentCustomization) : base(hero, heroEquipmentCustomization)
 	{
-		this.mainItemCategories = new List<ItemCategory>() {
-			ItemCategory.MountItemCategory,
+		this.mainItemCategories = new List<ExtendedItemCategory>() {
+			ExtendedItemCategory.MountItemCategory,
 		};
 
 		this.combatSkills = new CombatSkills(HeroUtil.GetCombatSkills(hero));
@@ -352,18 +353,25 @@ public class CavalryRiderClass : BaseHeroClass
 	}
 }
 
-public abstract class ItemCategory
+public abstract class ExtendedItemCategory
 {
-	public static readonly ItemCategory ArmorItemCategory = new ArmorItemCategory();
-	public static readonly ItemCategory WeaponItemCategory = new WeaponItemCategory();
-	public static readonly ItemCategory SaddleItemCategory = new SaddleItemCategory();
-	public static readonly ItemCategory MountItemCategory = new MountItemCategory();
-	public static readonly ItemCategory RangedWeaponItemCategory = new RangedWeaponItemCategory();
-	public static readonly ItemCategory BannerItemCategory = new BannerItemCategory();
-	public static readonly ItemCategory ShieldItemCategory = new ShieldItemCategory();
-	public static readonly ItemCategory OneHandedItemCategory = new OneHandedItemCategory();
-	public static readonly ItemCategory TwoHandedItemCategory = new TwoHandedItemCategory();
-	public static readonly ItemCategory PolearmItemCategory = new PolearmItemCategory();
+	public static readonly ExtendedItemCategory ArmorItemCategory = new ArmorItemCategory();
+	public static readonly ExtendedItemCategory WeaponItemCategory = new WeaponItemCategory();
+	public static readonly ExtendedItemCategory SaddleItemCategory = new SaddleItemCategory();
+	public static readonly ExtendedItemCategory MountItemCategory = new MountItemCategory();
+	public static readonly ExtendedItemCategory RangedWeaponItemCategory = new RangedWeaponItemCategory();
+	public static readonly ExtendedItemCategory BannerItemCategory = new BannerItemCategory();
+	public static readonly ExtendedItemCategory ShieldItemCategory = new ShieldItemCategory();
+	public static readonly ExtendedItemCategory OneHandedItemCategory = new OneHandedItemCategory();
+	public static readonly ExtendedItemCategory TwoHandedItemCategory = new TwoHandedItemCategory();
+	public static readonly ExtendedItemCategory PolearmItemCategory = new PolearmItemCategory();
+	public static readonly ExtendedItemCategory FoodItemCategory = new FoodItemCategory();
+	public static readonly ExtendedItemCategory GoodsItemCategory = new GoodsItemCategory();
+	public static readonly ExtendedItemCategory NonConsumableGoodsItemCategory = new NonConsumableGoodsItemCategory();
+	public static readonly ExtendedItemCategory MuleItemCategory = new MuleItemCategory();
+	public static readonly ExtendedItemCategory HorseItemCategory = new HorseItemCategory();
+	public static readonly ExtendedItemCategory CamelItemCategory = new CamelItemCategory();
+	public static readonly ExtendedItemCategory ResourcesGoodsItemCategory = new ResourcesGoodsItemCategory();
 
 	public abstract string Name { get; }
 	public abstract bool isType(ItemRosterElement itemRosterElement);
@@ -374,6 +382,12 @@ public abstract class ItemCategory
 		LEAST_EFFECTIVE,
 		ABOVE_AVERAGE_EFFECTIVE
 	}
+	public enum OrderByWeight
+	{
+		 MOST_HEAVY,
+		 LEAST_HEAVY,
+		 ABOVE_AVERAGE_HEAVY
+	}
 
 	public static List<ItemRosterElement> OrderItemRosterByEffectiveness(List<ItemRosterElement> itemRosterElementList, OrderByEffectiveness orderByEffectiveness = OrderByEffectiveness.MOST_EFFECTIVE)
 	{
@@ -381,36 +395,47 @@ public abstract class ItemCategory
 		{
 			case OrderByEffectiveness.MOST_EFFECTIVE:
 				return itemRosterElementList.OrderByDescending(itemRosterElement => itemRosterElement.EquipmentElement.Item.Effectiveness).ToList();
-
-			case OrderByEffectiveness.LEAST_EFFECTIVE:
+			case OrderByEffectiveness.ABOVE_AVERAGE_EFFECTIVE:
+			default:
 				return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Effectiveness).ToList();
 		}
-		return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Effectiveness).ToList();
 	}
-	public static List<string> AddItemCategoryNamesFromItemList(List<ItemRosterElement> itemList, List<ItemCategory> itemCategories, List<string> categoryNames)
+	public static List<ItemRosterElement> OrderItemRosterByWeight(List<ItemRosterElement> itemRosterElementList, OrderByWeight orderByWeight = OrderByWeight.MOST_HEAVY)
+	{
+		switch (orderByWeight)
+		{
+			case OrderByWeight.MOST_HEAVY:
+				return itemRosterElementList.OrderByDescending(itemRosterElement => itemRosterElement.EquipmentElement.Item.Weight).ToList();
+			default:
+				return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Weight).ToList();
+
+		}
+	}
+	public static Dictionary<string, int> AddItemCategoryNamesFromItemList(List<ItemRosterElement> itemList, List<ExtendedItemCategory> itemCategories, Dictionary<string, int> categories)
 	{
 		foreach (ItemRosterElement itemRosterElement in itemList)
 		{
-			foreach (ItemCategory itemCategory in itemCategories)
+			foreach (ExtendedItemCategory itemCategory in itemCategories)
 			{
 				if (itemCategory.isType(itemRosterElement))
 				{
-					string hasName = categoryNames.Find((name) => {
-						return name == itemCategory.Name;
-					});
-					if (hasName == null)
+					if (categories.ContainsKey(itemCategory.Name)) 
 					{
-						categoryNames.Add(itemCategory.Name);
+						int amount = categories[itemCategory.Name];
+						categories[itemCategory.Name] = amount + 1;
+					} else 
+					{
+						categories.Add(itemCategory.Name, 1);
 					}
 					break;
 				}
 			}
 		};
-		return categoryNames;
+		return categories;
 	}
 }
 
-public class MountItemCategory : ItemCategory
+public class MountItemCategory : ExtendedItemCategory
 {
 	public override string Name {
 		get { return "Mount";  }
@@ -423,7 +448,7 @@ public class MountItemCategory : ItemCategory
 	}
 }
 
-public class ArmorItemCategory : ItemCategory
+public class ArmorItemCategory : ExtendedItemCategory
 {
 	public override string Name
 	{
@@ -435,7 +460,7 @@ public class ArmorItemCategory : ItemCategory
 	}
 }
 
-public class WeaponItemCategory : ItemCategory
+public class WeaponItemCategory : ExtendedItemCategory
 {
 	public override string Name
 	{
@@ -447,7 +472,7 @@ public class WeaponItemCategory : ItemCategory
 	}
 }
 
-public class SaddleItemCategory : ItemCategory
+public class SaddleItemCategory : ExtendedItemCategory
 {
 	public override string Name
 	{
@@ -458,7 +483,7 @@ public class SaddleItemCategory : ItemCategory
 		return itemRosterElement.EquipmentElement.Item.Type == ItemObject.ItemTypeEnum.HorseHarness;
 	}
 }
-public class BannerItemCategory : ItemCategory
+public class BannerItemCategory : ExtendedItemCategory
 {
 	public override string Name
 	{
@@ -655,3 +680,119 @@ public class HorseSaddleItemCategory : SaddleItemCategory
 	}
 }
 
+public class FoodItemCategory : ExtendedItemCategory
+{
+	public override string Name
+	{
+		get { return "Food"; }
+	}
+	public override bool isType(ItemRosterElement itemRosterElement)
+	{
+		return EquipmentUtil.IsItemFood(itemRosterElement.EquipmentElement.Item);
+	}
+}
+
+public class GoodsItemCategory: ExtendedItemCategory
+{
+	public override string Name
+	{
+		get { return "Goods"; }
+	}
+	public override bool isType(ItemRosterElement itemRosterElement)
+	{
+		return itemRosterElement.EquipmentElement.Item.ItemType.HasAnyFlag(ItemObject.ItemTypeEnum.Goods);
+	}
+}
+
+public class NonConsumableGoodsItemCategory : GoodsItemCategory
+{
+	public override string Name
+	{
+		get { return "Non Consumable Goods"; }
+	}
+	public override bool isType(ItemRosterElement itemRosterElement)
+	{
+		return base.isType(itemRosterElement) && !EquipmentUtil.IsItemFood(itemRosterElement.EquipmentElement.Item);
+	}
+}
+
+public class MuleItemCategory : ExtendedItemCategory
+{
+	public override string Name
+	{
+		get { return "Mule"; }
+	}
+	public override bool isType(ItemRosterElement itemRosterElement)
+	{
+		return  EquipmentUtil.IsItemMule(itemRosterElement.EquipmentElement.Item);
+	}
+}
+
+public class HorseItemCategory: ExtendedItemCategory
+{
+	public override string Name
+	{
+		get { return "Horse"; }
+	}
+	public override bool isType(ItemRosterElement itemRosterElement)
+	{
+		return EquipmentUtil.IsItemHorse(itemRosterElement.EquipmentElement.Item) && !EquipmentUtil.IsItemMule(itemRosterElement.EquipmentElement.Item);
+	}
+}
+
+public class CamelItemCategory : ExtendedItemCategory
+{
+	public override string Name
+	{
+		get { return "Camel"; }
+	}
+	public override bool isType(ItemRosterElement itemRosterElement)
+	{
+		return EquipmentUtil.IsItemCamel(itemRosterElement.EquipmentElement.Item);
+	}
+}
+
+public class ResourcesGoodsItemCategory : NonConsumableGoodsItemCategory
+{ 
+	public override string Name
+	{
+		get { return "Resources"; }
+	}
+	public override bool isType(ItemRosterElement itemRosterElement)
+	{
+		return base.isType(itemRosterElement) && !itemRosterElement.EquipmentElement.Item.HasHorseComponent;
+	}
+}
+
+
+
+
+
+
+
+
+
+/*
+ * 
+ *	public static List<string> AddItemCategoryNamesFromItemList(List<ItemRosterElement> itemList, List<ExtendedItemCategory> itemCategories, List<string> categoryNames)
+	{
+		foreach (ItemRosterElement itemRosterElement in itemList)
+		{
+			foreach (ExtendedItemCategory itemCategory in itemCategories)
+			{
+				if (itemCategory.isType(itemRosterElement))
+				{
+					string hasName = categoryNames.Find((name) => {
+						return name == itemCategory.Name;
+					});
+					if (hasName == null)
+					{
+						categoryNames.Add(itemCategory.Name);
+					}
+					break;
+				}
+			}
+		};
+		return categoryNames;
+	}
+*/
