@@ -47,13 +47,13 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 					"enhanced_quatermaster_conv_menu_configure",
 					"Configurations",
 					ConversationSentenceType.DialogueTreeBranchStart
-				), AppliedDialogueLineRelation.LinkToCurrentBranch)
+				))
 			.WithConversationPart(
 				new SimpleConversationPart(
 					"enhanced_quatermaster_conv_menu_configure_equipment_settings",
 					"Equipment Filter Settings",
 					ConversationSentenceType.DialogueTreeBranchStart
-				), AppliedDialogueLineRelation.LinkToCurrentBranch)
+				))
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_allow_locked_items",
