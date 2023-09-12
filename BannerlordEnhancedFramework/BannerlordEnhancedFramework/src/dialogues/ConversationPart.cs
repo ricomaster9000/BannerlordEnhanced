@@ -164,6 +164,11 @@ namespace BannerlordEnhancedFramework.dialogues
             return this._to;
         }
 
+        public bool IsStartOfDialogueBranch()
+        {
+            return this._type.Equals(ConversationSentenceType.DialogueTreeBranchStart);
+        }
+
         public bool IsStartOfDialogueTreeOrBranch()
         {
             return this._type.Equals(ConversationSentenceType.DialogueTreeRootStart) ||

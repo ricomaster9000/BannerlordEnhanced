@@ -2,7 +2,7 @@
 
 public enum AppliedDialogueLineRelation
 {
-    ManuallyLinked,
+    AutomaticallyLinked,
     //LinkToRootStart,
     LinkToParentBranch,
     //LinkToNext,

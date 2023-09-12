@@ -28,14 +28,14 @@ namespace BannerlordEnhancedPartyRoles.src.Behaviors
 						ConversationSentenceType.DialogueTreeRootStart,
 						CoreInputToken.Entry.HeroMainOptions
 					).WithCondition(EnhancedEngineerService.IsPlayerTalkingToPlayerClanEngineer))
-						.WithConversationPart(
-							new SimpleConversationPart(
-								"enhanced_quatermaster_mass_execute_prisoners",
-								"Send Lord Prisoners For Mass Execution",
-								ConversationSentenceType.DialogueTreeBranchPart,
-								CoreInputToken.Entry.HeroMainOptions
-							).WithCondition(() => true).WithConsequence(EnhancedEngineerService.MassExecution),
-							AppliedDialogueLineRelation.LinkToCurrentBranch)
+					.WithConversationPart(
+						new SimpleConversationPart(
+							"enhanced_quatermaster_mass_execute_prisoners",
+							"Send Lord Prisoners For Mass Execution",
+							ConversationSentenceType.DialogueTreeBranchPart,
+							CoreInputToken.Entry.HeroMainOptions
+						).WithCondition(() => true).WithConsequence(EnhancedEngineerService.MassExecution),
+						AppliedDialogueLineRelation.LinkToCurrentBranch)
 				.Build(starter);
 		}
 	}

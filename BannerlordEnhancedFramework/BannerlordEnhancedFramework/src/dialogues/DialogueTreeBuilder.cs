@@ -27,7 +27,7 @@ public class DialogueTreeBuilder
 
     public DialogueTreeBuilder WithTrueFalseConversationToggle(
         ConversationPart conversationPart,
-        AppliedDialogueLineRelation appliedDialogueLineRelation = AppliedDialogueLineRelation.ManuallyLinked,
+        AppliedDialogueLineRelation appliedDialogueLineRelation = AppliedDialogueLineRelation.AutomaticallyLinked,
         DialogueLineRelationParams dialogueLineRelationParams = null
     ) {
         if (conversationPart.Consequence != null && conversationPart.Consequence().Method.GetParameters().Length > 0) {
@@ -66,7 +66,7 @@ public class DialogueTreeBuilder
 
     public DialogueTreeBuilder WithConversationPart(
         ConversationPart conversationPart,
-        AppliedDialogueLineRelation appliedDialogueLineRelation = AppliedDialogueLineRelation.ManuallyLinked,
+        AppliedDialogueLineRelation appliedDialogueLineRelation = AppliedDialogueLineRelation.AutomaticallyLinked,
         DialogueLineRelationParams dialogueLineRelationParams = null
     ) {
         return WithConversationParts(
@@ -79,7 +79,7 @@ public class DialogueTreeBuilder
     public DialogueTreeBuilder WithConversationParts(
         ConversationPart conversationPart,
         ConversationPart conversationPart2,
-        AppliedDialogueLineRelation appliedDialogueLineRelation = AppliedDialogueLineRelation.ManuallyLinked,
+        AppliedDialogueLineRelation appliedDialogueLineRelation = AppliedDialogueLineRelation.AutomaticallyLinked,
         DialogueLineRelationParams dialogueLineRelationParams = null
     ) {
         return WithConversationParts(
@@ -91,7 +91,7 @@ public class DialogueTreeBuilder
     
     public DialogueTreeBuilder WithConversationParts(
         List<ConversationPart> conversationParts,
-        AppliedDialogueLineRelation appliedDialogueLineRelation = AppliedDialogueLineRelation.ManuallyLinked,
+        AppliedDialogueLineRelation appliedDialogueLineRelation = AppliedDialogueLineRelation.AutomaticallyLinked,
         DialogueLineRelationParams dialogueLineRelationParams = null
     ) {
         addConversationPart(conversationParts,appliedDialogueLineRelation,dialogueLineRelationParams);
@@ -222,10 +222,6 @@ public class DialogueTreeBuilder
                 _currentTreeBranchStart = conversationPart;
                 _dialogueLinesToAdd[++_currentTreeBranchDepthIndex] = new List<ConversationPart>(){conversationPart};
             }
-            else
-            {
-                _dialogueLinesToAdd[_currentTreeBranchDepthIndex] = new List<ConversationPart>(){conversationPart};
-            }
         }
     }
 
@@ -233,7 +229,9 @@ public class DialogueTreeBuilder
         ConversationPart conversationPart,
         AppliedDialogueLineRelation appliedDialogueLineRelation,
         DialogueLineRelationParams dialogueLineRelationParams
-    ) {
+    )
+    {
+        ConversationPart branchStart = null;
         switch (appliedDialogueLineRelation)
         {
             case AppliedDialogueLineRelation.LinkToPrevious:
@@ -243,7 +241,7 @@ public class DialogueTreeBuilder
                 _dialogueLinesToAdd[_currentTreeBranchDepthIndex].Add(conversationPart);
                 break;
             case AppliedDialogueLineRelation.LinkToCurrentBranch:
-                var branchStart = _dialogueLinesToAdd[_currentTreeBranchDepthIndex].First();
+                branchStart = _dialogueLinesToAdd[_currentTreeBranchDepthIndex].First();
                 branchStart.To().Add(conversationPart);
                 conversationPart.From().Add(branchStart);
                 _dialogueLinesToAdd[_currentTreeBranchDepthIndex].Add(conversationPart);
@@ -252,6 +250,14 @@ public class DialogueTreeBuilder
                 var start = _dialogueLinesToAdd[_currentTreeBranchDepthIndex-1].First();
                 start.To().Add(conversationPart);
                 conversationPart.From().Add(start);
+                break;
+            case AppliedDialogueLineRelation.AutomaticallyLinked:
+                if (conversationPart.IsStartOfDialogueBranch())
+                {
+                    branchStart = _dialogueLinesToAdd[_currentTreeBranchDepthIndex].First();
+                    branchStart.To().Add(conversationPart);
+                    conversationPart.From().Add(branchStart);
+                }
                 break;
         }
     }

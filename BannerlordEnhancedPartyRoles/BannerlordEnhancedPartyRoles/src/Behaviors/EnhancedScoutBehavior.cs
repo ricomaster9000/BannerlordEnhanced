@@ -41,26 +41,40 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
                         ConversationSentenceType.DialogueTreeRootStart,
                         CoreInputToken.Entry.HeroMainOptions
                     ).WithCondition(EnhancedScoutService.IsPlayerTalkingToPlayerClanScout))
-                .WithConversationPart(
-                    new SimpleConversationPart(
-                        "enhanced_scout_conv_menu_configure",
-                        "Configurations",
-                        ConversationSentenceType.DialogueTreeBranchStart
-                    ), AppliedDialogueLineRelation.LinkToParentBranch)
-                .WithConversationPart(
-                    new SimpleConversationPart(
-                        "enhanced_scout_conv_menu_configure_enemy_alerts",
-                        "Enemy Alert Settings",
-                        ConversationSentenceType.DialogueTreeBranchStart
-                    ), AppliedDialogueLineRelation.LinkToParentBranch)
-                .WithTrueFalseConversationToggle(
-                    new SimpleConversationPart(
-                            "enhanced_scout_conv_menu_configure_enemy_alerts_toggle_pause_game",
-                            "Pause Game On Enemy Alert",
-                            ConversationSentenceType.DialogueTreeBranchPart
-                        ).WithCondition(() => EnhancedScoutService.GetScoutAlertsNearbyEnemies() == true)
-                        .WithConsequence(EnhancedScoutService.ToggleScoutAlertsNearbyEnemies),
-                    AppliedDialogueLineRelation.LinkToParentBranch)
+                    .WithConversationPart(
+                        new SimpleConversationPart(
+                            "enhanced_scout_conv_menu_configure",
+                            "Configurations",
+                            ConversationSentenceType.DialogueTreeBranchStart
+                        ))
+                        .WithConversationPart(
+                            new SimpleConversationPart(
+                                "enhanced_scout_conv_menu_configure_enemy_alerts",
+                                "Enemy Alert Settings",
+                                ConversationSentenceType.DialogueTreeBranchStart
+                            ))
+                            .WithTrueFalseConversationToggle(
+                                new SimpleConversationPart(
+                                        "enhanced_scout_conv_menu_configure_enemy_alerts_toggle_pause_game",
+                                        "Pause Game On Enemy Alert",
+                                        ConversationSentenceType.DialogueTreeBranchPart
+                                    ).WithCondition(() => EnhancedScoutService.GetScoutAlertsNearbyEnemies() == true)
+                                    .WithConsequence(EnhancedScoutService.ToggleScoutAlertsNearbyEnemies),
+                                AppliedDialogueLineRelation.LinkToCurrentBranch)
+                        .WithConversationPart(
+                            new SimpleConversationPart(
+                                "enhanced_scout_conv_menu_configure_enemy_alerts2",
+                                "Enemy Alert Settings 2",
+                                ConversationSentenceType.DialogueTreeBranchStart
+                            ), AppliedDialogueLineRelation.LinkToParentBranch)
+                            .WithTrueFalseConversationToggle(
+                                new SimpleConversationPart(
+                                        "enhanced_scout_conv_menu_configure_enemy_alerts_toggle_pause_game",
+                                        "Pause Game On Enemy Alert",
+                                        ConversationSentenceType.DialogueTreeBranchPart
+                                    ).WithCondition(() => EnhancedScoutService.GetScoutAlertsNearbyEnemies() == true)
+                                    .WithConsequence(EnhancedScoutService.ToggleScoutAlertsNearbyEnemies),
+                                AppliedDialogueLineRelation.LinkToCurrentBranch)
 				.Build(starter);
         }
     }
