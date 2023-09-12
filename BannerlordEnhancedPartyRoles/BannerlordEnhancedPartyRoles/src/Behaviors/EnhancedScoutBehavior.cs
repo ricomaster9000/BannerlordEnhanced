@@ -61,21 +61,7 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
                                     ).WithCondition(() => EnhancedScoutService.GetScoutAlertsNearbyEnemies() == true)
                                     .WithConsequence(EnhancedScoutService.ToggleScoutAlertsNearbyEnemies),
                                 AppliedDialogueLineRelation.LinkToCurrentBranch)
-                        .WithConversationPart(
-                            new SimpleConversationPart(
-                                "enhanced_scout_conv_menu_configure_enemy_alerts2",
-                                "Enemy Alert Settings 2",
-                                ConversationSentenceType.DialogueTreeBranchStart
-                            ), AppliedDialogueLineRelation.LinkToParentBranch)
-                            .WithTrueFalseConversationToggle(
-                                new SimpleConversationPart(
-                                        "enhanced_scout_conv_menu_configure_enemy_alerts_toggle_pause_game",
-                                        "Pause Game On Enemy Alert",
-                                        ConversationSentenceType.DialogueTreeBranchPart
-                                    ).WithCondition(() => EnhancedScoutService.GetScoutAlertsNearbyEnemies() == true)
-                                    .WithConsequence(EnhancedScoutService.ToggleScoutAlertsNearbyEnemies),
-                                AppliedDialogueLineRelation.LinkToCurrentBranch)
-				.Build(starter);
+		.Build(starter);
         }
     }
 }
