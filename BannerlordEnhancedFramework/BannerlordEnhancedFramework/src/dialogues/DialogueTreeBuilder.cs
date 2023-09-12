@@ -18,7 +18,6 @@ namespace BannerlordEnhancedFramework.dialogues;
 /// </summary>
 public class DialogueTreeBuilder
 {
-    // MAX CONVERSATION DEPTH OF 5 supported
     private readonly Dictionary<int, List<ConversationPart>>_dialogueLinesToAdd = new Dictionary<int, List<ConversationPart>>();
     private ConversationPart _currentTreeBranchStart = null;
     private int _currentTreeBranchDepthIndex = 0;
