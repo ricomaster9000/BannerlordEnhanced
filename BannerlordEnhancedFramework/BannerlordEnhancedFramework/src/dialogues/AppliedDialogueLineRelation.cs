@@ -2,14 +2,14 @@
 
 public enum AppliedDialogueLineRelation
 {
-    ManuallyLinked,
-    LinkToRootStart,
-    LinkToPreviousStart,
-    LinkToNext,
+    AutomaticallyLinked,
+    //LinkToRootStart,
+    LinkToParentBranch,
+    //LinkToNext,
     LinkToPrevious,
-    LinkToPreviousEnd,
-    LinkToCustom,
-    LinkToNthChild
+    LinkToCurrentBranch
+    //LinkToCustom,
+    //LinkToNthChild
 }
 
 public class DialogueLineRelationParams

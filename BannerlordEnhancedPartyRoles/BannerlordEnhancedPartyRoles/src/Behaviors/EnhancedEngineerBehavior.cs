@@ -20,7 +20,7 @@ namespace BannerlordEnhancedPartyRoles.src.Behaviors
 
 		private void AddDialogs(CampaignGameStarter starter)
 		{
-			new DialogueBuilder()
+			new DialogueTreeBuilder()
 				.WithConversationPart(
 					new SimpleConversationPart(
 						"enhanced_engineer_conv_start",
@@ -28,13 +28,14 @@ namespace BannerlordEnhancedPartyRoles.src.Behaviors
 						ConversationSentenceType.DialogueTreeRootStart,
 						CoreInputToken.Entry.HeroMainOptions
 					).WithCondition(EnhancedEngineerService.IsPlayerTalkingToPlayerClanEngineer))
-				.WithConversationPart(
-					new SimpleConversationPart(
-						"enhanced_quatermaster_mass_execute_prisoners",
-						"Send Lord Prisoners For Mass Exececution",
-						ConversationSentenceType.DialogueTreeBranchPart,
-						CoreInputToken.Entry.HeroMainOptions
-					).WithCondition(() => true).WithConsequence(EnhancedEngineerService.MassExecution), AppliedDialogueLineRelation.LinkToPreviousStart)
+					.WithConversationPart(
+						new SimpleConversationPart(
+							"enhanced_quatermaster_mass_execute_prisoners",
+							"Send Lord Prisoners For Mass Execution",
+							ConversationSentenceType.DialogueTreeBranchPart,
+							CoreInputToken.Entry.HeroMainOptions
+						).WithCondition(() => true).WithConsequence(EnhancedEngineerService.MassExecution),
+						AppliedDialogueLineRelation.LinkToCurrentBranch)
 				.Build(starter);
 		}
 	}

@@ -33,7 +33,7 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
 
         private void AddDialogs(CampaignGameStarter starter)
         {
-            new DialogueBuilder()
+            new DialogueTreeBuilder()
                 .WithConversationPart(
                     new SimpleConversationPart(
                         "enhanced_scout_conv_start",
@@ -41,33 +41,27 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
                         ConversationSentenceType.DialogueTreeRootStart,
                         CoreInputToken.Entry.HeroMainOptions
                     ).WithCondition(EnhancedScoutService.IsPlayerTalkingToPlayerClanScout))
-                .WithConversationPart(
-                    new SimpleConversationPart(
-                        "enhanced_scout_conv_menu_configure",
-                        "Configurations",
-                        ConversationSentenceType.DialogueTreeBranchStart
-                    ), AppliedDialogueLineRelation.LinkToPreviousStart)
-                .WithConversationPart(
-                    new SimpleConversationPart(
-                        "enhanced_scout_conv_menu_configure_enemy_alerts",
-                        "Enemy Alert Settings",
-                        ConversationSentenceType.DialogueTreeBranchStart
-                    ), AppliedDialogueLineRelation.LinkToPreviousStart)
-                .WithTrueFalseConversationToggle(
-                    new SimpleConversationPart(
-                            "enhanced_scout_conv_menu_configure_enemy_alerts_toggle_pause_game",
-                            "Pause Game On Enemy Alert",
-                            ConversationSentenceType.DialogueTreeBranchPart
-                        ).WithCondition(() => EnhancedScoutService.GetScoutAlertsNearbyEnemies() == true)
-                        .WithConsequence(EnhancedScoutService.ToggleScoutAlertsNearbyEnemies),
-                    AppliedDialogueLineRelation.LinkToPreviousStart)
-				.WithConversationPart(
-					new SimpleConversationPart(
-						"enhanced_scout_conv_menu_configure",
-						"Configurations",
-						ConversationSentenceType.DialogueTreeBranchStart
-					), AppliedDialogueLineRelation.LinkToPreviousStart)
-				.Build(starter);
+                    .WithConversationPart(
+                        new SimpleConversationPart(
+                            "enhanced_scout_conv_menu_configure",
+                            "Configurations",
+                            ConversationSentenceType.DialogueTreeBranchStart
+                        ))
+                        .WithConversationPart(
+                            new SimpleConversationPart(
+                                "enhanced_scout_conv_menu_configure_enemy_alerts",
+                                "Enemy Alert Settings",
+                                ConversationSentenceType.DialogueTreeBranchStart
+                            ))
+                            .WithTrueFalseConversationToggle(
+                                new SimpleConversationPart(
+                                        "enhanced_scout_conv_menu_configure_enemy_alerts_toggle_pause_game",
+                                        "Pause Game On Enemy Alert",
+                                        ConversationSentenceType.DialogueTreeBranchPart
+                                    ).WithCondition(() => EnhancedScoutService.GetScoutAlertsNearbyEnemies() == true)
+                                    .WithConsequence(EnhancedScoutService.ToggleScoutAlertsNearbyEnemies),
+                                AppliedDialogueLineRelation.LinkToCurrentBranch)
+		.Build(starter);
         }
     }
 }

@@ -34,7 +34,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 
 	private void AddDialogs(CampaignGameStarter starter)
 	{
-		new DialogueBuilder()
+		new DialogueTreeBuilder()
 			.WithConversationPart(
 				new SimpleConversationPart(
 					"enhanced_quatermaster_conv_start",
@@ -47,13 +47,13 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 					"enhanced_quatermaster_conv_menu_configure",
 					"Configurations",
 					ConversationSentenceType.DialogueTreeBranchStart
-				), AppliedDialogueLineRelation.LinkToPreviousStart)
+				))
 			.WithConversationPart(
 				new SimpleConversationPart(
 					"enhanced_quatermaster_conv_menu_configure_equipment_settings",
 					"Equipment Filter Settings",
 					ConversationSentenceType.DialogueTreeBranchStart
-				), AppliedDialogueLineRelation.LinkToPreviousStart)
+				))
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_allow_locked_items",
@@ -61,7 +61,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.CompanionEquipment.GetAllowLockedItems() == true)
 					.WithConsequence(EnhancedQuaterMasterService.CompanionEquipment.ToggleQuaterMasterAllowLockedItems),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_any",
@@ -69,7 +69,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.CompanionEquipment.GetAllowAnyCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.CompanionEquipment.ToggleQuaterMasterAllow_AnyCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_battania",
@@ -77,7 +77,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.CompanionEquipment.GetAllowBattaniaCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.CompanionEquipment.ToggleQuaterMasterAllow_BattaniaCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_sturgia",
@@ -85,7 +85,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.CompanionEquipment.GetAllowSturgiaCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.CompanionEquipment.ToggleQuaterMasterAllow_SturgiaCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_aserai",
@@ -93,7 +93,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.CompanionEquipment.GetAllowAseraiCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.CompanionEquipment.ToggleQuaterMasterAllow_AseraiCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_khuzait",
@@ -101,7 +101,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.CompanionEquipment.GetAllowKhuzaitCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.CompanionEquipment.ToggleQuaterMasterAllow_KhuzaitCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_vlandia",
@@ -109,7 +109,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.CompanionEquipment.GetAllowVlandiaCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.CompanionEquipment.ToggleQuaterMasterAllow_VlandiaCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_empire",
@@ -117,7 +117,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.CompanionEquipment.GetAllowEmpireCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.CompanionEquipment.ToggleQuaterMasterAllow_EmpireCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_type",
@@ -125,7 +125,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.CompanionEquipment.GetAllowBattleEquipment() == true)
 					.WithConsequence(EnhancedQuaterMasterService.CompanionEquipment.ToggleQuaterMasterAllow_BattleEquipment),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_type_civilian_equipment",
@@ -133,7 +133,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.CompanionEquipment.GetAllowCivilianEquipment() == true)
 					.WithConsequence(EnhancedQuaterMasterService.CompanionEquipment.ToggleQuaterMasterAllow_CivilianEquipment),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 
 			// Auto Trade Items Branch
 			// Culture
@@ -142,7 +142,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 					"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings",
 					"Auto Trade Items Filter Settings",
 					ConversationSentenceType.DialogueTreeBranchStart
-				), AppliedDialogueLineRelation.LinkToPreviousStart)
+				), AppliedDialogueLineRelation.LinkToParentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_any",
@@ -150,7 +150,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowAnyCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_AnyCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_battania",
@@ -158,7 +158,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowBattaniaCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_BattaniaCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_sturgia",
@@ -166,7 +166,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowSturgiaCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_SturgiaCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_aserai",
@@ -174,7 +174,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowAseraiCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_AseraiCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_khuzait",
@@ -182,7 +182,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowKhuzaitCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_KhuzaitCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_vlandia",
@@ -190,7 +190,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowVlandiaCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_VlandiaCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_empire",
@@ -198,7 +198,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowEmpireCulture() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_EmpireCulture),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_is_lighest_items_first",
@@ -206,7 +206,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetIsLightestItemsFirst() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterIsLightestItemsFirst),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_locked_items",
@@ -214,7 +214,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowLockedItems() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllowLockedItems),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			// Categories
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
@@ -223,7 +223,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowArmour() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_ArmourCategory),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_weapons_items",
@@ -231,7 +231,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowWeapons() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_WeaponsCategory),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_saddles_items",
@@ -239,7 +239,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowSaddles() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_SaddlesCategory),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_horses_items",
@@ -247,7 +247,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowHorses() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_HorsesCategory),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_camels_items",
@@ -255,7 +255,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowCamels() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_CamelsCategory),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_resources_items",
@@ -263,7 +263,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowResources() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_ResourcesCategory),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_banners_items",
@@ -271,7 +271,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowBanners() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_BannersCategory),
-				AppliedDialogueLineRelation.LinkToPreviousStart)
+				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.Build(starter);
 	}
 

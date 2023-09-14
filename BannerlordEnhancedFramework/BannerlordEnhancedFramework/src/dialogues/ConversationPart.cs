@@ -18,7 +18,7 @@ namespace BannerlordEnhancedFramework.dialogues
         private ConversationSentence.OnConditionDelegate _condition;
         private readonly List<ConversationPart> _from = new List<ConversationPart>();
         private readonly List<ConversationPart> _to = new List<ConversationPart>();
-
+        private int _dialogueTreeBranchDepth = 0;
         protected ConversationPart() {}
 
         public ConversationPart(ConversationPart conversationPart)
@@ -33,6 +33,7 @@ namespace BannerlordEnhancedFramework.dialogues
             this._condition = conversationPart._condition;
             this._from = conversationPart._from;
             this._to = conversationPart._to;
+            this._dialogueTreeBranchDepth = conversationPart._dialogueTreeBranchDepth;
         }
 
         public ConversationPart(string dialogueId)
@@ -163,6 +164,11 @@ namespace BannerlordEnhancedFramework.dialogues
             return this._to;
         }
 
+        public bool IsStartOfDialogueBranch()
+        {
+            return this._type.Equals(ConversationSentenceType.DialogueTreeBranchStart);
+        }
+
         public bool IsStartOfDialogueTreeOrBranch()
         {
             return this._type.Equals(ConversationSentenceType.DialogueTreeRootStart) ||
@@ -183,6 +189,16 @@ namespace BannerlordEnhancedFramework.dialogues
         public ConversationSentence.OnConditionDelegate Condition()
         {
             return this._condition;
+        }
+
+        public int GetDialogueTreeBranchDepth()
+        {
+            return this._dialogueTreeBranchDepth;
+        }
+
+        public void SetDialogueTreeBranchDepth(int dialogueTreeBranchDepth)
+        {
+            this._dialogueTreeBranchDepth = dialogueTreeBranchDepth;
         }
     }
 
