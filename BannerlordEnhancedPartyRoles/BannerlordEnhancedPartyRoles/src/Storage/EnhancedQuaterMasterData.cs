@@ -40,7 +40,7 @@ static class EnhancedQuaterMasterData
 		public static bool AllowArmour = true;
 		public static bool AllowWeapons = true;
 		public static bool AllowSaddles = true;
-		public static bool AllowResources = true;
+		public static bool AllowMiscellaneous = true;
 		public static bool AllowHorses = true;
 		public static bool AllowCamels = true;
 		public static bool AllowBanners = true;

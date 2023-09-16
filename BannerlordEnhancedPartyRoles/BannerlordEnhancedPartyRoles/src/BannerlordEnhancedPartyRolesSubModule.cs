@@ -24,10 +24,10 @@ public class BannerlordEnhancedPartyRolesSubModule : MBSubModuleBase
         HarmonyPatcher harmonyPatcher = new HarmonyPatcher("BannerlordEnhancedPartyRoles");
 
         DebugUtils.LogAndPrintInfo("add harmony patches - BEGIN");
-		harmonyPatcher.PatchMethodPostfix(
+		/*harmonyPatcher.PatchMethodPostfix(
 			typeof(InventoryLogic).GetMethod("DoneLogic"),
 			typeof(QuartermasterPatches).GetMethod("DoneLogic_Postfix")
-		);
+		);*/
 		harmonyPatcher.PatchMethod(
 			typeof(InventoryManager).GetMethod("CloseInventoryPresentation"),
 			typeof(QuartermasterPatches).GetMethod("CloseInventoryPresentation_Prefix")

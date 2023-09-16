@@ -23,15 +23,17 @@ internal class EnhancedQuaterMasterService
 				GameUtils.PlayerParty().EffectiveQuartermaster != null &&
 				Campaign.Current.ConversationManager.OneToOneConversationCharacter == GameUtils.PlayerParty().EffectiveQuartermaster.CharacterObject;
 	}
-	public static void SellItems(List<ItemRosterElement> items, List<ExtendedItemCategory>  itemCategories)
+	public static void SellItems(Settlement settlement,List<ItemRosterElement> items, List<ExtendedItemCategory>  itemCategories)
 	{
 		InventoryLogic inventoryLogic = InventoryManager.InventoryLogic;
-		SettlementComponent currentSettlementComponent = inventoryLogic.CurrentSettlementComponent;
 		List<ValueTuple<ItemRosterElement, int>> itemsToSellTuple = new List<ValueTuple<ItemRosterElement, int>>();
 		List<ValueTuple<ItemRosterElement, int>> itemsToBuyTuple = new List<ValueTuple<ItemRosterElement, int>>();
 		List<ItemRosterElement> itemsToSell = new List<ItemRosterElement>();
 
-		int settlementGold = currentSettlementComponent.Gold;
+		SettlementComponent settlementComponent = settlement.SettlementComponent;
+		TownMarketData marketData = new TownMarketData(settlement.Town);
+
+		int settlementGold = settlementComponent.Gold;
 		foreach (ItemRosterElement itemRosterElement in items)
 		{
 			ItemObject item = itemRosterElement.EquipmentElement.Item;
@@ -40,7 +42,7 @@ internal class EnhancedQuaterMasterService
 			{
 				continue;
 			}
-			int price = inventoryLogic.GetItemPrice(itemRosterElement, false);
+			int price = marketData.GetPrice(itemRosterElement.EquipmentElement, MobileParty.MainParty, true, null);
 			int totalSold = 0;
 			for (int _ = 0; _ < itemRosterElement.Amount; _++)
 			{
@@ -56,20 +58,19 @@ internal class EnhancedQuaterMasterService
 			itemsToSell.Add(soldItemRosterElement);
 
 		}
-		int income = currentSettlementComponent.Gold - settlementGold;
+		int income = settlementComponent.Gold - settlementGold;
 		if (income == 0)
 		{
 			return;
 		}
+		// 
 		Dictionary<string, int> categories = new Dictionary<string, int>();
 		categories = ExtendedItemCategory.AddItemCategoryNamesFromItemList(itemsToSell, itemCategories, categories);
-		InventoryListener inventoryListener = inventoryLogic.InventoryListener;
 
 		bool isTrading = true;
 		CampaignEventDispatcher.Instance.OnPlayerInventoryExchange(itemsToBuyTuple, itemsToSellTuple, isTrading);
 
-		inventoryListener.SetGold(inventoryListener.GetGold() - income);
-
+		settlementComponent.ChangeGold(settlementComponent.Gold - income);
 		MobileParty mainParty = MobileParty.MainParty;
 		GiveGoldAction.ApplyBetweenCharacters(null, mainParty.Party.LeaderHero, income, false);
 		if (mainParty.Party.LeaderHero.CompanionOf != null)
@@ -293,9 +294,9 @@ internal class EnhancedQuaterMasterService
 		{
 			SetAllowCamels(!GetAllowCamels());
 		}
-		public static void ToggleQuaterMasterAllow_ResourcesCategory()
+		public static void ToggleQuaterMasterAllow_MiscellaneousCategory()
 		{
-			SetAllowResources(!GetAllowResources());
+			SetAllowMiscellaneous(!GetAllowMiscellaneous());
 		}
 		public static void ToggleQuaterMasterAllow_BannersCategory()
 		{
@@ -322,9 +323,9 @@ internal class EnhancedQuaterMasterService
 		{
 			EnhancedQuaterMasterData.AutoTradeItems.AllowCamels = flag;
 		}
-		public static void SetAllowResources(bool flag)
+		public static void SetAllowMiscellaneous(bool flag)
 		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowResources = flag;
+			EnhancedQuaterMasterData.AutoTradeItems.AllowMiscellaneous = flag;
 		}
 		public static void SetAllowBanners(bool flag)
 		{
@@ -347,9 +348,9 @@ internal class EnhancedQuaterMasterService
 		{
 			return EnhancedQuaterMasterData.AutoTradeItems.AllowSaddles;
 		}
-		public static bool GetAllowResources()
+		public static bool GetAllowMiscellaneous()
 		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowResources;
+			return EnhancedQuaterMasterData.AutoTradeItems.AllowMiscellaneous;
 		}
 		public static bool GetAllowHorses()
 		{

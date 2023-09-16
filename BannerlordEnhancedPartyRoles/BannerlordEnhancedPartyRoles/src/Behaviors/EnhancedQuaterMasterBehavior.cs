@@ -12,6 +12,8 @@ using TaleWorlds.Library;
 using BannerlordEnhancedFramework.src.utils;
 using BannerlordEnhancedPartyRoles.src.Services;
 using BannerlordEnhancedFramework.utils;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Inventory;
 
 namespace BannerlordEnhancedPartyRoles.Behaviors;
 class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
@@ -26,10 +28,89 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 	public override void RegisterEvents()
 	{
 		CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(AddDialogs));
+		CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(this.OnSettlementEntered)); 
 	}
 
 	public override void SyncData(IDataStore dataStore)
 	{
+	}
+
+	public void OnSettlementEntered(MobileParty partyEnteredSettlement, Settlement settlement, Hero leader)
+	{
+		if(partyEnteredSettlement != null && partyEnteredSettlement == MobileParty.MainParty)
+		{
+			SettlementComponent settlementComponent = settlement.SettlementComponent;
+			if (settlementComponent == null || settlementComponent.IsTown == false)
+			{
+				return;
+			}
+			List<ExtendedItemCategory> itemCategories = new List<ExtendedItemCategory>();
+			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowArmour())
+			{
+				itemCategories.Add(ExtendedItemCategory.ArmorItemCategory);
+			}
+			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowWeapons())
+			{
+				itemCategories.Add(ExtendedItemCategory.WeaponItemCategory);
+			}
+			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowSaddles())
+			{
+				itemCategories.Add(ExtendedItemCategory.SaddleItemCategory);
+			}
+			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowHorses())
+			{
+				itemCategories.Add(ExtendedItemCategory.HorseItemCategory);
+			}
+			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowCamels())
+			{
+				itemCategories.Add(ExtendedItemCategory.CamelItemCategory);
+			}
+			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowMiscellaneous())
+			{
+				itemCategories.Add(ExtendedItemCategory.MiscellaneousItemCategory);
+			}
+			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowBanners())
+			{
+				itemCategories.Add(ExtendedItemCategory.BannerItemCategory);
+			}
+
+			List<ItemRosterElement> itemRosterElements = HeroEquipmentCustomization.getItemsByCategories(MobileParty.MainParty.ItemRoster.ToList(), itemCategories);
+
+			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowAnyCulture() == false)
+			{
+				itemRosterElements = HeroEquipmentCustomization.getItemsByCulture(itemRosterElements, EnhancedQuaterMasterService.AutoTradeItems.GetChosenCulture());
+			}
+
+			itemRosterElements = ExtendedItemCategory.OrderItemRosterByWeight(itemRosterElements);
+			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowLockedItems() == false)
+			{
+				itemRosterElements = EquipmentUtil.RemoveLockedItems(itemRosterElements);
+			}
+
+			int orderByWeight = Convert.ToInt32(EnhancedQuaterMasterService.AutoTradeItems.GetIsLightestItemsFirst());
+			itemRosterElements = ExtendedItemCategory.OrderItemRosterByWeight(itemRosterElements, (ExtendedItemCategory.OrderByWeight)orderByWeight);
+
+			EnhancedQuaterMasterService.SellItems(settlement, itemRosterElements, itemCategories);
+		}
+	}
+
+	// Taken from SettlementNameplatePartyMarkersVM class TODO move in util
+	private bool IsMobilePartyValid(MobileParty party)
+	{
+		if (party.IsGarrison || party.IsMilitia)
+		{
+			return false;
+		}
+		if (party.IsMainParty && (!party.IsMainParty || Campaign.Current.IsMainHeroDisguised))
+		{
+			return false;
+		}
+		if (party.Army != null)
+		{
+			Army army = party.Army;
+			return army != null && army.LeaderParty.IsMainParty && !Campaign.Current.IsMainHeroDisguised;
+		}
+		return true;
 	}
 
 	private void AddDialogs(CampaignGameStarter starter)
@@ -243,7 +324,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_horses_items",
-						"Allow Horses Items",
+						"Allow Horses",
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowHorses() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_HorsesCategory),
@@ -251,7 +332,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_camels_items",
-						"Allow Cames Items",
+						"Allow Camel",
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowCamels() == true)
 					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_CamelsCategory),
@@ -259,10 +340,10 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_resources_items",
-						"Allow Resources Items",
+						"Allow Miscellaneous Items",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowResources() == true)
-					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_ResourcesCategory),
+					).WithCondition(() => EnhancedQuaterMasterService.AutoTradeItems.GetAllowMiscellaneous() == true)
+					.WithConsequence(EnhancedQuaterMasterService.AutoTradeItems.ToggleQuaterMasterAllow_MiscellaneousCategory),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(

@@ -371,7 +371,7 @@ public abstract class ExtendedItemCategory
 	public static readonly ExtendedItemCategory MuleItemCategory = new MuleItemCategory();
 	public static readonly ExtendedItemCategory HorseItemCategory = new HorseItemCategory();
 	public static readonly ExtendedItemCategory CamelItemCategory = new CamelItemCategory();
-	public static readonly ExtendedItemCategory ResourcesGoodsItemCategory = new ResourcesGoodsItemCategory();
+	public static readonly ExtendedItemCategory MiscellaneousItemCategory = new MiscellaneousItemCategory();
 
 	public abstract string Name { get; }
 	public abstract bool isType(ItemRosterElement itemRosterElement);
@@ -752,11 +752,11 @@ public class CamelItemCategory : ExtendedItemCategory
 	}
 }
 
-public class ResourcesGoodsItemCategory : NonConsumableGoodsItemCategory
+public class MiscellaneousItemCategory : NonConsumableGoodsItemCategory
 { 
 	public override string Name
 	{
-		get { return "Resources"; }
+		get { return "Miscellaneous"; }
 	}
 	public override bool isType(ItemRosterElement itemRosterElement)
 	{
