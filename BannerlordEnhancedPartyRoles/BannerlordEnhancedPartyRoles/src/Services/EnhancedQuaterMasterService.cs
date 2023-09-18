@@ -25,7 +25,6 @@ internal class EnhancedQuaterMasterService
 	}
 	public static void SellItems(Settlement settlement,List<ItemRosterElement> items, List<ExtendedItemCategory>  itemCategories)
 	{
-		InventoryLogic inventoryLogic = InventoryManager.InventoryLogic;
 		List<ValueTuple<ItemRosterElement, int>> itemsToSellTuple = new List<ValueTuple<ItemRosterElement, int>>();
 		List<ValueTuple<ItemRosterElement, int>> itemsToBuyTuple = new List<ValueTuple<ItemRosterElement, int>>();
 		List<ItemRosterElement> itemsToSell = new List<ItemRosterElement>();
