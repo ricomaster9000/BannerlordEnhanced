@@ -24,25 +24,25 @@ public class QuartermasterPatches
 
 	public static void CloseInventoryPresentation_Prefix(bool fromCancel)
 	{
-		EnhancedQuaterMasterService.CompanionEquipment.SetIsLastInventoryCancelPressed(fromCancel);
+		CompanionEquipmentService.SetIsLastInventoryCancelPressed(fromCancel);
 	}
 	public static void CloseInventoryPresentation_Postfix(bool fromCancel)
 	{
 		int currentVersionNo = MobileParty.MainParty.ItemRoster.VersionNo;
-		if (EnhancedQuaterMasterService.CompanionEquipment.GetIsLastInventoryCancelPressed() == false && currentVersionNo != EnhancedQuaterMasterService.CompanionEquipment.GetLastItemRosterVersionNo())
+		if (CompanionEquipmentService.GetIsLastInventoryCancelPressed() == false && currentVersionNo != CompanionEquipmentService.GetLastItemRosterVersionNo())
 		{
 			EnhancedQuaterMasterBehavior.GiveBestEquipmentFromItemRoster();
 		}
-		EnhancedQuaterMasterService.CompanionEquipment.SetLastItemRosterVersionNo(currentVersionNo);
+		CompanionEquipmentService.SetLastItemRosterVersionNo(currentVersionNo);
 	}
 	
 	public static void ClanPresentationDone_Postfix()
 	{
-		int latestVersionNo = EnhancedQuaterMasterService.CompanionEquipment.GetLatestFilterSettingsVersionNo();
-		if (latestVersionNo != EnhancedQuaterMasterService.CompanionEquipment.GetPreviousFilterSettingsVersionNo())
+		int latestVersionNo = CompanionEquipmentService.GetLatestFilterSettingsVersionNo();
+		if (latestVersionNo != CompanionEquipmentService.GetPreviousFilterSettingsVersionNo())
 		{
 			EnhancedQuaterMasterBehavior.GiveBestEquipmentFromItemRoster();
 		}
-		EnhancedQuaterMasterService.CompanionEquipment.SetPreviousFilterSettingsVersionNo(latestVersionNo);
+		CompanionEquipmentService.SetPreviousFilterSettingsVersionNo(latestVersionNo);
 	}
 }

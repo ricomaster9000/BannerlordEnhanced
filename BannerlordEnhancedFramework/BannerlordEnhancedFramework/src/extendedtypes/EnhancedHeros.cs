@@ -322,7 +322,7 @@ public class FighterClass : BaseHeroClass
 	public FighterClass(Hero hero, HeroEquipmentCustomization heroEquipmentCustomization) : base(hero, heroEquipmentCustomization)
 	{
 		this.mainItemCategories = new List<ExtendedItemCategory>() {
-			ExtendedItemCategory.ArmorItemCategory,
+			ExtendedItemCategory.ArmourItemCategory,
 			ExtendedItemCategory.WeaponItemCategory,
 			ExtendedItemCategory.SaddleItemCategory,
 			ExtendedItemCategory.MountItemCategory,
@@ -355,7 +355,8 @@ public class CavalryRiderClass : BaseHeroClass
 
 public abstract class ExtendedItemCategory
 {
-	public static readonly ExtendedItemCategory ArmorItemCategory = new ArmorItemCategory();
+	public static readonly ExtendedItemCategory ArmourItemCategory = new ArmourItemCategory();
+	public static readonly ExtendedItemCategory BodyArmourItemCategory = new BodyArmourItemCategory();
 	public static readonly ExtendedItemCategory WeaponItemCategory = new WeaponItemCategory();
 	public static readonly ExtendedItemCategory SaddleItemCategory = new SaddleItemCategory();
 	public static readonly ExtendedItemCategory MountItemCategory = new MountItemCategory();
@@ -422,10 +423,10 @@ public abstract class ExtendedItemCategory
 					if (categories.ContainsKey(itemCategory.Name)) 
 					{
 						int amount = categories[itemCategory.Name];
-						categories[itemCategory.Name] = amount + 1;
+						categories[itemCategory.Name] = amount + itemRosterElement.Amount;
 					} else 
 					{
-						categories.Add(itemCategory.Name, 1);
+						categories.Add(itemCategory.Name, itemRosterElement.Amount);
 					}
 					break;
 				}
@@ -448,11 +449,11 @@ public class MountItemCategory : ExtendedItemCategory
 	}
 }
 
-public class ArmorItemCategory : ExtendedItemCategory
+public class ArmourItemCategory : ExtendedItemCategory
 {
 	public override string Name
 	{
-		get { return "Armor"; }
+		get { return "Armour"; }
 	}
 	public override bool isType(ItemRosterElement itemRosterElement)
 	{
@@ -517,15 +518,27 @@ public class ShieldItemCategory : WeaponItemCategory
 	}
 }
 
-public class LightArmorItemCategory : ArmorItemCategory
+public class LightArmourItemCategory : ArmourItemCategory
 {
 	public override string Name
 	{
-		get { return "LightArmor"; }
+		get { return "Light Armour"; }
 	}
 	public override bool isType(ItemRosterElement itemRosterElement)
 	{
 		return base.isType(itemRosterElement) && itemRosterElement.EquipmentElement.Item.Weight < 10; // TODO change number
+	}
+}
+
+public class BodyArmourItemCategory : ArmourItemCategory
+{
+	public override string Name
+	{
+		get { return "Body Armour"; }
+	}
+	public override bool isType(ItemRosterElement itemRosterElement)
+	{
+		return base.isType(itemRosterElement) && !EquipmentUtil.IsItemSaddle(itemRosterElement.EquipmentElement.Item);
 	}
 }
 
@@ -760,7 +773,8 @@ public class MiscellaneousItemCategory : NonConsumableGoodsItemCategory
 	}
 	public override bool isType(ItemRosterElement itemRosterElement)
 	{
-		return base.isType(itemRosterElement) && !itemRosterElement.EquipmentElement.Item.HasHorseComponent;
+		ItemObject item = itemRosterElement.EquipmentElement.Item;
+		return base.isType(itemRosterElement) && !item.HasHorseComponent && !item.HasArmorComponent && !item.HasBannerComponent && !item.HasWeaponComponent;
 	}
 }
 

@@ -8,6 +8,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.Library;
 using BannerlordEnhancedFramework.extendedtypes;
 using Helpers;
+using TaleWorlds.CampaignSystem.Inventory;
 
 namespace BannerlordEnhancedFramework.src.utils
 {
@@ -24,6 +25,10 @@ namespace BannerlordEnhancedFramework.src.utils
 		public static bool IsItemArmour(ItemObject item)
 		{
 			return (item.HasArmorComponent) ? true : false;
+		}
+		public static bool IsItemSaddle(ItemObject item)
+		{
+			return InventoryManager.GetInventoryItemTypeOfItem(item) == InventoryItemType.HorseHarness;
 		}
 
 		public static bool IsItemWeapon(ItemObject item)

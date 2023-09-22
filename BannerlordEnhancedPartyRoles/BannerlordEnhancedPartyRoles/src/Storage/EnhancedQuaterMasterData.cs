@@ -37,7 +37,7 @@ static class EnhancedQuaterMasterData
 		public static bool IsLighestItemsFirst = true;
 
 		public static bool AllowLockedItems = true;
-		public static bool AllowArmour = true;
+		public static bool AllowBodyArmour = true;
 		public static bool AllowWeapons = true;
 		public static bool AllowSaddles = true;
 		public static bool AllowMiscellaneous = true;
