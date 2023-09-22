@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BannerlordEnhancedFramework.extendedtypes;
 using BannerlordEnhancedFramework.src.utils;
+using BannerlordEnhancedFramework.utils;
 using BannerlordEnhancedPartyRoles.src.Storage;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -14,9 +15,9 @@ using TaleWorlds.Library;
 
 namespace BannerlordEnhancedPartyRoles.src.Services
 {
-	public static class AutoTradeItemsService
+	public static class AutoTraderService
 	{
-		public static List<ExtendedItemCategory> FilterExtendedItemCategoriesByConfigurations()
+		public static List<ExtendedItemCategory> GetAutoTraderItemFiltersWhenSelling()
 		{
 			List<ExtendedItemCategory> itemCategories = new List<ExtendedItemCategory>();
 			if (GetAllowBodyArmour())
@@ -49,30 +50,11 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			}
 			return itemCategories;
 		}
-		public static List<ItemRosterElement> FilterItemRosterElementsByConfigurationsAndItemCategories(List<ExtendedItemCategory> itemCategories)
-		{
-			List<ItemRosterElement> itemRosterElements = HeroEquipmentCustomization.getItemsByCategories(MobileParty.MainParty.ItemRoster.ToList(), itemCategories);
-
-			if (GetAllowAnyCulture() == false)
-			{
-				itemRosterElements = HeroEquipmentCustomization.getItemsByCulture(itemRosterElements, GetChosenCulture());
-			}
-
-			itemRosterElements = ExtendedItemCategory.OrderItemRosterByWeight(itemRosterElements);
-			if (GetAllowLockedItems() == false)
-			{
-				itemRosterElements = EquipmentUtil.RemoveLockedItems(itemRosterElements);
-			}
-
-			int orderByWeight = Convert.ToInt32(GetIsLightestItemsFirst());
-			itemRosterElements = ExtendedItemCategory.OrderItemRosterByWeight(itemRosterElements, (ExtendedItemCategory.OrderByWeight)orderByWeight);
-			return itemRosterElements;
-		}
 
 		// Culture
 		public static void ToggleQuaterMasterAllowLockedItems()
 		{
-			SetAllowLockedItems(GetAllowLockedItems() == false ? true : false);
+			SetAllowLockedItems(GetExcludeLockedItemsWhenSelling() ? true : false);
 		}
 		public static void ToggleQuaterMasterAllow_AnyCulture()
 		{
@@ -298,9 +280,9 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			EnhancedQuaterMasterData.AutoTradeItems.AllowBanners = flag;
 		}
 
-		public static bool GetAllowLockedItems()
+		public static bool GetExcludeLockedItemsWhenSelling()
 		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowLockedItems;
+			return EnhancedQuaterMasterData.AutoTradeItems.AllowLockedItems == false;
 		}
 		public static bool GetAllowBodyArmour()
 		{
@@ -336,6 +318,11 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		{
 			SetIsLightestItemsFirst(!GetIsLightestItemsFirst());
 		}
+		
+		public static EquipmentUtil.OrderBy GetItemOrderByWhenSelling()
+		{
+			return GetIsLightestItemsFirst() ? EquipmentUtil.OrderBy.LIGHTEST_TO_HEAVIEST : EquipmentUtil.OrderBy.HEAVIEST_TO_LIGHTEST;
+		}
 		public static bool GetIsLightestItemsFirst()
 		{
 			return EnhancedQuaterMasterData.AutoTradeItems.IsLighestItemsFirst;
@@ -343,6 +330,21 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		public static void SetIsLightestItemsFirst(bool flag)
 		{
 			EnhancedQuaterMasterData.AutoTradeItems.IsLighestItemsFirst = flag;
+		}
+
+		public static void SellItemsWhenMainPartyEntersSettlement(Settlement settlement)
+		{
+			List<ExtendedItemCategory> itemCategories = GetAutoTraderItemFiltersWhenSelling();
+
+			List<ItemRosterElement> itemRosterElements = EquipmentUtil.FilterItemRosterByItemCategoriesAndCultureCode(
+				MobileParty.MainParty.ItemRoster.ToList(), itemCategories, GetChosenCulture(), GetItemOrderByWhenSelling(), GetExcludeLockedItemsWhenSelling()
+			);
+
+			List<ItemRosterElement> itemsSold = PartyUtils.SellItemsToSettlement(MobileParty.MainParty, settlement, itemRosterElements);
+			Dictionary<string, int> categoriesSold = ExtendedItemCategory.AddItemCategoryNamesFromItemList(itemsSold, itemCategories, new Dictionary<string, int>());
+			if(itemsSold.Count > 0) {
+				EnhancedQuaterMasterService.DisplayMessageListCategoryNameAndTotal(categoriesSold, "Quartermaster sold items from your inventory");
+			}			
 		}
 	}
 }

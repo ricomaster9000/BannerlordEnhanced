@@ -11,37 +11,44 @@ using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
 using TaleWorlds.Core;
 
 namespace BannerlordEnhancedPartyRoles.patches;
 
 public class QuartermasterPatches
 {
-    /*public static void DoneLogic_Postfix(InventoryLogic __instance, bool __result)
+	/*static void DoneLogic_Postfix(InventoryLogic __instance, bool __result)
     {
-        DebugUtils.LogAndPrintInfo("DoneLogic_Postfix is working");
-	}*/
+	    if (!__instance.IsTrading && !__instance.IsPreviewingItem && !__instance.IsDiscardDonating)
+	    {
+		    DebugUtils.LogAndPrintInfo("DoneLogic_Postfix is working");
+		    EnhancedQuaterMasterService.GiveBestEquipmentFromItemRoster();
+	    }
+    }*/
 
-	public static void CloseInventoryPresentation_Prefix(bool fromCancel)
+	public static void CloseInventoryPresentation_Prefix(InventoryManager __instance, bool fromCancel)
 	{
 		CompanionEquipmentService.SetIsLastInventoryCancelPressed(fromCancel);
 	}
-	public static void CloseInventoryPresentation_Postfix(bool fromCancel)
+	public static void CloseInventoryPresentation_Postfix(InventoryManager __instance, bool fromCancel)
 	{
 		int currentVersionNo = MobileParty.MainParty.ItemRoster.VersionNo;
-		if (CompanionEquipmentService.GetIsLastInventoryCancelPressed() == false && currentVersionNo != CompanionEquipmentService.GetLastItemRosterVersionNo())
+		if (CompanionEquipmentService.GetIsLastInventoryCancelPressed() == false &&
+		    currentVersionNo != CompanionEquipmentService.GetLastItemRosterVersionNo() &&
+		    __instance.CurrentMode != InventoryMode.Trade)
 		{
-			EnhancedQuaterMasterBehavior.GiveBestEquipmentFromItemRoster();
+			EnhancedQuaterMasterService.GiveBestEquipmentFromItemRoster();
 		}
 		CompanionEquipmentService.SetLastItemRosterVersionNo(currentVersionNo);
 	}
 	
-	public static void ClanPresentationDone_Postfix()
+	public static void ClanPresentationDone_Postfix(ClanManagementVM __instance)
 	{
 		int latestVersionNo = CompanionEquipmentService.GetLatestFilterSettingsVersionNo();
 		if (latestVersionNo != CompanionEquipmentService.GetPreviousFilterSettingsVersionNo())
 		{
-			EnhancedQuaterMasterBehavior.GiveBestEquipmentFromItemRoster();
+			EnhancedQuaterMasterService.GiveBestEquipmentFromItemRoster();
 		}
 		CompanionEquipmentService.SetPreviousFilterSettingsVersionNo(latestVersionNo);
 	}

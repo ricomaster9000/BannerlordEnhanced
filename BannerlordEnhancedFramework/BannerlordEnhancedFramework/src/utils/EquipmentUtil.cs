@@ -340,7 +340,7 @@ namespace BannerlordEnhancedFramework.src.utils
 			return equipmentIndex;
 		}
 
-		public static EquipmentIndex GetItemTypeWithItemObject(ItemObject item)
+		public static EquipmentIndex GetItemTypeFromItemObject(ItemObject item)
 		{
 			if (item == null)
 			{
@@ -390,6 +390,36 @@ namespace BannerlordEnhancedFramework.src.utils
 				return EquipmentIndex.WeaponItemBeginSlot;
 			}
 			return EquipmentIndex.None;
+		}
+		
+		public static List<ItemRosterElement> FilterItemRosterByItemCategoriesAndCultureCode(
+			List<ItemRosterElement> itemRoster,
+			List<ExtendedItemCategory> itemCategories,
+			CultureCode cultureCode,
+			OrderBy orderBy = OrderBy.HEAVIEST_TO_LIGHTEST,
+			Boolean excludeLockedItems = false)
+		{
+			List<ItemRosterElement> itemRosterElements = HeroEquipmentCustomization.getItemsByCategories(itemRoster, itemCategories);
+
+			if (cultureCode != CultureCode.Invalid)
+			{
+				itemRosterElements = HeroEquipmentCustomization.getItemsByCulture(itemRosterElements, cultureCode);
+			}
+
+			if (excludeLockedItems)
+			{
+				itemRosterElements = EquipmentUtil.RemoveLockedItems(itemRosterElements);
+			}
+			
+			itemRosterElements = ExtendedItemCategory.OrderItemRoster(itemRosterElements, orderBy);
+			return itemRosterElements;
+		}
+
+		public enum OrderBy
+		{
+			LIGHTEST_TO_HEAVIEST,
+			HEAVIEST_TO_LIGHTEST,
+			MOST_VALUABLE_TO_LEAST_VALUABLE
 		}
 
 	}

@@ -33,7 +33,7 @@ public abstract class HeroEquipmentCustomization
 			}
 
 			// TODO replace equipment that does match filters example player had culture code to Battania but his current equipt item is Sturgia it should be replaced
-			EquipmentIndex equipmentIndex = EquipmentUtil.GetItemTypeWithItemObject(newItem);
+			EquipmentIndex equipmentIndex = EquipmentUtil.GetItemTypeFromItemObject(newItem);
 			EquipmentElement currentEquipmentElement = equipment[equipmentIndex];
 
 			bool isOpenSlot = EquipmentUtil.IsItemEquipped(currentEquipmentElement) == false;
@@ -386,8 +386,7 @@ public abstract class ExtendedItemCategory
 	public enum OrderByWeight
 	{
 		 MOST_HEAVY,
-		 LEAST_HEAVY,
-		 ABOVE_AVERAGE_HEAVY
+		 LEAST_HEAVY
 	}
 
 	public static List<ItemRosterElement> OrderItemRosterByEffectiveness(List<ItemRosterElement> itemRosterElementList, OrderByEffectiveness orderByEffectiveness = OrderByEffectiveness.MOST_EFFECTIVE)
@@ -401,15 +400,15 @@ public abstract class ExtendedItemCategory
 				return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Effectiveness).ToList();
 		}
 	}
-	public static List<ItemRosterElement> OrderItemRosterByWeight(List<ItemRosterElement> itemRosterElementList, OrderByWeight orderByWeight = OrderByWeight.MOST_HEAVY)
+	public static List<ItemRosterElement> OrderItemRoster(List<ItemRosterElement> itemRosterElementList, EquipmentUtil.OrderBy orderBy)
 	{
-		switch (orderByWeight)
-		{
-			case OrderByWeight.MOST_HEAVY:
+		switch (orderBy) {
+			case EquipmentUtil.OrderBy.HEAVIEST_TO_LIGHTEST:
 				return itemRosterElementList.OrderByDescending(itemRosterElement => itemRosterElement.EquipmentElement.Item.Weight).ToList();
-			default:
+			case EquipmentUtil.OrderBy.LIGHTEST_TO_HEAVIEST:
 				return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Weight).ToList();
-
+			default:
+				return itemRosterElementList;
 		}
 	}
 	public static Dictionary<string, int> AddItemCategoryNamesFromItemList(List<ItemRosterElement> itemList, List<ExtendedItemCategory> itemCategories, Dictionary<string, int> categories)

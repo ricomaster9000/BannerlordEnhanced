@@ -136,7 +136,7 @@ public static class PartyUtils
 		return heros;
 	}
 
-	public static List<ItemRosterElement> SellItemsToSettlement(MobileParty sellerParty, Settlement settlement, List<ItemRosterElement> items, List<ExtendedItemCategory> itemCategories)
+	public static List<ItemRosterElement> SellItemsToSettlement(MobileParty sellerParty, Settlement settlement, List<ItemRosterElement> items)
 	{
 		List<ValueTuple<ItemRosterElement, int>> itemsToSellTuple = new List<ValueTuple<ItemRosterElement, int>>();
 		List<ValueTuple<ItemRosterElement, int>> itemsToBuyTuple = new List<ValueTuple<ItemRosterElement, int>>();
