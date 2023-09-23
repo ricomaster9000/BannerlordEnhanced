@@ -11,94 +11,45 @@ using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
 using TaleWorlds.Core;
 
 namespace BannerlordEnhancedPartyRoles.patches;
 
 public class QuartermasterPatches
 {
-    public static void DoneLogic_Postfix(InventoryLogic __instance, bool __result)
+	/*static void DoneLogic_Postfix(InventoryLogic __instance, bool __result)
     {
-        DebugUtils.LogAndPrintInfo("DoneLogic_Postfix is working");
-		if (InventoryManager.InventoryLogic.IsTrading)
-		{
+	    if (!__instance.IsTrading && !__instance.IsPreviewingItem && !__instance.IsDiscardDonating)
+	    {
+		    DebugUtils.LogAndPrintInfo("DoneLogic_Postfix is working");
+		    EnhancedQuaterMasterService.GiveBestEquipmentFromItemRoster();
+	    }
+    }*/
 
-			InventoryLogic inventoryLogic = InventoryManager.InventoryLogic;
-			if (inventoryLogic.CurrentSettlementComponent == null || inventoryLogic.CurrentSettlementComponent.IsTown == false)
-			{
-				return;
-			}
-			List<ExtendedItemCategory> itemCategories = new List<ExtendedItemCategory>();
-			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowArmour())
-			{
-				itemCategories.Add(ExtendedItemCategory.ArmorItemCategory);
-			}
-			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowWeapons())
-			{
-				itemCategories.Add(ExtendedItemCategory.WeaponItemCategory);
-			}
-			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowSaddles())
-			{
-				itemCategories.Add(ExtendedItemCategory.SaddleItemCategory);
-			}
-			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowHorses())
-			{
-				itemCategories.Add(ExtendedItemCategory.HorseItemCategory);
-			}
-			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowCamels())
-			{
-				itemCategories.Add(ExtendedItemCategory.CamelItemCategory);
-			}
-			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowResources())
-			{
-				itemCategories.Add(ExtendedItemCategory.ResourcesGoodsItemCategory);
-			}
-			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowBanners())
-			{
-				itemCategories.Add(ExtendedItemCategory.BannerItemCategory);
-			}
-
-			List<ItemRosterElement> itemRosterElements = HeroEquipmentCustomization.getItemsByCategories(MobileParty.MainParty.ItemRoster.ToList(), itemCategories);
-			
-			if(EnhancedQuaterMasterService.AutoTradeItems.GetAllowAnyCulture() == false)
-			{
-				itemRosterElements = HeroEquipmentCustomization.getItemsByCulture(itemRosterElements, EnhancedQuaterMasterService.AutoTradeItems.GetChosenCulture());
-			}
-	
-			itemRosterElements = ExtendedItemCategory.OrderItemRosterByWeight(itemRosterElements);
-			if (EnhancedQuaterMasterService.AutoTradeItems.GetAllowLockedItems() == false)
-			{
-				itemRosterElements = EquipmentUtil.RemoveLockedItems(itemRosterElements);
-			}
-
-			int orderByWeight = Convert.ToInt32(EnhancedQuaterMasterService.AutoTradeItems.GetIsLightestItemsFirst());
-			itemRosterElements = ExtendedItemCategory.OrderItemRosterByWeight(itemRosterElements, (ExtendedItemCategory.OrderByWeight)orderByWeight);
-			
-			EnhancedQuaterMasterService.SellItems(itemRosterElements, itemCategories);
-		}
-	}
-
-	public static void CloseInventoryPresentation_Prefix(bool fromCancel)
+	public static void CloseInventoryPresentation_Prefix(InventoryManager __instance, bool fromCancel)
 	{
-		EnhancedQuaterMasterService.CompanionEquipment.SetIsLastInventoryCancelPressed(fromCancel);
+		CompanionEquipmentService.SetIsLastInventoryCancelPressed(fromCancel);
 	}
-	public static void CloseInventoryPresentation_Postfix(bool fromCancel)
+	public static void CloseInventoryPresentation_Postfix(InventoryManager __instance, bool fromCancel)
 	{
 		int currentVersionNo = MobileParty.MainParty.ItemRoster.VersionNo;
-		if (EnhancedQuaterMasterService.CompanionEquipment.GetIsLastInventoryCancelPressed() == false && currentVersionNo != EnhancedQuaterMasterService.CompanionEquipment.GetLastItemRosterVersionNo())
+		if (CompanionEquipmentService.GetIsLastInventoryCancelPressed() == false &&
+		    currentVersionNo != CompanionEquipmentService.GetLastItemRosterVersionNo() &&
+		    __instance.CurrentMode != InventoryMode.Trade)
 		{
-			EnhancedQuaterMasterBehavior.GiveBestEquipmentFromItemRoster();
+			EnhancedQuaterMasterService.GiveBestEquipmentFromItemRoster();
 		}
-		EnhancedQuaterMasterService.CompanionEquipment.SetLastItemRosterVersionNo(currentVersionNo);
+		CompanionEquipmentService.SetLastItemRosterVersionNo(currentVersionNo);
 	}
 	
-	public static void ClanPresentationDone_Postfix()
+	public static void ClanPresentationDone_Postfix(ClanManagementVM __instance)
 	{
-		int latestVersionNo = EnhancedQuaterMasterService.CompanionEquipment.GetLatestFilterSettingsVersionNo();
-		if (latestVersionNo != EnhancedQuaterMasterService.CompanionEquipment.GetPreviousFilterSettingsVersionNo())
+		int latestVersionNo = CompanionEquipmentService.GetLatestFilterSettingsVersionNo();
+		if (latestVersionNo != CompanionEquipmentService.GetPreviousFilterSettingsVersionNo())
 		{
-			EnhancedQuaterMasterBehavior.GiveBestEquipmentFromItemRoster();
+			EnhancedQuaterMasterService.GiveBestEquipmentFromItemRoster();
 		}
-		EnhancedQuaterMasterService.CompanionEquipment.SetPreviousFilterSettingsVersionNo(latestVersionNo);
+		CompanionEquipmentService.SetPreviousFilterSettingsVersionNo(latestVersionNo);
 	}
 }

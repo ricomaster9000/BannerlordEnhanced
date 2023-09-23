@@ -33,7 +33,7 @@ public abstract class HeroEquipmentCustomization
 			}
 
 			// TODO replace equipment that does match filters example player had culture code to Battania but his current equipt item is Sturgia it should be replaced
-			EquipmentIndex equipmentIndex = EquipmentUtil.GetItemTypeWithItemObject(newItem);
+			EquipmentIndex equipmentIndex = EquipmentUtil.GetItemTypeFromItemObject(newItem);
 			EquipmentElement currentEquipmentElement = equipment[equipmentIndex];
 
 			bool isOpenSlot = EquipmentUtil.IsItemEquipped(currentEquipmentElement) == false;
@@ -322,7 +322,7 @@ public class FighterClass : BaseHeroClass
 	public FighterClass(Hero hero, HeroEquipmentCustomization heroEquipmentCustomization) : base(hero, heroEquipmentCustomization)
 	{
 		this.mainItemCategories = new List<ExtendedItemCategory>() {
-			ExtendedItemCategory.ArmorItemCategory,
+			ExtendedItemCategory.ArmourItemCategory,
 			ExtendedItemCategory.WeaponItemCategory,
 			ExtendedItemCategory.SaddleItemCategory,
 			ExtendedItemCategory.MountItemCategory,
@@ -355,7 +355,8 @@ public class CavalryRiderClass : BaseHeroClass
 
 public abstract class ExtendedItemCategory
 {
-	public static readonly ExtendedItemCategory ArmorItemCategory = new ArmorItemCategory();
+	public static readonly ExtendedItemCategory ArmourItemCategory = new ArmourItemCategory();
+	public static readonly ExtendedItemCategory BodyArmourItemCategory = new BodyArmourItemCategory();
 	public static readonly ExtendedItemCategory WeaponItemCategory = new WeaponItemCategory();
 	public static readonly ExtendedItemCategory SaddleItemCategory = new SaddleItemCategory();
 	public static readonly ExtendedItemCategory MountItemCategory = new MountItemCategory();
@@ -371,7 +372,7 @@ public abstract class ExtendedItemCategory
 	public static readonly ExtendedItemCategory MuleItemCategory = new MuleItemCategory();
 	public static readonly ExtendedItemCategory HorseItemCategory = new HorseItemCategory();
 	public static readonly ExtendedItemCategory CamelItemCategory = new CamelItemCategory();
-	public static readonly ExtendedItemCategory ResourcesGoodsItemCategory = new ResourcesGoodsItemCategory();
+	public static readonly ExtendedItemCategory MiscellaneousItemCategory = new MiscellaneousItemCategory();
 
 	public abstract string Name { get; }
 	public abstract bool isType(ItemRosterElement itemRosterElement);
@@ -385,8 +386,7 @@ public abstract class ExtendedItemCategory
 	public enum OrderByWeight
 	{
 		 MOST_HEAVY,
-		 LEAST_HEAVY,
-		 ABOVE_AVERAGE_HEAVY
+		 LEAST_HEAVY
 	}
 
 	public static List<ItemRosterElement> OrderItemRosterByEffectiveness(List<ItemRosterElement> itemRosterElementList, OrderByEffectiveness orderByEffectiveness = OrderByEffectiveness.MOST_EFFECTIVE)
@@ -400,15 +400,15 @@ public abstract class ExtendedItemCategory
 				return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Effectiveness).ToList();
 		}
 	}
-	public static List<ItemRosterElement> OrderItemRosterByWeight(List<ItemRosterElement> itemRosterElementList, OrderByWeight orderByWeight = OrderByWeight.MOST_HEAVY)
+	public static List<ItemRosterElement> OrderItemRoster(List<ItemRosterElement> itemRosterElementList, EquipmentUtil.OrderBy orderBy)
 	{
-		switch (orderByWeight)
-		{
-			case OrderByWeight.MOST_HEAVY:
+		switch (orderBy) {
+			case EquipmentUtil.OrderBy.HEAVIEST_TO_LIGHTEST:
 				return itemRosterElementList.OrderByDescending(itemRosterElement => itemRosterElement.EquipmentElement.Item.Weight).ToList();
-			default:
+			case EquipmentUtil.OrderBy.LIGHTEST_TO_HEAVIEST:
 				return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Weight).ToList();
-
+			default:
+				return itemRosterElementList;
 		}
 	}
 	public static Dictionary<string, int> AddItemCategoryNamesFromItemList(List<ItemRosterElement> itemList, List<ExtendedItemCategory> itemCategories, Dictionary<string, int> categories)
@@ -422,10 +422,10 @@ public abstract class ExtendedItemCategory
 					if (categories.ContainsKey(itemCategory.Name)) 
 					{
 						int amount = categories[itemCategory.Name];
-						categories[itemCategory.Name] = amount + 1;
+						categories[itemCategory.Name] = amount + itemRosterElement.Amount;
 					} else 
 					{
-						categories.Add(itemCategory.Name, 1);
+						categories.Add(itemCategory.Name, itemRosterElement.Amount);
 					}
 					break;
 				}
@@ -448,11 +448,11 @@ public class MountItemCategory : ExtendedItemCategory
 	}
 }
 
-public class ArmorItemCategory : ExtendedItemCategory
+public class ArmourItemCategory : ExtendedItemCategory
 {
 	public override string Name
 	{
-		get { return "Armor"; }
+		get { return "Armour"; }
 	}
 	public override bool isType(ItemRosterElement itemRosterElement)
 	{
@@ -517,15 +517,27 @@ public class ShieldItemCategory : WeaponItemCategory
 	}
 }
 
-public class LightArmorItemCategory : ArmorItemCategory
+public class LightArmourItemCategory : ArmourItemCategory
 {
 	public override string Name
 	{
-		get { return "LightArmor"; }
+		get { return "Light Armour"; }
 	}
 	public override bool isType(ItemRosterElement itemRosterElement)
 	{
 		return base.isType(itemRosterElement) && itemRosterElement.EquipmentElement.Item.Weight < 10; // TODO change number
+	}
+}
+
+public class BodyArmourItemCategory : ArmourItemCategory
+{
+	public override string Name
+	{
+		get { return "Body Armour"; }
+	}
+	public override bool isType(ItemRosterElement itemRosterElement)
+	{
+		return base.isType(itemRosterElement) && !EquipmentUtil.IsItemSaddle(itemRosterElement.EquipmentElement.Item);
 	}
 }
 
@@ -752,15 +764,16 @@ public class CamelItemCategory : ExtendedItemCategory
 	}
 }
 
-public class ResourcesGoodsItemCategory : NonConsumableGoodsItemCategory
+public class MiscellaneousItemCategory : NonConsumableGoodsItemCategory
 { 
 	public override string Name
 	{
-		get { return "Resources"; }
+		get { return "Miscellaneous"; }
 	}
 	public override bool isType(ItemRosterElement itemRosterElement)
 	{
-		return base.isType(itemRosterElement) && !itemRosterElement.EquipmentElement.Item.HasHorseComponent;
+		ItemObject item = itemRosterElement.EquipmentElement.Item;
+		return base.isType(itemRosterElement) && !item.HasHorseComponent && !item.HasArmorComponent && !item.HasBannerComponent && !item.HasWeaponComponent;
 	}
 }
 

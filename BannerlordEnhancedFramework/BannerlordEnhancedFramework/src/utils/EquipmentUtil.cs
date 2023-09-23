@@ -8,6 +8,7 @@ using TaleWorlds.Localization;
 using TaleWorlds.Library;
 using BannerlordEnhancedFramework.extendedtypes;
 using Helpers;
+using TaleWorlds.CampaignSystem.Inventory;
 
 namespace BannerlordEnhancedFramework.src.utils
 {
@@ -24,6 +25,10 @@ namespace BannerlordEnhancedFramework.src.utils
 		public static bool IsItemArmour(ItemObject item)
 		{
 			return (item.HasArmorComponent) ? true : false;
+		}
+		public static bool IsItemSaddle(ItemObject item)
+		{
+			return InventoryManager.GetInventoryItemTypeOfItem(item) == InventoryItemType.HorseHarness;
 		}
 
 		public static bool IsItemWeapon(ItemObject item)
@@ -335,7 +340,7 @@ namespace BannerlordEnhancedFramework.src.utils
 			return equipmentIndex;
 		}
 
-		public static EquipmentIndex GetItemTypeWithItemObject(ItemObject item)
+		public static EquipmentIndex GetItemTypeFromItemObject(ItemObject item)
 		{
 			if (item == null)
 			{
@@ -385,6 +390,40 @@ namespace BannerlordEnhancedFramework.src.utils
 				return EquipmentIndex.WeaponItemBeginSlot;
 			}
 			return EquipmentIndex.None;
+		}
+		
+		public static List<ItemRosterElement> FilterItemRosterByItemCategoriesAndCultureCode(
+			List<ItemRosterElement> itemRoster,
+			List<ExtendedItemCategory> itemCategories,
+			CultureCode cultureCode,
+			OrderBy orderBy = OrderBy.HEAVIEST_TO_LIGHTEST,
+			bool excludeLockedItems = false)
+		{
+			List<ItemRosterElement> itemRosterElements = HeroEquipmentCustomization.getItemsByCategories(itemRoster, itemCategories);
+			if(cultureCode == CultureCode.Invalid)
+			{
+				return new List<ItemRosterElement>();
+			}
+
+			if (cultureCode != CultureCode.AnyOtherCulture)
+			{
+				itemRosterElements = HeroEquipmentCustomization.getItemsByCulture(itemRosterElements, cultureCode);
+			}
+
+			if (excludeLockedItems)
+			{
+				itemRosterElements = RemoveLockedItems(itemRosterElements);
+			}
+			
+			itemRosterElements = ExtendedItemCategory.OrderItemRoster(itemRosterElements, orderBy);
+			return itemRosterElements;
+		}
+
+		public enum OrderBy
+		{
+			LIGHTEST_TO_HEAVIEST,
+			HEAVIEST_TO_LIGHTEST,
+			MOST_VALUABLE_TO_LEAST_VALUABLE
 		}
 
 	}

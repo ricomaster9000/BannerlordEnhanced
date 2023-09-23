@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using BannerlordEnhancedFramework.extendedtypes;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.Actions;
+using TaleWorlds.CampaignSystem.CampaignBehaviors;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.ViewModelCollection.ClanManagement;
+using TaleWorlds.Core;
 using TaleWorlds.Library;
+using static TaleWorlds.MountAndBlade.ViewModelCollection.Scoreboard.ScoreboardBaseVM;
 
 namespace BannerlordEnhancedFramework.utils;
 
@@ -127,5 +134,93 @@ public static class PartyUtils
 			}
 		}
 		return heros;
+	}
+
+	public static List<ItemRosterElement> SellItemsToSettlement(MobileParty sellerParty, Settlement settlement, List<ItemRosterElement> items)
+	{
+		List<ValueTuple<ItemRosterElement, int>> itemsToSellTuple = new List<ValueTuple<ItemRosterElement, int>>();
+		List<ValueTuple<ItemRosterElement, int>> itemsToBuyTuple = new List<ValueTuple<ItemRosterElement, int>>();
+		List<ItemRosterElement> itemsSold = new List<ItemRosterElement>();
+
+		SettlementComponent settlementComponent = settlement.SettlementComponent;
+		TownMarketData marketData = new TownMarketData(settlement.Town);
+
+		int settlementGold = settlementComponent.Gold;
+		foreach (ItemRosterElement itemRosterElement in items)
+		{
+			ItemObject item = itemRosterElement.EquipmentElement.Item;
+
+			if (item == null || itemRosterElement.EquipmentElement.IsQuestItem == true)
+			{
+				continue;
+			}
+			int price = marketData.GetPrice(itemRosterElement.EquipmentElement, sellerParty, true, null);
+			int totalSold = 0;
+			for (int _ = 0; _ < itemRosterElement.Amount; _++)
+			{
+				if (settlementGold - price < 0)
+				{
+					break;
+				};
+				settlementGold -= price;
+				totalSold += 1;
+			}
+			ItemRosterElement soldItemRosterElement = new ItemRosterElement(itemRosterElement.EquipmentElement.Item, totalSold, itemRosterElement.EquipmentElement.ItemModifier);
+			itemsToSellTuple.Add(new ValueTuple<ItemRosterElement, int>(soldItemRosterElement, price));
+			itemsSold.Add(soldItemRosterElement);
+
+		}
+
+		int income = settlementComponent.Gold - settlementGold;
+		if (income == 0)
+		{
+			return itemsSold;
+		}
+
+		bool isTrading = true;
+		CampaignEventDispatcher.Instance.OnPlayerInventoryExchange(itemsToBuyTuple, itemsToSellTuple, isTrading);
+
+		settlementComponent.ChangeGold(settlementComponent.Gold - income);
+
+		GiveGoldAction.ApplyBetweenCharacters(null, sellerParty.Party.LeaderHero, income, false);
+		if (sellerParty.Party.LeaderHero.CompanionOf != null)
+		{
+			sellerParty.AddTaxGold((int)((float)income * 0.1f));
+		}
+
+		updateItemRoster(sellerParty.ItemRoster, new List<ItemRosterElement>(), itemsSold);
+		updateItemRoster(Settlement.CurrentSettlement.ItemRoster, itemsSold, new List<ItemRosterElement>());
+
+		return itemsSold;
+	}
+
+	public static bool IsMobilePartyValid(MobileParty party)
+	{
+		if (party.IsGarrison || party.IsMilitia)
+		{
+			return false;
+		}
+		if (party.IsMainParty && (!party.IsMainParty || Campaign.Current.IsMainHeroDisguised))
+		{
+			return false;
+		}
+		if (party.Army != null)
+		{
+			Army army = party.Army;
+			return army != null && army.LeaderParty.IsMainParty && !Campaign.Current.IsMainHeroDisguised;
+		}
+		return true;
+	}
+
+	public static void updateItemRoster(ItemRoster itemRoster, List<ItemRosterElement> additions, List<ItemRosterElement> removals)
+	{
+		foreach (ItemRosterElement itemRosterElement in additions)
+		{
+			itemRoster.Add(itemRosterElement);
+		}
+		foreach (ItemRosterElement itemRosterElement in removals)
+		{
+			itemRoster.Remove(itemRosterElement);
+		}
 	}
 }
