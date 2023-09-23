@@ -339,12 +339,15 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			List<ItemRosterElement> itemRosterElements = EquipmentUtil.FilterItemRosterByItemCategoriesAndCultureCode(
 				MobileParty.MainParty.ItemRoster.ToList(), itemCategories, GetChosenCulture(), GetItemOrderByWhenSelling(), GetExcludeLockedItemsWhenSelling()
 			);
-
-			List<ItemRosterElement> itemsSold = PartyUtils.SellItemsToSettlement(MobileParty.MainParty, settlement, itemRosterElements);
-			Dictionary<string, int> categoriesSold = ExtendedItemCategory.AddItemCategoryNamesFromItemList(itemsSold, itemCategories, new Dictionary<string, int>());
-			if(itemsSold.Count > 0) {
-				EnhancedQuaterMasterService.DisplayMessageListCategoryNameAndTotal(categoriesSold, "Quartermaster sold items from your inventory");
-			}			
+			if(itemRosterElements.Count > 0)
+			{
+				List<ItemRosterElement> itemsSold = PartyUtils.SellItemsToSettlement(MobileParty.MainParty, settlement, itemRosterElements);
+				Dictionary<string, int> categoriesSold = ExtendedItemCategory.AddItemCategoryNamesFromItemList(itemsSold, itemCategories, new Dictionary<string, int>());
+				if (itemsSold.Count > 0)
+				{
+					EnhancedQuaterMasterService.DisplayMessageListCategoryNameAndTotal(categoriesSold, "Quartermaster sold items from your inventory");
+				}
+			}		
 		}
 	}
 }

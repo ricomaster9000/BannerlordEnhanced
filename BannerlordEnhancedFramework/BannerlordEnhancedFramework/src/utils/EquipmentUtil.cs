@@ -397,18 +397,22 @@ namespace BannerlordEnhancedFramework.src.utils
 			List<ExtendedItemCategory> itemCategories,
 			CultureCode cultureCode,
 			OrderBy orderBy = OrderBy.HEAVIEST_TO_LIGHTEST,
-			Boolean excludeLockedItems = false)
+			bool excludeLockedItems = false)
 		{
 			List<ItemRosterElement> itemRosterElements = HeroEquipmentCustomization.getItemsByCategories(itemRoster, itemCategories);
+			if(cultureCode == CultureCode.Invalid)
+			{
+				return new List<ItemRosterElement>();
+			}
 
-			if (cultureCode != CultureCode.Invalid)
+			if (cultureCode != CultureCode.AnyOtherCulture)
 			{
 				itemRosterElements = HeroEquipmentCustomization.getItemsByCulture(itemRosterElements, cultureCode);
 			}
 
 			if (excludeLockedItems)
 			{
-				itemRosterElements = EquipmentUtil.RemoveLockedItems(itemRosterElements);
+				itemRosterElements = RemoveLockedItems(itemRosterElements);
 			}
 			
 			itemRosterElements = ExtendedItemCategory.OrderItemRoster(itemRosterElements, orderBy);
