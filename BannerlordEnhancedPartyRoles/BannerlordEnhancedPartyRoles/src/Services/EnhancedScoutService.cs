@@ -4,8 +4,13 @@ using System.Linq;
 using BannerlordEnhancedFramework.extendedtypes.asynchronous;
 using BannerlordEnhancedFramework.utils;
 using BannerlordEnhancedPartyRoles.Storage;
+using SandBox.View.Map;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Siege;
+using TaleWorlds.Core;
+using TaleWorlds.Library;
 
 namespace BannerlordEnhancedPartyRoles.Services;
 
@@ -103,5 +108,36 @@ public static class EnhancedScoutService
             }
         }
         return hostileParty;
-    }
+	}
+
+	public static void showSiegePopupIfSettlementIsInScoutDetectedRange(SiegeEvent siegeEvent)
+	{
+		GameUtils.PauseGame();
+		Settlement settlement = siegeEvent.BesiegedSettlement;
+		MobileParty hostileParty = siegeEvent.BesiegerCamp.BesiegerParty;
+
+		float distanceToSettlement = PartyUtils.GetDistanceToSettlement(MobileParty.MainParty, settlement);
+		float scoutSkillValue = MobileParty.MainParty.EffectiveScout.GetSkillValue(DefaultSkills.Scouting);
+
+		const float baseDistance = 40;
+		const double distanceMultplier = 2.5;
+		double detectSiegeDistance = baseDistance + scoutSkillValue * distanceMultplier;
+
+		InformationManager.DisplayMessage(new InformationMessage("Distance to Settlement: " + distanceToSettlement, BannerlordEnhancedFramework.Colors.Yellow));
+		InformationManager.DisplayMessage(new InformationMessage("Scout skill value:: " + scoutSkillValue, BannerlordEnhancedFramework.Colors.Yellow));
+		InformationManager.DisplayMessage(new InformationMessage("detectSiegeDistance: " + detectSiegeDistance, BannerlordEnhancedFramework.Colors.Yellow));
+
+		if (distanceToSettlement < detectSiegeDistance)
+		{
+			WindowUtils.PopupSimpleInquiry(
+			"Settlement is being besieged",
+				"Scout found " + hostileParty.Name + " with " + hostileParty.MemberRoster.TotalHealthyCount + " soldiers " + "besieging " + settlement.Name + ".", // + "\nTheir siege startegy is " + settlement.SiegeStrategy.Name + " " + settlement.SiegeStrategy.Description,
+				"Show on map",
+				"Ok",
+				() => MapScreen.Instance.FastMoveCameraToPosition(settlement.Position2D),
+				() => {}
+			); ;
+		}
+	}
+
 }

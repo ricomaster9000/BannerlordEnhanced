@@ -136,6 +136,10 @@ public static class PartyUtils
 		return heros;
 	}
 
+	public static float GetDistanceToSettlement(MobileParty mobileParty, Settlement settlement)
+	{
+		return settlement.Position2D.Distance(mobileParty.Position2D);
+	}
 	public static List<ItemRosterElement> SellItemsToSettlement(MobileParty sellerParty, Settlement settlement, List<ItemRosterElement> items)
 	{
 		List<ValueTuple<ItemRosterElement, int>> itemsToSellTuple = new List<ValueTuple<ItemRosterElement, int>>();

@@ -4,6 +4,14 @@ using BannerlordEnhancedFramework.dialogues;
 using BannerlordEnhancedFramework.extendedtypes;
 using TaleWorlds.CampaignSystem;
 using BannerlordEnhancedPartyRoles.Services;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Settlements;
+using TaleWorlds.CampaignSystem.Siege;
+using BannerlordEnhancedFramework.utils;
+using SandBox.View;
+using SandBox.View.Map;
+using TaleWorlds.Library;
+using TaleWorlds.Core;
 
 namespace BannerlordEnhancedPartyRoles.Behaviors
 {
@@ -15,8 +23,10 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
         {
             // add Dialogs
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(AddDialogs));
-            // add enemy close by alert timer
-            _enemyAlertCloseByTimer = new ExtendedTimer(250, () =>
+			CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, new Action<SiegeEvent>(this.OnSiegeEventStarted));
+
+			// add enemy close by alert timer
+			_enemyAlertCloseByTimer = new ExtendedTimer(250, () =>
                 {
                     //DebugUtils.LogAndPrintInfo("_enemyAlertCloseByTimer running");
                     if (EnhancedScoutService.GetScoutAlertsNearbyEnemies())
@@ -63,5 +73,17 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
                                 AppliedDialogueLineRelation.LinkToCurrentBranch)
 		.Build(starter);
         }
-    }
+
+		public void OnSiegeEventStarted(SiegeEvent siegeEvent)
+		{
+			Hero owner = siegeEvent.BesiegedSettlement.Owner;
+			MobileParty mainParty = MobileParty.MainParty;
+			Hero kingdomLeader = mainParty.Owner;
+			if (owner == kingdomLeader || owner.Clan.Kingdom == kingdomLeader.Clan.Kingdom)
+			{
+				EnhancedScoutService.showSiegePopupIfSettlementIsInScoutDetectedRange(siegeEvent);
+			}
+		}
+
+	}
 }
