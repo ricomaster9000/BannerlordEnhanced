@@ -25,8 +25,6 @@ public static class GameUtils
     {
         Campaign.Current.SetTimeSpeed(0);
     }
-
-	// TODO fix bug System.NullReferenceException: in return
 	public static bool IsPlayerConversing()
     {
         return Campaign.Current.ConversationManager.OneToOneConversationCharacter != null;
