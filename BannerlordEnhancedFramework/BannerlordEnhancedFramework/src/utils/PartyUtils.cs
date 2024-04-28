@@ -198,9 +198,11 @@ public static class PartyUtils
 		return itemsSold;
 	}
 
+	/*
+	 * TODO This is not working well only validates players mobile party maybe rename the function
 	public static bool IsMobilePartyValid(MobileParty party)
 	{
-		if (party.IsGarrison || party.IsMilitia)
+		if (party == null || party.IsGarrison || party.IsMilitia)
 		{
 			return false;
 		}
@@ -215,6 +217,7 @@ public static class PartyUtils
 		}
 		return true;
 	}
+	*/
 
 	public static void updateItemRoster(ItemRoster itemRoster, List<ItemRosterElement> additions, List<ItemRosterElement> removals)
 	{

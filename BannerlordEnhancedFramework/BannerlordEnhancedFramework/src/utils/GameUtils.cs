@@ -27,7 +27,7 @@ public static class GameUtils
     }
 	public static bool IsPlayerConversing()
     {
-        return Campaign.Current.ConversationManager.OneToOneConversationCharacter != null;
+        return Campaign.Current != null && Campaign.Current.ConversationManager.OneToOneConversationCharacter != null;
     }
 
     public static bool IsPlayerActiveInWorldMap()

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using BannerlordEnhancedFramework.extendedtypes.asynchronous;
 using BannerlordEnhancedFramework.utils;
 using BannerlordEnhancedPartyRoles.Storage;
 using SandBox.View.Map;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.MapEvents;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.Siege;
@@ -110,11 +112,11 @@ public static class EnhancedScoutService
         return hostileParty;
 	}
 
-	public static void showSiegePopupIfSettlementIsInScoutDetectedRange(SiegeEvent siegeEvent)
+	public static void ShowSiegePopupIfSettlementIsInScoutDetectedRange(SiegeEvent siegeEvent)
 	{
 		GameUtils.PauseGame();
 		Settlement settlement = siegeEvent.BesiegedSettlement;
-		MobileParty hostileParty = siegeEvent.BesiegerCamp.BesiegerParty;
+		List<PartyBase> attackers = siegeEvent.GetInvolvedPartiesForEventType(MapEvent.BattleTypes.Siege);
 
 		float distanceToSettlement = PartyUtils.GetDistanceToSettlement(MobileParty.MainParty, settlement);
 		float scoutSkillValue = MobileParty.MainParty.EffectiveScout.GetSkillValue(DefaultSkills.Scouting);
@@ -126,17 +128,34 @@ public static class EnhancedScoutService
 		InformationManager.DisplayMessage(new InformationMessage("Distance to Settlement: " + distanceToSettlement, BannerlordEnhancedFramework.Colors.Yellow));
 		InformationManager.DisplayMessage(new InformationMessage("Scout skill value:: " + scoutSkillValue, BannerlordEnhancedFramework.Colors.Yellow));
 		InformationManager.DisplayMessage(new InformationMessage("detectSiegeDistance: " + detectSiegeDistance, BannerlordEnhancedFramework.Colors.Yellow));
-
+		
 		if (distanceToSettlement < detectSiegeDistance)
 		{
+			string title = "Settlement is being besieged";
+			string attackersDetails = "";
+			int totalSoldiers = 0;
+			for (int i = 0; i < attackers.Count; i++)
+			{
+				PartyBase attacker = attackers[i];
+				MobileParty? mobileParty = attacker.MobileParty;
+				if (mobileParty != null && GameUtils.IsPlayerHostileToParty(mobileParty))
+				{
+					int soldiers = mobileParty.MemberRoster.TotalHealthyCount;
+					attackersDetails = attackersDetails.Add(mobileParty.Name + " with " + soldiers + " soldiers ", true);
+					totalSoldiers += soldiers;
+				}
+			}
+			string subTitle = "Scout found " + settlement.Name + " being besieged by " + totalSoldiers.ToString() + " Soldiers";
 			WindowUtils.PopupSimpleInquiry(
-			"Settlement is being besieged",
-				"Scout found " + hostileParty.Name + " with " + hostileParty.MemberRoster.TotalHealthyCount + " soldiers " + "besieging " + settlement.Name + ".", // + "\nTheir siege startegy is " + settlement.SiegeStrategy.Name + " " + settlement.SiegeStrategy.Description,
+				title,
+				subTitle 
+				+ Environment.NewLine 
+				+ attackersDetails,
 				"Show on map",
 				"Ok",
 				() => MapScreen.Instance.FastMoveCameraToPosition(settlement.Position2D),
 				() => {}
-			); ;
+			); 
 		}
 	}
 
