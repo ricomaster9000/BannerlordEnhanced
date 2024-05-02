@@ -18,8 +18,12 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
             // add enemy close by alert timer
             _enemyAlertCloseByTimer = new ExtendedTimer(250, () =>
                 {
+                    if (Campaign.Current == null)
+                    {
+                        _enemyAlertCloseByTimer.StopTimer();
+                    }
 					// DebugUtils.LogAndPrintInfo("_enemyAlertCloseByTimer running");
-					if (Campaign.Current != null && EnhancedScoutService.GetScoutAlertsNearbyEnemies())
+					if (EnhancedScoutService.GetScoutAlertsNearbyEnemies())
                     {
                         EnhancedScoutService.AlertPlayerToNearbyHostileParties();
                     }

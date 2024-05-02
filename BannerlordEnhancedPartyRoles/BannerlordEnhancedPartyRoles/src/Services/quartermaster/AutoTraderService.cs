@@ -14,11 +14,6 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 {
 	public static class AutoTraderService
 	{
-		public static List<ExtendedItemCategory> GetGeneralItemFiltersWhenSelling()
-		{
-			List<ExtendedItemCategory> itemCategories = new List<ExtendedItemCategory>();
-			return itemCategories;
-		}
 		public static List<ExtendedItemCategory> GetItemFiltersWhenSellingByCultureCode(ExtendedCultureCode cultureCode)
 		{
 			List<ExtendedItemCategory> itemCategories = new List<ExtendedItemCategory>();
@@ -76,34 +71,6 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		public static void SetAllowLockedItems(bool flag)
 		{
 			EnhancedQuarterMasterData.AutoTraderData.AllowLockedItems = flag;
-		}
-		public static void SetAllowBodyArmour(ExtendedCultureCode cultureCode, bool flag)
-		{
-			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowBodyArmour"] = flag;
-		}
-		public static void SetAllowWeapons(ExtendedCultureCode cultureCode, bool flag)
-		{
-			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowWeapons"] = flag;
-		}
-		public static void SetAllowSaddles(ExtendedCultureCode cultureCode, bool flag)
-		{
-			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowSaddles"] = flag;
-		}
-		public static void SetAllowHorses(ExtendedCultureCode cultureCode, bool flag)
-		{
-			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowHorses"] = flag;
-		}
-		public static void SetAllowCamels(ExtendedCultureCode cultureCode, bool flag)
-		{
-			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowCamels"] = flag;
-		}
-		public static void SetAllowMiscellaneous(ExtendedCultureCode cultureCode, bool flag)
-		{
-			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowMiscellaneous"] = flag;
-		}
-		public static void SetAllowBanners(ExtendedCultureCode cultureCode, bool flag)
-		{
-			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowBanners"] = flag;
 		}
 
 		public static bool GetIncludeLockedItemsWhenSelling()
@@ -181,6 +148,36 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			bool AllowBanners = !EnhancedQuarterMasterData.AutoTraderData.AllowBanners;
 			EnhancedQuarterMasterData.AutoTraderData.AllowBanners = AllowBanners;
 		}
+		
+		
+		public static void SetAllowBodyArmour(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowBodyArmour"] = flag;
+		}
+		public static void SetAllowWeapons(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowWeapons"] = flag;
+		}
+		public static void SetAllowSaddles(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowSaddles"] = flag;
+		}
+		public static void SetAllowHorses(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowHorses"] = flag;
+		}
+		public static void SetAllowCamels(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowCamels"] = flag;
+		}
+		public static void SetAllowMiscellaneous(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowMiscellaneous"] = flag;
+		}
+		public static void SetAllowBanners(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowBanners"] = flag;
+		}
 
 		// Weight 
 		public static void ToggleQuarterMasterIsLightestItemsFirst()
@@ -194,11 +191,11 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		}
 		public static bool GetIsLightestItemsFirst()
 		{
-			return EnhancedQuarterMasterData.AutoTraderData.IsLighestItemsFirst;
+			return EnhancedQuarterMasterData.AutoTraderData.IsLightestItemsFirst;
 		}
 		public static void SetIsLightestItemsFirst(bool flag)
 		{
-			EnhancedQuarterMasterData.AutoTraderData.IsLighestItemsFirst = flag;
+			EnhancedQuarterMasterData.AutoTraderData.IsLightestItemsFirst = flag;
 		}
 
 		public static void SellItemsWhenMainPartyEntersSettlement(Settlement settlement)

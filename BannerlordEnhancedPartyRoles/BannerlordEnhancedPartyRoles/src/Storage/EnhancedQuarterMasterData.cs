@@ -53,7 +53,7 @@ static class EnhancedQuarterMasterData
 
 	public static class AutoTraderData
 	{
-		public static Dictionary<ExtendedCultureCode, Dictionary<String, Boolean>> CultureToItemCategoryFilters = new Dictionary<ExtendedCultureCode, Dictionary<string, bool>>();
+		public static readonly Dictionary<ExtendedCultureCode, Dictionary<String, Boolean>> CultureToItemCategoryFilters = new Dictionary<ExtendedCultureCode, Dictionary<string, bool>>();
 		public static bool AllowAnyCulture = true;
 		public static bool AllowBodyArmor = true;
 		public static bool AllowWeapons = true;
@@ -63,13 +63,13 @@ static class EnhancedQuarterMasterData
 		public static bool AllowBanners = true;
 		public static bool AllowMiscellaneous = true;
 		// OrderBy filtering settings
-		public static bool IsLighestItemsFirst = true;
+		public static bool IsLightestItemsFirst = true;
 		public static bool AllowLockedItems = true;
 	}
 	
 	public static class AutoEquip
 	{
-		public static Dictionary<ExtendedCultureCode, Dictionary<String, Boolean>> CultureToItemCategoryFilters = new Dictionary<ExtendedCultureCode, Dictionary<string, bool>>();
+		public static readonly Dictionary<ExtendedCultureCode, Dictionary<String, Boolean>> CultureToItemCategoryFilters = new Dictionary<ExtendedCultureCode, Dictionary<string, bool>>();
 		// OrderBy filtering settings
 		public static bool IsLighestItemsFirst = true;
 		public static bool AllowLockedItems = true;
