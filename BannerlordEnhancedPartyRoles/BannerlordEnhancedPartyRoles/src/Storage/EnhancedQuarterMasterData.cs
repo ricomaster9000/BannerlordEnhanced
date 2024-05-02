@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using BannerlordEnhancedFramework.extendedtypes;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.Core;
 
 namespace BannerlordEnhancedPartyRoles.src.Storage;
 
@@ -21,38 +20,29 @@ static class EnhancedQuarterMasterData
 		public static bool IsLastInventoryCancelPressed = false;
 	}
 
-	static EnhancedQuarterMasterData()
-	{
-		foreach (var extendedCultureCode in ExtendedCultureCode.values())
-		{
-			AutoTraderData.CultureToItemCategoryFilters.Add(extendedCultureCode, new Dictionary<string, bool>()
-			{
-				{ "LockedAll", false },
-				{ "AllowBodyArmour", true },
-				{ "AllowWeapons", true },
-				{ "AllowSaddles", true },
-				{ "AllowMiscellaneous", true },
-				{ "AllowHorses", true },
-				{ "AllowCamels", true },
-				{ "AllowBanners", true }
-			});
-			
-			AutoEquip.CultureToItemCategoryFilters.Add(extendedCultureCode, new Dictionary<string, bool>()
-			{
-				{ "LockedAll", false },
-				{ "AllowBodyArmour", true },
-				{ "AllowWeapons", true },
-				{ "AllowSaddles", true },
-				{ "AllowMiscellaneous", true },
-				{ "AllowHorses", true },
-				{ "AllowCamels", true },
-				{ "AllowBanners", true }
-			});
-		}
-	}
+	static EnhancedQuarterMasterData() {}
 
 	public static class AutoTraderData
 	{
+		
+		static AutoTraderData()
+		{
+			foreach (var extendedCultureCode in ExtendedCultureCode.values())
+			{
+				CultureToItemCategoryFilters.Add(extendedCultureCode, new Dictionary<string, bool>()
+				{
+					{ "LockedAll", false },
+					{ "AllowBodyArmour", true },
+					{ "AllowWeapons", true },
+					{ "AllowSaddles", true },
+					{ "AllowMiscellaneous", true },
+					{ "AllowHorses", true },
+					{ "AllowCamels", true },
+					{ "AllowBanners", true }
+				});
+			}
+		}
+		
 		public static readonly Dictionary<ExtendedCultureCode, Dictionary<String, Boolean>> CultureToItemCategoryFilters = new Dictionary<ExtendedCultureCode, Dictionary<string, bool>>();
 		public static bool AllowAnyCulture = true;
 		public static bool AllowBodyArmor = true;
@@ -69,6 +59,24 @@ static class EnhancedQuarterMasterData
 	
 	public static class AutoEquip
 	{
+		static AutoEquip()
+		{
+			foreach (var extendedCultureCode in ExtendedCultureCode.values())
+			{
+				CultureToItemCategoryFilters.Add(extendedCultureCode, new Dictionary<string, bool>()
+				{
+					{ "LockedAll", false },
+					{ "AllowBodyArmour", true },
+					{ "AllowWeapons", true },
+					{ "AllowSaddles", true },
+					{ "AllowMiscellaneous", true },
+					{ "AllowHorses", true },
+					{ "AllowCamels", true },
+					{ "AllowBanners", true }
+				});
+			}
+		}
+		
 		public static readonly Dictionary<ExtendedCultureCode, Dictionary<String, Boolean>> CultureToItemCategoryFilters = new Dictionary<ExtendedCultureCode, Dictionary<string, bool>>();
 		// OrderBy filtering settings
 		public static bool IsLighestItemsFirst = true;
