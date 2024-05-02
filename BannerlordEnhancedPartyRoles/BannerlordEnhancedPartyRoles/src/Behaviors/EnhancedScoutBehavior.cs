@@ -4,7 +4,6 @@ using BannerlordEnhancedFramework.dialogues;
 using BannerlordEnhancedFramework.extendedtypes;
 using TaleWorlds.CampaignSystem;
 using BannerlordEnhancedPartyRoles.Services;
-
 namespace BannerlordEnhancedPartyRoles.Behaviors
 {
     class EnhancedScoutBehavior : CampaignBehaviorBase
@@ -15,11 +14,12 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
         {
             // add Dialogs
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(AddDialogs));
+
             // add enemy close by alert timer
             _enemyAlertCloseByTimer = new ExtendedTimer(250, () =>
                 {
-                    //DebugUtils.LogAndPrintInfo("_enemyAlertCloseByTimer running");
-                    if (EnhancedScoutService.GetScoutAlertsNearbyEnemies())
+					// DebugUtils.LogAndPrintInfo("_enemyAlertCloseByTimer running");
+					if (Campaign.Current != null && EnhancedScoutService.GetScoutAlertsNearbyEnemies())
                     {
                         EnhancedScoutService.AlertPlayerToNearbyHostileParties();
                     }
@@ -30,7 +30,7 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
         public override void SyncData(IDataStore dataStore)
         {   
         }
-
+		
         private void AddDialogs(CampaignGameStarter starter)
         {
             new DialogueTreeBuilder()

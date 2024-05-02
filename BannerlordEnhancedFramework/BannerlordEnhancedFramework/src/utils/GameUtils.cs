@@ -25,8 +25,7 @@ public static class GameUtils
     {
         Campaign.Current.SetTimeSpeed(0);
     }
-    
-    public static bool IsPlayerConversing()
+	public static bool IsPlayerConversing()
     {
         return Campaign.Current.ConversationManager.OneToOneConversationCharacter != null;
     }
