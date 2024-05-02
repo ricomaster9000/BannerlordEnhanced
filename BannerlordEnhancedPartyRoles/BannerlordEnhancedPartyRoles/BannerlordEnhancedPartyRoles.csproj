@@ -205,7 +205,7 @@
     <Compile Include="src\*" />
     <Compile Include="src\patches\*" />
     <Compile Include="src\Behaviors\EnhancedEngineerBehavior.cs" />
-    <Compile Include="src\Behaviors\EnhancedQuaterMasterBehavior.cs" />
+    <Compile Include="src\Behaviors\EnhancedQuarterMasterBehavior.cs" />
     <Compile Include="src\Behaviors\EnhancedScoutBehavior.cs" />
     <Compile Include="src\Services\CompanionEquipmentService.cs" />
     <Compile Include="src\Services\quartermaster\AutoTraderService.cs" />

@@ -14,7 +14,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 {
 	public static class AutoTraderService
 	{
-		public static List<ExtendedItemCategory> GetItemFiltersWhenSellingByCultureCode(ExtendedCultureCode cultureCode)
+		public static List<ExtendedItemCategory> GetItemCategoriesWhenSellingByCultureCode(ExtendedCultureCode cultureCode)
 		{
 			List<ExtendedItemCategory> itemCategories = new List<ExtendedItemCategory>();
 
@@ -205,7 +205,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			Dictionary<string, int> categoriesSold = new Dictionary<string, int>();
 			foreach (ExtendedCultureCode cultureCode in ExtendedCultureCode.values()) {
 				
-				List<ExtendedItemCategory> itemCategories = GetItemFiltersWhenSellingByCultureCode(cultureCode);
+				List<ExtendedItemCategory> itemCategories = GetItemCategoriesWhenSellingByCultureCode(cultureCode);
 				
 				itemRosterElementsToSell.AddRange(
 					EquipmentUtil.FilterItemRosterByItemCategories(

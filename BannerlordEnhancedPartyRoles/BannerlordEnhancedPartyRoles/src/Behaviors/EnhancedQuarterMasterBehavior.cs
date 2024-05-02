@@ -11,7 +11,7 @@ using BannerlordEnhancedPartyRoles.src.Services;
 using TaleWorlds.CampaignSystem.Settlements;
 
 namespace BannerlordEnhancedPartyRoles.Behaviors;
-class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
+class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 {
 
 	// Don't define low level logic reference high level logic here. (Single resposibility)

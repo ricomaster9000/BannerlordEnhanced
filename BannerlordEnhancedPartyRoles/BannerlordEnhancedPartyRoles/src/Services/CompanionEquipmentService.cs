@@ -213,37 +213,20 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		{
 			return EnhancedQuarterMasterData.CompanionEquiptment.PreviousFilterSettingsVersionNo;
 		}
-		public static CultureCode GetChosenCulture()
+		
+		// TODO - Make this return a list of ExtendedCultureCodes where LockedAll is false, allow multiple cultures
+		public static List<ExtendedCultureCode> GetChosenCultures()
 		{
-			if (GetAllowAnyCulture())
+			List<ExtendedCultureCode> choseCultures = new List<ExtendedCultureCode>();
+			foreach (var cultureToItemCategoryFilter in EnhancedQuarterMasterData.AutoEquip.CultureToItemCategoryFilters)
 			{
-				return CultureCode.AnyOtherCulture;
+				if (!cultureToItemCategoryFilter.Value["LockedAll"])
+				{
+					choseCultures.Add(cultureToItemCategoryFilter.Key);
+				}
 			}
-			if (GetAllowBattaniaCulture())
-			{
-				return CultureCode.Battania;
-			}
-			else if (GetAllowSturgiaCulture())
-			{
-				return CultureCode.Sturgia;
-			}
-			else if (GetAllowAseraiCulture())
-			{
-				return CultureCode.Aserai;
-			}
-			else if (GetAllowKhuzaitCulture())
-			{
-				return CultureCode.Khuzait;
-			}
-			else if (GetAllowVlandiaCulture())
-			{
-				return CultureCode.Vlandia;
-			}
-			else if (GetAllowEmpireCulture())
-			{
-				return CultureCode.Empire;
-			}
-			return CultureCode.Invalid;
+
+			return choseCultures;
 		}
 	}
 }

@@ -34,55 +34,65 @@ internal class EnhancedQuarterMasterService
 	public static void GiveBestEquipmentFromItemRoster()
 	{
 		MobileParty mainParty = MobileParty.MainParty;
-
 		ItemRoster itemRoster = mainParty.ItemRoster;
-
 		List<TroopRosterElement> allCompanionsTroopRosterElement = PartyUtils.GetHerosExcludePlayerHero(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
 		List<FighterClass> fighters = new List<FighterClass>();
-
 		bool canRemoveLockedItems = CompanionEquipmentService.GetAllowLockedItems() == false;
-
-		CultureCode chosenCulture = CompanionEquipmentService.GetChosenCulture();
-
-		HeroEquipmentCustomization heroEquipmentCustomization = new HeroEquipmentCustomizationByClass();
-
-		if (chosenCulture == CultureCode.Invalid)
-		{
-			return;
-		}
-		else if(chosenCulture != CultureCode.AnyOtherCulture)
-		{
-			heroEquipmentCustomization = new HeroEquipmentCustomizationByClassAndCulture(chosenCulture); 
-		}
-
-		foreach (TroopRosterElement troopCompanion in allCompanionsTroopRosterElement)
-		{
-			fighters.Add(new FighterClass(troopCompanion.Character.HeroObject, heroEquipmentCustomization));
-		}
-
 		Dictionary<string, int> categories = new Dictionary<string, int>();
-
-		foreach (FighterClass fighterClass in fighters)
+		
+		List<ExtendedCultureCode> chosenCultures = CompanionEquipmentService.GetChosenCultures();
+		foreach (var chosenCulture in chosenCultures)
 		{
-			List<ItemRosterElement> items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-			
-			if (CompanionEquipmentService.GetAllowBattleEquipment())
-			{
-				PartyUtils.updateItemRoster(itemRoster, fighterClass.removeRelavantBattleEquipment(items), new List<ItemRosterElement>());
+			HeroEquipmentCustomization heroEquipmentCustomization = new HeroEquipmentCustomizationByClass();
 
-				items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-				var changes = fighterClass.assignBattleEquipment(items);
-				categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals, fighterClass.MainItemCategories, categories);
-				PartyUtils.updateItemRoster(itemRoster, changes.additions, changes.removals);
+			if (chosenCulture == ExtendedCultureCode.get(CultureCode.Invalid))
+			{
+				return;
 			}
-			if (CompanionEquipmentService.GetAllowCivilianEquipment())
+			
+			if (chosenCulture != ExtendedCultureCode.get(CultureCode.AnyOtherCulture))
 			{
-				items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-				PartyUtils.updateItemRoster(itemRoster, fighterClass.removeRelavantCivilianEquipment(items), new List<ItemRosterElement>());
-				var changes = fighterClass.assignCivilianEquipment(items);
+				heroEquipmentCustomization = new HeroEquipmentCustomizationByClassAndCulture(chosenCulture.nativeCultureCode());
+			}
 
-				categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals, fighterClass.MainItemCategories, categories);
-				PartyUtils.updateItemRoster(itemRoster, changes.additions, changes.removals);
+			foreach (TroopRosterElement troopCompanion in allCompanionsTroopRosterElement)
+			{
+				fighters.Add(new FighterClass(troopCompanion.Character.HeroObject, heroEquipmentCustomization));
+			}
+
+			foreach (FighterClass fighterClass in fighters)
+			{
+				List<ItemRosterElement> items = canRemoveLockedItems
+					? EquipmentUtil.RemoveLockedItems(itemRoster.ToList())
+					: itemRoster.ToList();
+
+				if (CompanionEquipmentService.GetAllowBattleEquipment())
+				{
+					PartyUtils.updateItemRoster(itemRoster, fighterClass.removeRelavantBattleEquipment(items),
+						new List<ItemRosterElement>());
+
+					items = canRemoveLockedItems
+						? EquipmentUtil.RemoveLockedItems(itemRoster.ToList())
+						: itemRoster.ToList();
+					var changes = fighterClass.assignBattleEquipment(items);
+					categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals,
+						fighterClass.MainItemCategories, categories);
+					PartyUtils.updateItemRoster(itemRoster, changes.additions, changes.removals);
+				}
+
+				if (CompanionEquipmentService.GetAllowCivilianEquipment())
+				{
+					items = canRemoveLockedItems
+						? EquipmentUtil.RemoveLockedItems(itemRoster.ToList())
+						: itemRoster.ToList();
+					PartyUtils.updateItemRoster(itemRoster, fighterClass.removeRelavantCivilianEquipment(items),
+						new List<ItemRosterElement>());
+					var changes = fighterClass.assignCivilianEquipment(items);
+
+					categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals,
+						fighterClass.MainItemCategories, categories);
+					PartyUtils.updateItemRoster(itemRoster, changes.additions, changes.removals);
+				}
 			}
 		}
 
@@ -95,6 +105,7 @@ internal class EnhancedQuarterMasterService
 			}
 			InformationManager.DisplayMessage(new InformationMessage("Quartermaster updated companions " + BuildQuarterMasterNotification(categoriesNames), BannerlordEnhancedFramework.Colors.Yellow));
 		}
+		
 	}
 	
 	public static string BuildQuarterMasterNotification(List<string> list)
