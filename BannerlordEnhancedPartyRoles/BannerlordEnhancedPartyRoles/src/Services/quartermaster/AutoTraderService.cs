@@ -22,6 +22,12 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		public static List<ExtendedItemCategory> GetItemFiltersWhenSellingByCultureCode(ExtendedCultureCode cultureCode)
 		{
 			List<ExtendedItemCategory> itemCategories = new List<ExtendedItemCategory>();
+
+			if (!GetAllowCulture(cultureCode))
+			{
+				return itemCategories;
+			}
+
 			if (GetAllowBodyArmour())
 			{
 				itemCategories.Add(ExtendedItemCategories.BodyArmourItemCategory);
