@@ -47,7 +47,7 @@ internal class EnhancedQuarterMasterService
 
 			if (chosenCulture == ExtendedCultureCode.get(CultureCode.Invalid))
 			{
-				return;
+				continue;
 			}
 			
 			if (chosenCulture != ExtendedCultureCode.get(CultureCode.AnyOtherCulture))
