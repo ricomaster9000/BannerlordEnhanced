@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using BannerlordEnhancedFramework;
 using BannerlordEnhancedFramework.dialogues;
 using BannerlordEnhancedFramework.extendedtypes;
 using TaleWorlds.CampaignSystem.Party;
-using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
-using BannerlordEnhancedFramework.src.utils;
 using BannerlordEnhancedPartyRoles.src.Services;
-using BannerlordEnhancedFramework.utils;
 using TaleWorlds.CampaignSystem.Settlements;
-using TaleWorlds.CampaignSystem.Inventory;
-using static TaleWorlds.MountAndBlade.ViewModelCollection.Scoreboard.ScoreboardBaseVM;
-using TaleWorlds.CampaignSystem.Extensions;
 
 namespace BannerlordEnhancedPartyRoles.Behaviors;
 class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
@@ -25,7 +18,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 	[CommandLineFunctionality.CommandLineArgumentFunction("quatermaster_give_best_items_to_companions_new_version", "debug")]
 	public static string DebugGiveBestItemsToCompanions(List<string> strings)
 	{
-		EnhancedQuaterMasterService.GiveBestEquipmentFromItemRoster();
+		EnhancedQuarterMasterService.GiveBestEquipmentFromItemRoster();
 		return "Done";
 	}
 
@@ -62,7 +55,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 					"Enhanced Quatermaster Menu",
 					ConversationSentenceType.DialogueTreeRootStart,
 					CoreInputToken.Entry.HeroMainOptions
-				).WithCondition(EnhancedQuaterMasterService.IsPlayerTalkingToPlayerClanQuaterMaster))
+				).WithCondition(EnhancedQuarterMasterService.IsPlayerTalkingToPlayerClanQuarterMaster))
 			.WithConversationPart(
 				new SimpleConversationPart(
 					"enhanced_quatermaster_conv_menu_configure",
@@ -170,55 +163,55 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						"Allow Any Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => AutoTraderService.GetAllowAnyCulture() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_AnyCulture),
+					.WithConsequence(AutoTraderService.ToggleAllowAnyCulture),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_battania",
 						"Allow Battania Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowBattaniaCulture() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_BattaniaCulture),
+					).WithCondition(() => AutoTraderService.GetAllowCulture(ExtendedCultureCode.get(CultureCode.Battania)))
+					.WithConsequence(() => AutoTraderService.ToggleAllowCulture(ExtendedCultureCode.get(CultureCode.Battania))),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_sturgia",
 						"Allow Sturgia Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowSturgiaCulture() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_SturgiaCulture),
+					).WithCondition(() => AutoTraderService.GetAllowCulture(ExtendedCultureCode.get(CultureCode.Sturgia)))
+					.WithConsequence(() => AutoTraderService.ToggleAllowCulture(ExtendedCultureCode.get(CultureCode.Sturgia))),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_aserai",
 						"Allow Aserai Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowAseraiCulture() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_AseraiCulture),
+					).WithCondition(() => AutoTraderService.GetAllowCulture(ExtendedCultureCode.get(CultureCode.Aserai)))
+					.WithConsequence(() => AutoTraderService.ToggleAllowCulture(ExtendedCultureCode.get(CultureCode.Aserai))),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_khuzait",
 						"Allow Khuzait Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowKhuzaitCulture() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_KhuzaitCulture),
+					).WithCondition(() => AutoTraderService.GetAllowCulture(ExtendedCultureCode.get(CultureCode.Khuzait)))
+					.WithConsequence(() => AutoTraderService.ToggleAllowCulture(ExtendedCultureCode.get(CultureCode.Khuzait))),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_vlandia",
 						"Allow Vlandia Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowVlandiaCulture() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_VlandiaCulture),
+					).WithCondition(() => AutoTraderService.GetAllowCulture(ExtendedCultureCode.get(CultureCode.Vlandia)))
+					.WithConsequence(() => AutoTraderService.ToggleAllowCulture(ExtendedCultureCode.get(CultureCode.Vlandia))),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_empire",
 						"Allow Empire Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowEmpireCulture() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_EmpireCulture),
+					).WithCondition(() => AutoTraderService.GetAllowCulture(ExtendedCultureCode.get(CultureCode.Empire)))
+					.WithConsequence(() => AutoTraderService.ToggleAllowCulture(ExtendedCultureCode.get(CultureCode.Empire))),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
@@ -226,72 +219,72 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 						"Light Items First",
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => AutoTraderService.GetIsLightestItemsFirst() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterIsLightestItemsFirst),
+					.WithConsequence(AutoTraderService.ToggleQuarterMasterIsLightestItemsFirst),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_locked_items",
 						"Allow Locked Items",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetExcludeLockedItemsWhenSelling() == false)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllowLockedItems),
+					).WithCondition(() => AutoTraderService.GetIncludeLockedItemsWhenSelling() == false)
+					.WithConsequence(AutoTraderService.ToggleQuarterMasterAllowLockedItems),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			// Categories
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_armour_items",
 						"Allow Body Armour Items",
-						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowBodyArmour() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_ArmourCategory),
+						ConversationSentenceType.DialogueTreeBranchPart)
+					.WithCondition(() => AutoTraderService.GetAllowBodyArmour() == false)
+					.WithConsequence(AutoTraderService.ToggleAllowBodyArmour),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_weapons_items",
 						"Allow Weapons Items",
-						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowWeapons() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_WeaponsCategory),
+						ConversationSentenceType.DialogueTreeBranchPart)
+					.WithCondition(() => AutoTraderService.GetAllowWeapons() == false)
+					.WithConsequence(AutoTraderService.ToggleAllowWeapons),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_saddles_items",
 						"Allow Saddles Items",
-						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowSaddles() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_SaddlesCategory),
+						ConversationSentenceType.DialogueTreeBranchPart)
+					.WithCondition(() => AutoTraderService.GetAllowSaddles() == false)
+					.WithConsequence(AutoTraderService.ToggleAllowSaddles),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_horses_items",
 						"Allow Horses",
-						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowHorses() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_HorsesCategory),
+						ConversationSentenceType.DialogueTreeBranchPart)
+					.WithCondition(() => AutoTraderService.GetAllowHorses() == false)
+					.WithConsequence(AutoTraderService.ToggleAllowHorses),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_camels_items",
 						"Allow Camels",
-						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowCamels() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_CamelsCategory),
+						ConversationSentenceType.DialogueTreeBranchPart)
+					.WithCondition(() => AutoTraderService.GetAllowCamels() == false)
+					.WithConsequence(AutoTraderService.ToggleAllowCamels),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_resources_items",
-						"Allow Miscellaneous Items",
-						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowMiscellaneous() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_MiscellaneousCategory),
+						"Allow All Miscellaneous Items",
+						ConversationSentenceType.DialogueTreeBranchPart)
+					.WithCondition(() => AutoTraderService.GetAllowMiscellaneous() == false)
+					.WithConsequence(AutoTraderService.ToggleAllowMiscellaneous),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_banners_items",
-						"Allow Banners Items",
-						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => AutoTraderService.GetAllowBanners() == true)
-					.WithConsequence(AutoTraderService.ToggleQuaterMasterAllow_BannersCategory),
+						"Allow All Banners Items",
+						ConversationSentenceType.DialogueTreeBranchPart)
+					.WithCondition(() => AutoTraderService.GetAllowBanners() == false)
+					.WithConsequence(AutoTraderService.ToggleAllowBanners),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.Build(starter);
 	}

@@ -38,7 +38,7 @@ public class QuartermasterPatches
 		    currentVersionNo != CompanionEquipmentService.GetLastItemRosterVersionNo() &&
 		    __instance.CurrentMode != InventoryMode.Trade)
 		{
-			EnhancedQuaterMasterService.GiveBestEquipmentFromItemRoster();
+			EnhancedQuarterMasterService.GiveBestEquipmentFromItemRoster();
 		}
 		CompanionEquipmentService.SetLastItemRosterVersionNo(currentVersionNo);
 	}
@@ -48,7 +48,7 @@ public class QuartermasterPatches
 		int latestVersionNo = CompanionEquipmentService.GetLatestFilterSettingsVersionNo();
 		if (latestVersionNo != CompanionEquipmentService.GetPreviousFilterSettingsVersionNo())
 		{
-			EnhancedQuaterMasterService.GiveBestEquipmentFromItemRoster();
+			EnhancedQuarterMasterService.GiveBestEquipmentFromItemRoster();
 		}
 		CompanionEquipmentService.SetPreviousFilterSettingsVersionNo(latestVersionNo);
 	}

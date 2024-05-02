@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BannerlordEnhancedFramework.extendedtypes;
+using BannerlordEnhancedFramework.extendedtypes.itemcategories;
 using BannerlordEnhancedFramework.src.utils;
 using BannerlordEnhancedFramework.utils;
-using BannerlordEnhancedPartyRoles.src.Storage;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Actions;
-using TaleWorlds.CampaignSystem.Inventory;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Roster;
-using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 
 namespace BannerlordEnhancedPartyRoles.src.Services;
 
-internal class EnhancedQuaterMasterService
+internal class EnhancedQuarterMasterService
 {
-	public static bool IsPlayerTalkingToPlayerClanQuaterMaster()
+	public static bool IsPlayerTalkingToPlayerClanQuarterMaster()
 	{
 		return Campaign.Current != null &&
 				GameUtils.PlayerParty() != null &&
@@ -69,14 +65,14 @@ internal class EnhancedQuaterMasterService
 		foreach (FighterClass fighterClass in fighters)
 		{
 			List<ItemRosterElement> items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
-
+			
 			if (CompanionEquipmentService.GetAllowBattleEquipment())
 			{
 				PartyUtils.updateItemRoster(itemRoster, fighterClass.removeRelavantBattleEquipment(items), new List<ItemRosterElement>());
 
 				items = canRemoveLockedItems ? EquipmentUtil.RemoveLockedItems(itemRoster.ToList()) : itemRoster.ToList();
 				var changes = fighterClass.assignBattleEquipment(items);
-				categories = ExtendedItemCategory.AddItemCategoryNamesFromItemList(changes.removals, fighterClass.MainItemCategories, categories);
+				categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals, fighterClass.MainItemCategories, categories);
 				PartyUtils.updateItemRoster(itemRoster, changes.additions, changes.removals);
 			}
 			if (CompanionEquipmentService.GetAllowCivilianEquipment())
@@ -85,7 +81,7 @@ internal class EnhancedQuaterMasterService
 				PartyUtils.updateItemRoster(itemRoster, fighterClass.removeRelavantCivilianEquipment(items), new List<ItemRosterElement>());
 				var changes = fighterClass.assignCivilianEquipment(items);
 
-				categories = ExtendedItemCategory.AddItemCategoryNamesFromItemList(changes.removals, fighterClass.MainItemCategories, categories);
+				categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals, fighterClass.MainItemCategories, categories);
 				PartyUtils.updateItemRoster(itemRoster, changes.additions, changes.removals);
 			}
 		}
@@ -97,11 +93,11 @@ internal class EnhancedQuaterMasterService
 			{
 				categoriesNames.Add(item.Key);
 			}
-			InformationManager.DisplayMessage(new InformationMessage("Quatermaster updated companions " + BuildQuaterMasterNotification(categoriesNames), BannerlordEnhancedFramework.Colors.Yellow));
+			InformationManager.DisplayMessage(new InformationMessage("Quartermaster updated companions " + BuildQuarterMasterNotification(categoriesNames), BannerlordEnhancedFramework.Colors.Yellow));
 		}
 	}
 	
-	public static string BuildQuaterMasterNotification(List<string> list)
+	public static string BuildQuarterMasterNotification(List<string> list)
 	{
 		string text = "";
 		int i = 0;

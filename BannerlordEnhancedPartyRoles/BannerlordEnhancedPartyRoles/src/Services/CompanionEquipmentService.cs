@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BannerlordEnhancedFramework.extendedtypes;
 using BannerlordEnhancedPartyRoles.src.Storage;
 using TaleWorlds.Core;
 
@@ -97,127 +98,120 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 
 		public static void SetAllowAnyCulture(bool flag)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
-			EnhancedQuaterMasterData.CompanionEquiptment.AllowAnyCulture = flag;
+			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
 		}
 		public static void SetAllowLockedItems(bool flag)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
-			EnhancedQuaterMasterData.CompanionEquiptment.AllowLockedEquipment = flag;
+			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
+			EnhancedQuarterMasterData.CompanionEquiptment.AllowLockedEquipment = flag;
 		}
 		public static void SetAllowBattaniaCulture(bool flag)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
-			EnhancedQuaterMasterData.CompanionEquiptment.AllowBattaniaCulture = flag;
+			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
 		}
 		public static void SetAllowSturgiaCulture(bool flag)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
-			EnhancedQuaterMasterData.CompanionEquiptment.AllowSturgiaCulture = flag;
+			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
 		}
 		public static void SetAllowAseraiCulture(bool flag)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
-			EnhancedQuaterMasterData.CompanionEquiptment.AllowAseraiCulture = flag;
+			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
 		}
 		public static void SetAllowKhuzaitCulture(bool flag)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
-			EnhancedQuaterMasterData.CompanionEquiptment.AllowKhuzaitCulture = flag;
+			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
 		}
 		public static void SetAllowVlandiaCulture(bool flag)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
-			EnhancedQuaterMasterData.CompanionEquiptment.AllowVlandiaCulture = flag;
+			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
 		}
 		public static void SetAllowEmpireCulture(bool flag)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
-			EnhancedQuaterMasterData.CompanionEquiptment.AllowEmpireCulture = flag;
+			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
 		}
 
 		public static void SetAllowBattleEquipment(bool flag)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.AllowBattleEquipment = flag;
+			EnhancedQuarterMasterData.CompanionEquiptment.AllowBattleEquipment = flag;
 		}
 		public static void SetAllowCivilianEquipment(bool flag)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.AllowCivilianEquipment = flag;
+			EnhancedQuarterMasterData.CompanionEquiptment.AllowCivilianEquipment = flag;
 		}
 
 		public static void SetLastItemRosterVersionNo(int version)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.LastItemRosterVersionNo = version;
+			EnhancedQuarterMasterData.CompanionEquiptment.LastItemRosterVersionNo = version;
 		}
 		public static void SetIsLastInventoryCancelPressed(bool fromCancel)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.IsLastInventoryCancelPressed = fromCancel;
+			EnhancedQuarterMasterData.CompanionEquiptment.IsLastInventoryCancelPressed = fromCancel;
 		}
 
 		public static void SetPreviousFilterSettingsVersionNo(int versionNo)
 		{
-			EnhancedQuaterMasterData.CompanionEquiptment.PreviousFilterSettingsVersionNo = versionNo;
+			EnhancedQuarterMasterData.CompanionEquiptment.PreviousFilterSettingsVersionNo = versionNo;
 		}
 
 
 		public static bool GetAllowAnyCulture()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.AllowAnyCulture;
+			return EnhancedQuarterMasterData.AutoTraderData.AllowAnyCulture;
 		}
 		public static bool GetAllowLockedItems()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.AllowLockedEquipment;
+			return EnhancedQuarterMasterData.CompanionEquiptment.AllowLockedEquipment;
 		}
 		public static bool GetAllowBattaniaCulture()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.AllowBattaniaCulture;
+			return !EnhancedQuarterMasterData.AutoEquip.CultureToItemCategoryFilters[ExtendedCultureCode.byName["Battania"]]["LockedAll"];
 		}
 		public static bool GetAllowSturgiaCulture()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.AllowSturgiaCulture;
+			return !EnhancedQuarterMasterData.AutoEquip.CultureToItemCategoryFilters[ExtendedCultureCode.byName["Sturgia"]]["LockedAll"];
 		}
 		public static bool GetAllowAseraiCulture()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.AllowAseraiCulture;
+			return !EnhancedQuarterMasterData.AutoEquip.CultureToItemCategoryFilters[ExtendedCultureCode.byName["Aserai"]]["LockedAll"];
 		}
 		public static bool GetAllowKhuzaitCulture()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.AllowKhuzaitCulture;
+			return !EnhancedQuarterMasterData.AutoEquip.CultureToItemCategoryFilters[ExtendedCultureCode.byName["Khuzait"]]["LockedAll"];
 		}
 		public static bool GetAllowVlandiaCulture()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.AllowVlandiaCulture;
+			return !EnhancedQuarterMasterData.AutoEquip.CultureToItemCategoryFilters[ExtendedCultureCode.byName["Vlandia"]]["LockedAll"];
 		}
 		public static bool GetAllowEmpireCulture()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.AllowEmpireCulture;
+			return !EnhancedQuarterMasterData.AutoEquip.CultureToItemCategoryFilters[ExtendedCultureCode.byName["Empire"]]["LockedAll"];
 		}
 
 		public static bool GetAllowBattleEquipment()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.AllowBattleEquipment;
+			return EnhancedQuarterMasterData.CompanionEquiptment.AllowBattleEquipment;
 		}
 		public static bool GetAllowCivilianEquipment()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.AllowCivilianEquipment;
+			return EnhancedQuarterMasterData.CompanionEquiptment.AllowCivilianEquipment;
 		}
 		public static int GetLastItemRosterVersionNo()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.LastItemRosterVersionNo;
+			return EnhancedQuarterMasterData.CompanionEquiptment.LastItemRosterVersionNo;
 		}
 
 		public static bool GetIsLastInventoryCancelPressed()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.IsLastInventoryCancelPressed;
+			return EnhancedQuarterMasterData.CompanionEquiptment.IsLastInventoryCancelPressed;
 		}
 
 		public static int GetLatestFilterSettingsVersionNo()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo;
+			return EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo;
 		}
 		public static int GetPreviousFilterSettingsVersionNo()
 		{
-			return EnhancedQuaterMasterData.CompanionEquiptment.PreviousFilterSettingsVersionNo;
+			return EnhancedQuarterMasterData.CompanionEquiptment.PreviousFilterSettingsVersionNo;
 		}
 		public static CultureCode GetChosenCulture()
 		{

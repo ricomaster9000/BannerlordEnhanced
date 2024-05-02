@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <BannerlordEnhancedFrameworkVersion>0.2.2.0</BannerlordEnhancedFrameworkVersion>
+    <BannerlordEnhancedFrameworkVersion>0.2.3.0</BannerlordEnhancedFrameworkVersion>
     <BannerlordGameVersionToUse>1.1</BannerlordGameVersionToUse>
     <DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
   </PropertyGroup>
@@ -209,7 +209,7 @@
     <Compile Include="src\Behaviors\EnhancedScoutBehavior.cs" />
     <Compile Include="src\Services\CompanionEquipmentService.cs" />
     <Compile Include="src\Services\quartermaster\AutoTraderService.cs" />
-    <Compile Include="src\Services\quartermaster\EnhancedQuaterMasterService.cs" />
+    <Compile Include="src\Services\quartermaster\EnhancedQuarterMasterService.cs" />
     <Compile Include="src\Storage\*" />
     <Compile Include="src\Services\EnhancedEngineerService.cs" />
     <Compile Include="src\Services\EnhancedScoutService.cs" />
