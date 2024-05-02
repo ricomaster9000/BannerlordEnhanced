@@ -273,7 +273,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_resources_items",
-						"Allow All Miscellaneous Items",
+						"Allow Miscellaneous Items",
 						ConversationSentenceType.DialogueTreeBranchPart)
 					.WithCondition(() => AutoTraderService.GetAllowMiscellaneous() == false)
 					.WithConsequence(AutoTraderService.ToggleAllowMiscellaneous),
@@ -281,7 +281,7 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings_allow_banners_items",
-						"Allow All Banners Items",
+						"Allow Banners Items",
 						ConversationSentenceType.DialogueTreeBranchPart)
 					.WithCondition(() => AutoTraderService.GetAllowBanners() == false)
 					.WithConsequence(AutoTraderService.ToggleAllowBanners),
