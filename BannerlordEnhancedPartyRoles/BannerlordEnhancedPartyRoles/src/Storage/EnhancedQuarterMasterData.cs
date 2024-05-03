@@ -7,19 +7,6 @@ namespace BannerlordEnhancedPartyRoles.src.Storage;
 
 static class EnhancedQuarterMasterData
 {
-	public static class CompanionEquiptment
-	{
-		public static bool AllowLockedEquipment = false;
-		public static int PreviousFilterSettingsVersionNo = 0;
-		public static int LatestFilterSettingsVersionNo = 0;
-
-		public static bool AllowBattleEquipment = true;
-		public static bool AllowCivilianEquipment = true;
-
-		public static int LastItemRosterVersionNo = MobileParty.MainParty.ItemRoster.VersionNo;
-		public static bool IsLastInventoryCancelPressed = false;
-	}
-
 	static EnhancedQuarterMasterData() {}
 
 	public static class AutoTraderData
@@ -81,6 +68,16 @@ static class EnhancedQuarterMasterData
 		// OrderBy filtering settings
 		public static bool IsLighestItemsFirst = true;
 		public static bool AllowLockedItems = true;
+		
+		public static bool AllowLockedEquipment = false;
+		public static int PreviousFilterSettingsVersionNo = 0;
+		public static int LatestFilterSettingsVersionNo = 0;
+
+		public static bool AllowBattleEquipment = true;
+		public static bool AllowCivilianEquipment = true;
+
+		public static int LastItemRosterVersionNo = MobileParty.MainParty.ItemRoster.VersionNo;
+		public static bool IsLastInventoryCancelPressed = false;
 	}
 
 }

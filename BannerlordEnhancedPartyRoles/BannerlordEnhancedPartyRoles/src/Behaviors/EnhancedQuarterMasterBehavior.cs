@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BannerlordEnhancedFramework;
 using BannerlordEnhancedFramework.dialogues;
 using BannerlordEnhancedFramework.extendedtypes;
+using BannerlordEnhancedFramework.utils;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -18,7 +19,7 @@ class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 	[CommandLineFunctionality.CommandLineArgumentFunction("quatermaster_give_best_items_to_companions_new_version", "debug")]
 	public static string DebugGiveBestItemsToCompanions(List<string> strings)
 	{
-		EnhancedQuarterMasterService.GiveBestEquipmentFromItemRoster();
+		AutoEquipService.GiveBestEquipmentFromItemRoster();
 		return "Done";
 	}
 
@@ -55,7 +56,7 @@ class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 					"Enhanced Quatermaster Menu",
 					ConversationSentenceType.DialogueTreeRootStart,
 					CoreInputToken.Entry.HeroMainOptions
-				).WithCondition(EnhancedQuarterMasterService.IsPlayerTalkingToPlayerClanQuarterMaster))
+				).WithCondition(PlayerUtils.IsPlayerTalkingToPlayerClanQuarterMaster))
 			.WithConversationPart(
 				new SimpleConversationPart(
 					"enhanced_quatermaster_conv_menu_configure",
@@ -73,80 +74,80 @@ class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_allow_locked_items",
 						"Allow Locked Items",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => CompanionEquipmentService.GetAllowLockedItems() == true)
-					.WithConsequence(CompanionEquipmentService.ToggleQuaterMasterAllowLockedItems),
+					).WithCondition(() => AutoEquipService.GetAllowLockedItems() == true)
+					.WithConsequence(AutoEquipService.ToggleQuaterMasterAllowLockedItems),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_any",
 						"Allow Any Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => CompanionEquipmentService.GetAllowAnyCulture() == true)
-					.WithConsequence(CompanionEquipmentService.ToggleQuaterMasterAllow_AnyCulture),
+					).WithCondition(() => AutoEquipService.GetAllowAnyCulture() == true)
+					.WithConsequence(AutoEquipService.ToggleQuaterMasterAllow_AnyCulture),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_battania",
 						"Allow Battania Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => CompanionEquipmentService.GetAllowBattaniaCulture() == true)
-					.WithConsequence(CompanionEquipmentService.ToggleQuaterMasterAllow_BattaniaCulture),
+					).WithCondition(() => AutoEquipService.GetAllowBattaniaCulture() == true)
+					.WithConsequence(AutoEquipService.ToggleQuaterMasterAllow_BattaniaCulture),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_sturgia",
 						"Allow Sturgia Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => CompanionEquipmentService.GetAllowSturgiaCulture() == true)
-					.WithConsequence(CompanionEquipmentService.ToggleQuaterMasterAllow_SturgiaCulture),
+					).WithCondition(() => AutoEquipService.GetAllowSturgiaCulture() == true)
+					.WithConsequence(AutoEquipService.ToggleQuaterMasterAllow_SturgiaCulture),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_aserai",
 						"Allow Aserai Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => CompanionEquipmentService.GetAllowAseraiCulture() == true)
-					.WithConsequence(CompanionEquipmentService.ToggleQuaterMasterAllow_AseraiCulture),
+					).WithCondition(() => AutoEquipService.GetAllowAseraiCulture() == true)
+					.WithConsequence(AutoEquipService.ToggleQuaterMasterAllow_AseraiCulture),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_khuzait",
 						"Allow Khuzait Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => CompanionEquipmentService.GetAllowKhuzaitCulture() == true)
-					.WithConsequence(CompanionEquipmentService.ToggleQuaterMasterAllow_KhuzaitCulture),
+					).WithCondition(() => AutoEquipService.GetAllowKhuzaitCulture() == true)
+					.WithConsequence(AutoEquipService.ToggleQuaterMasterAllow_KhuzaitCulture),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_vlandia",
 						"Allow Vlandia Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => CompanionEquipmentService.GetAllowVlandiaCulture() == true)
-					.WithConsequence(CompanionEquipmentService.ToggleQuaterMasterAllow_VlandiaCulture),
+					).WithCondition(() => AutoEquipService.GetAllowVlandiaCulture() == true)
+					.WithConsequence(AutoEquipService.ToggleQuaterMasterAllow_VlandiaCulture),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_empire",
 						"Allow Empire Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => CompanionEquipmentService.GetAllowEmpireCulture() == true)
-					.WithConsequence(CompanionEquipmentService.ToggleQuaterMasterAllow_EmpireCulture),
+					).WithCondition(() => AutoEquipService.GetAllowEmpireCulture() == true)
+					.WithConsequence(AutoEquipService.ToggleQuaterMasterAllow_EmpireCulture),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_type",
 						"Allow Battle Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => CompanionEquipmentService.GetAllowBattleEquipment() == true)
-					.WithConsequence(CompanionEquipmentService.ToggleQuaterMasterAllow_BattleEquipment),
+					).WithCondition(() => AutoEquipService.GetAllowBattleEquipment() == true)
+					.WithConsequence(AutoEquipService.ToggleQuaterMasterAllow_BattleEquipment),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_type_civilian_equipment",
 						"Allow Civilian Equipment",
 						ConversationSentenceType.DialogueTreeBranchPart
-					).WithCondition(() => CompanionEquipmentService.GetAllowCivilianEquipment() == true)
-					.WithConsequence(CompanionEquipmentService.ToggleQuaterMasterAllow_CivilianEquipment),
+					).WithCondition(() => AutoEquipService.GetAllowCivilianEquipment() == true)
+					.WithConsequence(AutoEquipService.ToggleQuaterMasterAllow_CivilianEquipment),
 				AppliedDialogueLineRelation.LinkToCurrentBranch)
 
 			// Auto Trade Items Branch

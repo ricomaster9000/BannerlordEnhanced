@@ -207,9 +207,8 @@
     <Compile Include="src\Behaviors\EnhancedEngineerBehavior.cs" />
     <Compile Include="src\Behaviors\EnhancedQuarterMasterBehavior.cs" />
     <Compile Include="src\Behaviors\EnhancedScoutBehavior.cs" />
-    <Compile Include="src\Services\CompanionEquipmentService.cs" />
+    <Compile Include="src\Services\quartermaster\AutoEquipService.cs" />
     <Compile Include="src\Services\quartermaster\AutoTraderService.cs" />
-    <Compile Include="src\Services\quartermaster\EnhancedQuarterMasterService.cs" />
     <Compile Include="src\Storage\*" />
     <Compile Include="src\Services\EnhancedEngineerService.cs" />
     <Compile Include="src\Services\EnhancedScoutService.cs" />

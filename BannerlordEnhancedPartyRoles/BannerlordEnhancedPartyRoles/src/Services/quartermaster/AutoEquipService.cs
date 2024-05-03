@@ -4,14 +4,124 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BannerlordEnhancedFramework.extendedtypes;
+using BannerlordEnhancedFramework.extendedtypes.itemcategories;
+using BannerlordEnhancedFramework.src.utils;
+using BannerlordEnhancedFramework.utils;
 using BannerlordEnhancedPartyRoles.src.Storage;
+using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.CampaignSystem.Roster;
 using TaleWorlds.Core;
+using TaleWorlds.Library;
 
 namespace BannerlordEnhancedPartyRoles.src.Services
 {
 
-	public static class CompanionEquipmentService
-	{
+	public static class AutoEquipService
+	{ 
+		
+		
+		public static void GiveBestEquipmentFromItemRoster()
+		{
+			MobileParty mainParty = MobileParty.MainParty;
+			ItemRoster itemRoster = mainParty.ItemRoster;
+			List<TroopRosterElement> allCompanionsTroopRosterElement = PartyUtils.GetHerosExcludePlayerHero(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
+			List<FighterClass> fighters = new List<FighterClass>();
+			bool canRemoveLockedItems = AutoEquipService.GetAllowLockedItems() == false;
+			Dictionary<string, int> categories = new Dictionary<string, int>();
+			
+			List<ExtendedCultureCode> chosenCultures = AutoEquipService.GetChosenCultures();
+			foreach (var chosenCulture in chosenCultures)
+			{
+				HeroEquipmentCustomization heroEquipmentCustomization = new HeroEquipmentCustomizationByClass();
+
+				if (chosenCulture == ExtendedCultureCode.get(CultureCode.Invalid))
+				{
+					continue;
+				}
+				
+				if (chosenCulture != ExtendedCultureCode.get(CultureCode.AnyOtherCulture))
+				{
+					heroEquipmentCustomization = new HeroEquipmentCustomizationByClassAndCulture(chosenCulture.nativeCultureCode());
+				}
+
+				foreach (TroopRosterElement troopCompanion in allCompanionsTroopRosterElement)
+				{
+					fighters.Add(new FighterClass(troopCompanion.Character.HeroObject, heroEquipmentCustomization));
+				}
+
+				foreach (FighterClass fighterClass in fighters)
+				{
+					List<ItemRosterElement> items = canRemoveLockedItems
+						? EquipmentUtil.RemoveLockedItems(itemRoster.ToList())
+						: itemRoster.ToList();
+
+					if (AutoEquipService.GetAllowBattleEquipment())
+					{
+						PartyUtils.updateItemRoster(itemRoster, fighterClass.removeRelavantBattleEquipment(items),
+							new List<ItemRosterElement>());
+
+						items = canRemoveLockedItems
+							? EquipmentUtil.RemoveLockedItems(itemRoster.ToList())
+							: itemRoster.ToList();
+						var changes = fighterClass.assignBattleEquipment(items);
+						categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals,
+							fighterClass.MainItemCategories, categories);
+						PartyUtils.updateItemRoster(itemRoster, changes.additions, changes.removals);
+					}
+
+					if (AutoEquipService.GetAllowCivilianEquipment())
+					{
+						items = canRemoveLockedItems
+							? EquipmentUtil.RemoveLockedItems(itemRoster.ToList())
+							: itemRoster.ToList();
+						PartyUtils.updateItemRoster(itemRoster, fighterClass.removeRelavantCivilianEquipment(items),
+							new List<ItemRosterElement>());
+						var changes = fighterClass.assignCivilianEquipment(items);
+
+						categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals,
+							fighterClass.MainItemCategories, categories);
+						PartyUtils.updateItemRoster(itemRoster, changes.additions, changes.removals);
+					}
+				}
+			}
+
+			if (categories.Count > 0)
+			{
+				List<string> categoriesNames = new List<string>();
+				foreach(KeyValuePair<string, int> item in categories)
+				{
+					categoriesNames.Add(item.Key);
+				}
+				InformationManager.DisplayMessage(new InformationMessage("Quartermaster updated companions " + BuildQuarterMasterNotification(categoriesNames), BannerlordEnhancedFramework.Colors.Yellow));
+			}
+			
+		}
+		
+		public static string BuildQuarterMasterNotification(List<string> list)
+		{
+			string text = "";
+			int i = 0;
+			int size = list.Count;
+			foreach (var word in list)
+			{
+				i += 1;
+				if (i == size)
+				{
+					string addsPlural = word[word.Length - 1] != 'r' ? word + "s" : word;
+					text += addsPlural;
+				}
+				else if (i == size - 1)
+				{
+					text += word + " and ";
+				}
+				else
+				{
+					text += word + ", ";
+				}
+			}
+			return text;
+		}
+		
 		public static void ToggleQuaterMasterAllowLockedItems()
 		{
 			SetAllowLockedItems(GetAllowLockedItems() == false ? true : false);
@@ -98,59 +208,59 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 
 		public static void SetAllowAnyCulture(bool flag)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
+			EnhancedQuarterMasterData.AutoEquip.LatestFilterSettingsVersionNo += 1;
 		}
 		public static void SetAllowLockedItems(bool flag)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
-			EnhancedQuarterMasterData.CompanionEquiptment.AllowLockedEquipment = flag;
+			EnhancedQuarterMasterData.AutoEquip.LatestFilterSettingsVersionNo += 1;
+			EnhancedQuarterMasterData.AutoEquip.AllowLockedEquipment = flag;
 		}
 		public static void SetAllowBattaniaCulture(bool flag)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
+			EnhancedQuarterMasterData.AutoEquip.LatestFilterSettingsVersionNo += 1;
 		}
 		public static void SetAllowSturgiaCulture(bool flag)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
+			EnhancedQuarterMasterData.AutoEquip.LatestFilterSettingsVersionNo += 1;
 		}
 		public static void SetAllowAseraiCulture(bool flag)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
+			EnhancedQuarterMasterData.AutoEquip.LatestFilterSettingsVersionNo += 1;
 		}
 		public static void SetAllowKhuzaitCulture(bool flag)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
+			EnhancedQuarterMasterData.AutoEquip.LatestFilterSettingsVersionNo += 1;
 		}
 		public static void SetAllowVlandiaCulture(bool flag)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
+			EnhancedQuarterMasterData.AutoEquip.LatestFilterSettingsVersionNo += 1;
 		}
 		public static void SetAllowEmpireCulture(bool flag)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo += 1;
+			EnhancedQuarterMasterData.AutoEquip.LatestFilterSettingsVersionNo += 1;
 		}
 
 		public static void SetAllowBattleEquipment(bool flag)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.AllowBattleEquipment = flag;
+			EnhancedQuarterMasterData.AutoEquip.AllowBattleEquipment = flag;
 		}
 		public static void SetAllowCivilianEquipment(bool flag)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.AllowCivilianEquipment = flag;
+			EnhancedQuarterMasterData.AutoEquip.AllowCivilianEquipment = flag;
 		}
 
 		public static void SetLastItemRosterVersionNo(int version)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.LastItemRosterVersionNo = version;
+			EnhancedQuarterMasterData.AutoEquip.LastItemRosterVersionNo = version;
 		}
 		public static void SetIsLastInventoryCancelPressed(bool fromCancel)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.IsLastInventoryCancelPressed = fromCancel;
+			EnhancedQuarterMasterData.AutoEquip.IsLastInventoryCancelPressed = fromCancel;
 		}
 
 		public static void SetPreviousFilterSettingsVersionNo(int versionNo)
 		{
-			EnhancedQuarterMasterData.CompanionEquiptment.PreviousFilterSettingsVersionNo = versionNo;
+			EnhancedQuarterMasterData.AutoEquip.PreviousFilterSettingsVersionNo = versionNo;
 		}
 
 
@@ -160,7 +270,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		}
 		public static bool GetAllowLockedItems()
 		{
-			return EnhancedQuarterMasterData.CompanionEquiptment.AllowLockedEquipment;
+			return EnhancedQuarterMasterData.AutoEquip.AllowLockedEquipment;
 		}
 		public static bool GetAllowBattaniaCulture()
 		{
@@ -189,32 +299,30 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 
 		public static bool GetAllowBattleEquipment()
 		{
-			return EnhancedQuarterMasterData.CompanionEquiptment.AllowBattleEquipment;
+			return EnhancedQuarterMasterData.AutoEquip.AllowBattleEquipment;
 		}
 		public static bool GetAllowCivilianEquipment()
 		{
-			return EnhancedQuarterMasterData.CompanionEquiptment.AllowCivilianEquipment;
+			return EnhancedQuarterMasterData.AutoEquip.AllowCivilianEquipment;
 		}
 		public static int GetLastItemRosterVersionNo()
 		{
-			return EnhancedQuarterMasterData.CompanionEquiptment.LastItemRosterVersionNo;
+			return EnhancedQuarterMasterData.AutoEquip.LastItemRosterVersionNo;
 		}
 
 		public static bool GetIsLastInventoryCancelPressed()
 		{
-			return EnhancedQuarterMasterData.CompanionEquiptment.IsLastInventoryCancelPressed;
+			return EnhancedQuarterMasterData.AutoEquip.IsLastInventoryCancelPressed;
 		}
 
 		public static int GetLatestFilterSettingsVersionNo()
 		{
-			return EnhancedQuarterMasterData.CompanionEquiptment.LatestFilterSettingsVersionNo;
+			return EnhancedQuarterMasterData.AutoEquip.LatestFilterSettingsVersionNo;
 		}
 		public static int GetPreviousFilterSettingsVersionNo()
 		{
-			return EnhancedQuarterMasterData.CompanionEquiptment.PreviousFilterSettingsVersionNo;
+			return EnhancedQuarterMasterData.AutoEquip.PreviousFilterSettingsVersionNo;
 		}
-		
-		// TODO - Make this return a list of ExtendedCultureCodes where LockedAll is false, allow multiple cultures
 		public static List<ExtendedCultureCode> GetChosenCultures()
 		{
 			List<ExtendedCultureCode> choseCultures = new List<ExtendedCultureCode>();
