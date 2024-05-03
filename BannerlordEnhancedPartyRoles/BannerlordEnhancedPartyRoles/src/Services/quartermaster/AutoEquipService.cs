@@ -97,31 +97,6 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			
 		}
 		
-		public static string BuildQuarterMasterNotification(List<string> list)
-		{
-			string text = "";
-			int i = 0;
-			int size = list.Count;
-			foreach (var word in list)
-			{
-				i += 1;
-				if (i == size)
-				{
-					string addsPlural = word[word.Length - 1] != 'r' ? word + "s" : word;
-					text += addsPlural;
-				}
-				else if (i == size - 1)
-				{
-					text += word + " and ";
-				}
-				else
-				{
-					text += word + ", ";
-				}
-			}
-			return text;
-		}
-		
 		public static void ToggleQuaterMasterAllowLockedItems()
 		{
 			SetAllowLockedItems(GetAllowLockedItems() == false ? true : false);
@@ -185,6 +160,8 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			SetAllowCivilianEquipment(GetAllowCivilianEquipment() == false ? true : false);
 		}
 
+		
+		// TODO - refactor to become foreach that iterates through all culture configurations in AutoEquip Data CultureToItemCategoryFilters field
 		public static void SetAllCultureToAllowFalse()
 		{
 			SetAllowAnyCulture(false);
@@ -323,7 +300,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		{
 			return EnhancedQuarterMasterData.AutoEquip.PreviousFilterSettingsVersionNo;
 		}
-		public static List<ExtendedCultureCode> GetChosenCultures()
+		private static List<ExtendedCultureCode> GetChosenCultures()
 		{
 			List<ExtendedCultureCode> choseCultures = new List<ExtendedCultureCode>();
 			foreach (var cultureToItemCategoryFilter in EnhancedQuarterMasterData.AutoEquip.CultureToItemCategoryFilters)
@@ -335,6 +312,30 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			}
 
 			return choseCultures;
+		}
+		private static string BuildQuarterMasterNotification(List<string> list)
+		{
+			string text = "";
+			int i = 0;
+			int size = list.Count;
+			foreach (var word in list)
+			{
+				i += 1;
+				if (i == size)
+				{
+					string addsPlural = word[word.Length - 1] != 'r' ? word + "s" : word;
+					text += addsPlural;
+				}
+				else if (i == size - 1)
+				{
+					text += word + " and ";
+				}
+				else
+				{
+					text += word + ", ";
+				}
+			}
+			return text;
 		}
 	}
 }

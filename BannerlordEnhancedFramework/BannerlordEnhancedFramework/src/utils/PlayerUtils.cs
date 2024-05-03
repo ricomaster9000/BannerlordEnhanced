@@ -13,6 +13,14 @@ public class PlayerUtils
                    Campaign.Current.ConversationManager.OneToOneConversationCharacter == PlayerParty().EffectiveQuartermaster.CharacterObject;
         }
         
+        public static bool IsPlayerTalkingToPlayerClanEngineer()
+        {
+            return Campaign.Current != null &&
+                   PlayerUtils.PlayerParty() != null &&
+                   PlayerUtils.PlayerParty().EffectiveQuartermaster != null && 
+                   Campaign.Current.ConversationManager.OneToOneConversationCharacter == PlayerUtils.PlayerParty().EffectiveEngineer.CharacterObject;
+        }
+        
         public static bool IsPlayerConversing()
         {
             return Campaign.Current.ConversationManager.OneToOneConversationCharacter != null;
