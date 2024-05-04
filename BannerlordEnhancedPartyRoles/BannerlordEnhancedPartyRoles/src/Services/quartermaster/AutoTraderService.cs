@@ -204,7 +204,6 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			// iterate through every faction and filter the items out for that faction, add it to the main filtered out list
 			Dictionary<string, int> categoriesSold = new Dictionary<string, int>();
 			foreach (ExtendedCultureCode cultureCode in ExtendedCultureCode.values()) {
-				
 				List<ExtendedItemCategory> itemCategories = GetItemCategoriesWhenSellingByCultureCode(cultureCode);
 				
 				itemRosterElementsToSell.AddRange(
@@ -213,14 +212,23 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 						itemCategories,
 						GetItemOrderByWhenSelling())
 				);
-
+				
 				categoriesSold = categoriesSold.Concat(
-						ExtendedItemCategory.GetItemCategoryToTotalWorthForCategoryFromItems(itemRosterElementsToSell, itemCategories)
-					)
-					.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+						ExtendedItemCategory.GetItemCategoryToTotalWorthForCultureAndCategoryFromItems(
+							itemRosterElementsToSell,
+							itemCategories,
+							cultureCode)
+						)
+					.GroupBy(kvp => kvp.Key)
+					.ToDictionary(
+						group => group.Key,
+						group => group.First().Value
+					);
 			}
 			if(itemRosterElementsToSell.Count > 0)
 			{
+				// remove duplicates
+				itemRosterElementsToSell = itemRosterElementsToSell.Distinct().ToList();
 				List<ItemRosterElement> itemsSold = PartyUtils.SellPartyItemsToSettlement(MobileParty.MainParty, settlement, itemRosterElementsToSell);
 				if (itemsSold.Count > 0)
 				{

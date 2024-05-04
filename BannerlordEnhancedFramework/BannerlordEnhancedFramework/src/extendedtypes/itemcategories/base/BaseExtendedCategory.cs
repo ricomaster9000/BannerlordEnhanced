@@ -33,22 +33,26 @@ public abstract partial class ExtendedItemCategory
 				return itemRosterElementList;
 		}
 	}
-	public static Dictionary<string, int> GetItemCategoryToTotalWorthForCategoryFromItems(List<ItemRosterElement> itemList, List<ExtendedItemCategory> itemCategories)
+	public static Dictionary<string, int> GetItemCategoryToTotalWorthForCultureAndCategoryFromItems(
+		List<ItemRosterElement> itemList,
+		List<ExtendedItemCategory> itemCategories,
+		ExtendedCultureCode cultureCode
+	)
 	{
 		Dictionary<string, int> result = new Dictionary<string, int>();
 		foreach (ItemRosterElement itemRosterElement in itemList)
 		{
 			foreach (ExtendedItemCategory itemCategory in itemCategories)
 			{
-				if (itemCategory.isType(itemRosterElement))
+				if (itemCategory.isType(itemRosterElement) && cultureCode.nativeCultureCode() == itemRosterElement.EquipmentElement.Item.Culture.GetCultureCode())
 				{
-					if (result.ContainsKey(itemCategory.Name)) 
+					string itemCategoryToNameKey = cultureCode.getName() + " " + itemCategory.Name;
+					if (result.ContainsKey(itemCategoryToNameKey)) 
 					{
-						int amount = result[itemCategory.Name];
-						result[itemRosterElement.EquipmentElement.Item.Culture.Name + " " + itemCategory.Name] = amount + itemRosterElement.Amount;
+						result[itemCategoryToNameKey]+=itemRosterElement.Amount;
 					} else 
 					{
-						result.Add(itemRosterElement.EquipmentElement.Item.Culture.Name + " " + itemCategory.Name, itemRosterElement.Amount);
+						result.Add(itemCategoryToNameKey, itemRosterElement.Amount);
 					}
 					break;
 				}
