@@ -42,16 +42,21 @@ class EnhancedQuaterMasterBehavior : CampaignBehaviorBase
 	public void OnSettlementEntered(MobileParty partyEnteredSettlement, Settlement settlement, Hero leader)
 	{
 		// Our logic attach with game logic (First line)
-		if(partyEnteredSettlement != null && partyEnteredSettlement == MobileParty.MainParty)
+		if(partyEnteredSettlement == null || partyEnteredSettlement != MobileParty.MainParty)
 		{
-			// Should not have low level implementation of mod logic
-			SettlementComponent settlementComponent = settlement.SettlementComponent;
-			if (settlementComponent == null || settlementComponent.IsTown == false)
-			{
-				return;
-			}
-			AutoTraderService.SellItemsWhenMainPartyEntersSettlement(settlement);
+			return;
 		}
+		// Should not have low level implementation of mod logic
+		SettlementComponent settlementComponent = settlement.SettlementComponent;
+		if (settlementComponent == null || settlementComponent.IsTown == false)
+		{
+			return;
+		}
+		if(PartyUtils.IsAtWarWithSettlement(MobileParty.MainParty, settlement) == true)
+		{
+			return;
+		}
+		AutoTraderService.SellItemsToSettlement(settlement);
 	}
 	private void AddDialogs(CampaignGameStarter starter)
 	{

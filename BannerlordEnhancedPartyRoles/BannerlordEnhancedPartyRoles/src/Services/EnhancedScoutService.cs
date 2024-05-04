@@ -125,38 +125,37 @@ public static class EnhancedScoutService
 		const double distanceMultplier = 2.5;
 		double detectSiegeDistance = baseDistance + scoutSkillValue * distanceMultplier;
 
-		InformationManager.DisplayMessage(new InformationMessage("Distance to Settlement: " + distanceToSettlement, BannerlordEnhancedFramework.Colors.Yellow));
-		InformationManager.DisplayMessage(new InformationMessage("Scout skill value:: " + scoutSkillValue, BannerlordEnhancedFramework.Colors.Yellow));
-		InformationManager.DisplayMessage(new InformationMessage("detectSiegeDistance: " + detectSiegeDistance, BannerlordEnhancedFramework.Colors.Yellow));
-		
-		if (distanceToSettlement < detectSiegeDistance)
+		if (distanceToSettlement > detectSiegeDistance)
 		{
-			string title = "Settlement is being besieged";
-			string attackersDetails = "";
-			int totalSoldiers = 0;
-			for (int i = 0; i < attackers.Count; i++)
-			{
-				PartyBase attacker = attackers[i];
-				MobileParty? mobileParty = attacker.MobileParty;
-				if (mobileParty != null && GameUtils.IsPlayerHostileToParty(mobileParty))
-				{
-					int soldiers = mobileParty.MemberRoster.TotalHealthyCount;
-					attackersDetails = attackersDetails.Add(mobileParty.Name + " with " + soldiers + " soldiers ", true);
-					totalSoldiers += soldiers;
-				}
-			}
-			string subTitle = "Scout found " + settlement.Name + " being besieged by " + totalSoldiers.ToString() + " Soldiers";
-			WindowUtils.PopupSimpleInquiry(
-				title,
-				subTitle 
-				+ Environment.NewLine 
-				+ attackersDetails,
-				"Show on map",
-				"Ok",
-				() => MapScreen.Instance.FastMoveCameraToPosition(settlement.Position2D),
-				() => {}
-			); 
+			return;
 		}
+
+		string title = "Settlement is being besieged";
+		string attackersDetails = "";
+		int totalSoldiers = 0;
+
+		for (int i = 0; i < attackers.Count; i++)
+		{
+			PartyBase attacker = attackers[i];
+			MobileParty? mobileParty = attacker.MobileParty;
+			if (mobileParty != null && GameUtils.IsPlayerHostileToParty(mobileParty))
+			{
+				int soldiers = mobileParty.MemberRoster.TotalHealthyCount;
+				attackersDetails = attackersDetails.Add(mobileParty.Name + " with " + soldiers + " soldiers ", true);
+				totalSoldiers += soldiers;
+			}
+		}
+		string subTitle = "Scout found " + settlement.Name + " being besieged by " + totalSoldiers.ToString() + " Soldiers";
+		WindowUtils.PopupSimpleInquiry(
+			title,
+			subTitle
+			+ Environment.NewLine
+			+ attackersDetails,
+			"Show on map",
+			"Ok",
+			() => MapScreen.Instance.FastMoveCameraToPosition(settlement.Position2D),
+			() => { }
+		);
 	}
 
 }

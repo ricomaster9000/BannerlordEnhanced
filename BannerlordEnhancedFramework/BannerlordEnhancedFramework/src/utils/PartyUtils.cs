@@ -59,7 +59,12 @@ public static class PartyUtils
         return party.MapFaction.IsAtWarWith(targetParty.MapFaction);
     }
 
-    public static float CalculateDistanceBetweenParties(MobileParty partyFrom, MobileParty partyTo) {
+	public static bool IsAtWarWithSettlement(MobileParty party, Settlement settlement)
+	{
+		return party.MapFaction.IsAtWarWith(settlement.MapFaction);
+	}
+
+	public static float CalculateDistanceBetweenParties(MobileParty partyFrom, MobileParty partyTo) {
         return CalculateDistanceBetweenLocations(partyFrom.Position2D, partyTo.Position2D);
     }
     

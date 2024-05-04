@@ -332,7 +332,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			EnhancedQuaterMasterData.AutoTradeItems.IsLighestItemsFirst = flag;
 		}
 
-		public static void SellItemsWhenMainPartyEntersSettlement(Settlement settlement)
+		public static void SellItemsToSettlement(Settlement settlement)
 		{
 			List<ExtendedItemCategory> itemCategories = GetAutoTraderItemFiltersWhenSelling();
 
