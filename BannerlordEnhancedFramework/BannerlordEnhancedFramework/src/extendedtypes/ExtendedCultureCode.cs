@@ -9,7 +9,7 @@ public class ExtendedCultureCode
 
     public static readonly Dictionary<string, ExtendedCultureCode> byName = new Dictionary<string, ExtendedCultureCode>()
         {
-            { CultureCode.Invalid.ToString(), new ExtendedCultureCode(CultureCode.Invalid) },
+            //{ CultureCode.Invalid.ToString(), new ExtendedCultureCode(CultureCode.Invalid) },
             { CultureCode.Empire.ToString(), new ExtendedCultureCode(CultureCode.Empire) },
             { CultureCode.Sturgia.ToString(), new ExtendedCultureCode(CultureCode.Sturgia) },
             { CultureCode.Aserai.ToString(), new ExtendedCultureCode(CultureCode.Aserai) },

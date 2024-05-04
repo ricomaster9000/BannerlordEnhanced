@@ -26,7 +26,7 @@ class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 	public override void RegisterEvents()
 	{
 		CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(AddDialogs));
-		CampaignEvents.SettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(this.OnSettlementEntered));
+		CampaignEvents.AfterSettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(this.OnSettlementEntered));
 	}
 
 	public override void SyncData(IDataStore dataStore)
@@ -161,7 +161,7 @@ class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 			.WithTrueFalseConversationToggle(
 				new SimpleConversationPart(
 						"enhanced_quatermaster_conv_menu_configure_equipment_settings_add_culture_type_any",
-						"Allow Any Equipment",
+						"Allow Any Culture",
 						ConversationSentenceType.DialogueTreeBranchPart
 					).WithCondition(() => AutoTraderService.GetAllowAnyCulture() == true)
 					.WithConsequence(AutoTraderService.ToggleAllowAnyCulture),

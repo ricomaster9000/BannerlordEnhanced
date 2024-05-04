@@ -16,9 +16,9 @@ public class PlayerUtils
         public static bool IsPlayerTalkingToPlayerClanEngineer()
         {
             return Campaign.Current != null &&
-                   PlayerUtils.PlayerParty() != null &&
-                   PlayerUtils.PlayerParty().EffectiveQuartermaster != null && 
-                   Campaign.Current.ConversationManager.OneToOneConversationCharacter == PlayerUtils.PlayerParty().EffectiveEngineer.CharacterObject;
+                   PlayerParty() != null &&
+                   PlayerParty().EffectiveQuartermaster != null && 
+                   Campaign.Current.ConversationManager.OneToOneConversationCharacter == PlayerParty().EffectiveEngineer.CharacterObject;
         }
         
         public static bool IsPlayerConversing()

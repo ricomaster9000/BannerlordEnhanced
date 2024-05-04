@@ -13,7 +13,7 @@ using TaleWorlds.CampaignSystem.Inventory;
 
 namespace BannerlordEnhancedFramework.src.utils
 {
-	public static class EquipmentUtil
+	public static partial class EquipmentUtil
 	{
 		public static bool IsItemAnimal(ItemObject item)
 		{
@@ -156,17 +156,12 @@ namespace BannerlordEnhancedFramework.src.utils
 		public static bool CanEquipHorseHarness(Equipment equipment, ItemObject item)
 		{
 			EquipmentElement equipmentElement = equipment[EquipmentIndex.Horse];
-			if (HasHorseForHorseHarness(equipmentElement) && equipmentElement.Item.HorseComponent.Monster.FamilyType == item.ArmorComponent.FamilyType)
-			{
-				return true;
-			}
-			return false;
+			return (HasHorseForHorseHarness(equipmentElement) && equipmentElement.Item.HorseComponent.Monster.FamilyType == item.ArmorComponent.FamilyType);
 		}
 
 		public static bool HasHorseForHorseHarness(EquipmentElement equipmentElement)
 		{
-			bool hasHorseEquipped = IsItemEquipped(equipmentElement);
-			return hasHorseEquipped ? true : false;
+			return IsItemEquipped(equipmentElement);
 		}
 
 		public static bool CanUseItemByGender(bool isFemale, ItemObject item)
@@ -206,7 +201,7 @@ namespace BannerlordEnhancedFramework.src.utils
 			}).ToList();
 		}
 
-		/* CalculateArmourEffectiveness is added because there is I believe a bug that causes items that is same but different variantions to get same effectiveness. 
+		/* CalculateArmourEffectiveness is added because there is I believe a bug that causes items that is same but different variations to get same effectiveness. 
 		Although we order items based on effectiveness we then atleast check here. */
 		public static float CalculateArmourEffectiveness(ItemObject item)
 		{
@@ -316,11 +311,10 @@ namespace BannerlordEnhancedFramework.src.utils
 			});
 		}
 
-
 		public static EquipmentIndex GetLowestWeaponEquipmentIndexBySkillRank(Equipment equipment, CharacterObject character)
 		{
 			EquipmentIndex equipmentIndex = EquipmentIndex.None;
-			int skillValue = 9000;
+			int skillValue = Int32.MaxValue;
 
 			for (EquipmentIndex i = EquipmentIndex.WeaponItemBeginSlot; i < EquipmentIndex.ExtraWeaponSlot; i++)
 			{
@@ -347,19 +341,10 @@ namespace BannerlordEnhancedFramework.src.utils
 			{
 				return EquipmentIndex.None;
 			}
-			ItemObject.ItemTypeEnum type = item.Type;
-			switch (type)
+			switch (item.Type)
 			{
 				case ItemObject.ItemTypeEnum.Horse:
 					return EquipmentIndex.ArmorItemEndSlot;
-				case ItemObject.ItemTypeEnum.OneHandedWeapon:
-				case ItemObject.ItemTypeEnum.TwoHandedWeapon:
-				case ItemObject.ItemTypeEnum.Polearm:
-				case ItemObject.ItemTypeEnum.Bow:
-				case ItemObject.ItemTypeEnum.Crossbow:
-				case ItemObject.ItemTypeEnum.Thrown:
-				case ItemObject.ItemTypeEnum.Goods:
-					break;
 				case ItemObject.ItemTypeEnum.Arrows:
 					return EquipmentIndex.WeaponItemBeginSlot;
 				case ItemObject.ItemTypeEnum.Bolts:
@@ -374,23 +359,19 @@ namespace BannerlordEnhancedFramework.src.utils
 					return EquipmentIndex.Leg;
 				case ItemObject.ItemTypeEnum.HandArmor:
 					return EquipmentIndex.Gloves;
+				case ItemObject.ItemTypeEnum.Cape:
+					return EquipmentIndex.Cape;
+				case ItemObject.ItemTypeEnum.HorseHarness:
+					return EquipmentIndex.HorseHarness;
+				case ItemObject.ItemTypeEnum.Banner:
+					return EquipmentIndex.ExtraWeaponSlot;
 				default:
-					switch (type)
+					if (item.WeaponComponent != null)
 					{
-						case ItemObject.ItemTypeEnum.Cape:
-							return EquipmentIndex.Cape;
-						case ItemObject.ItemTypeEnum.HorseHarness:
-							return EquipmentIndex.HorseHarness;
-						case ItemObject.ItemTypeEnum.Banner:
-							return EquipmentIndex.ExtraWeaponSlot;
+						return EquipmentIndex.WeaponItemBeginSlot;
 					}
-					break;
+					return EquipmentIndex.None;
 			}
-			if (item.WeaponComponent != null)
-			{
-				return EquipmentIndex.WeaponItemBeginSlot;
-			}
-			return EquipmentIndex.None;
 		}
 		
 		public static List<ItemRosterElement> FilterItemRosterByItemCategories(
@@ -423,13 +404,5 @@ namespace BannerlordEnhancedFramework.src.utils
 			itemRosterElements = ExtendedItemCategory.OrderItemRoster(itemRosterElements, orderBy);
 			return itemRosterElements;
 		}
-
-		public enum OrderBy
-		{
-			LIGHTEST_TO_HEAVIEST,
-			HEAVIEST_TO_LIGHTEST,
-			MOST_VALUABLE_TO_LEAST_VALUABLE
-		}
-
 	}
 }

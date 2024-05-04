@@ -57,7 +57,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 
 					if (AutoEquipService.GetAllowBattleEquipment())
 					{
-						PartyUtils.updateItemRoster(itemRoster, fighterClass.removeRelavantBattleEquipment(items),
+						PartyUtils.UpdatePartyItemRoster(itemRoster, fighterClass.removeRelavantBattleEquipment(items),
 							new List<ItemRosterElement>());
 
 						items = canRemoveLockedItems
@@ -66,7 +66,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 						var changes = fighterClass.assignBattleEquipment(items);
 						categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals,
 							fighterClass.MainItemCategories, categories);
-						PartyUtils.updateItemRoster(itemRoster, changes.additions, changes.removals);
+						PartyUtils.UpdatePartyItemRoster(itemRoster, changes.additions, changes.removals);
 					}
 
 					if (AutoEquipService.GetAllowCivilianEquipment())
@@ -74,13 +74,13 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 						items = canRemoveLockedItems
 							? EquipmentUtil.RemoveLockedItems(itemRoster.ToList())
 							: itemRoster.ToList();
-						PartyUtils.updateItemRoster(itemRoster, fighterClass.removeRelavantCivilianEquipment(items),
+						PartyUtils.UpdatePartyItemRoster(itemRoster, fighterClass.removeRelavantCivilianEquipment(items),
 							new List<ItemRosterElement>());
 						var changes = fighterClass.assignCivilianEquipment(items);
 
 						categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals,
 							fighterClass.MainItemCategories, categories);
-						PartyUtils.updateItemRoster(itemRoster, changes.additions, changes.removals);
+						PartyUtils.UpdatePartyItemRoster(itemRoster, changes.additions, changes.removals);
 					}
 				}
 			}
