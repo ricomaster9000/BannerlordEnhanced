@@ -138,7 +138,7 @@ public static class EnhancedScoutService
 		{
 			PartyBase attacker = attackers[i];
 			MobileParty? mobileParty = attacker.MobileParty;
-			if (mobileParty != null && GameUtils.IsPlayerHostileToParty(mobileParty))
+			if (mobileParty != null && PlayerUtils.IsPlayerHostileToParty(mobileParty))
 			{
 				int soldiers = mobileParty.MemberRoster.TotalHealthyCount;
 				attackersDetails = attackersDetails.Add(mobileParty.Name + " with " + soldiers + " soldiers ", true);
