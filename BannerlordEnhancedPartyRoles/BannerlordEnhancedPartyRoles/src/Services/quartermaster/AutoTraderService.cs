@@ -258,12 +258,12 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 
 		public static bool GetAllowCulture(ExtendedCultureCode cultureCode)
 		{
-			return EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowAll"];
+			return !EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["LockedAll"];
 		}
 		
 		public static void SetAllowCulture(ExtendedCultureCode cultureCode, bool flag)
 		{
-			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowAll"] = flag;
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["LockedAll"] = !flag;
 		}
 		
 		public static void ToggleAllowCulture(ExtendedCultureCode cultureCode)
