@@ -68,9 +68,8 @@ public static class EnhancedScoutService
             // we assume player is aware of being targeted and is trying to get away if they are relatively facing the same direction as chasing party
             if (EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer != null &&
                 EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer == hostileParty &&
-                (PartyUtils.IsPartyFacingSameDirectionOfPartyDirection(PlayerUtils.PlayerParty(),hostileParty, 0.25f) ||
+                PartyUtils.IsPartyFacingSameDirectionOfPartyDirection(PlayerUtils.PlayerParty(),hostileParty, 0.25f) &&
                  PlayerUtils.PlayerParty().Speed > 0 /*player is not standing still */)
-            )
             {
                 return;
             }
