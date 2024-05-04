@@ -221,7 +221,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			}
 			if(itemRosterElementsToSell.Count > 0)
 			{
-				List<ItemRosterElement> itemsSold = PartyUtils.SellItemsToSettlement(MobileParty.MainParty, settlement, itemRosterElementsToSell);
+				List<ItemRosterElement> itemsSold = PartyUtils.SellPartyItemsToSettlement(MobileParty.MainParty, settlement, itemRosterElementsToSell);
 				if (itemsSold.Count > 0)
 				{
 					WindowUtils.DisplayMessageListNameAndTotal(categoriesSold, "Quartermaster sold items from your inventory");
@@ -258,12 +258,12 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 
 		public static bool GetAllowCulture(ExtendedCultureCode cultureCode)
 		{
-			return EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowAll"];
+			return !EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["LockedAll"];
 		}
 		
 		public static void SetAllowCulture(ExtendedCultureCode cultureCode, bool flag)
 		{
-			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowAll"] = flag;
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["LockedAll"] = !flag;
 		}
 		
 		public static void ToggleAllowCulture(ExtendedCultureCode cultureCode)

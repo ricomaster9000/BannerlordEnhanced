@@ -145,7 +145,8 @@ public static class PartyUtils
 	{
 		return settlement.Position2D.Distance(mobileParty.Position2D);
 	}
-	public static List<ItemRosterElement> SellItemsToSettlement(MobileParty sellerParty, Settlement settlement, List<ItemRosterElement> items)
+
+	public static List<ItemRosterElement> SellPartyItemsToSettlement(MobileParty sellerParty, Settlement settlement, List<ItemRosterElement> items)
 	{
 		List<ValueTuple<ItemRosterElement, int>> itemsToSellTuple = new List<ValueTuple<ItemRosterElement, int>>();
 		List<ValueTuple<ItemRosterElement, int>> itemsToBuyTuple = new List<ValueTuple<ItemRosterElement, int>>();
@@ -197,8 +198,8 @@ public static class PartyUtils
 			sellerParty.AddTaxGold((int)((float)income * 0.1f));
 		}
 
-		updateItemRoster(sellerParty.ItemRoster, new List<ItemRosterElement>(), itemsSold);
-		updateItemRoster(Settlement.CurrentSettlement.ItemRoster, itemsSold, new List<ItemRosterElement>());
+		UpdatePartyItemRoster(sellerParty.ItemRoster, new List<ItemRosterElement>(), itemsSold);
+		UpdatePartyItemRoster(Settlement.CurrentSettlement.ItemRoster, itemsSold, new List<ItemRosterElement>());
 
 		return itemsSold;
 	}
@@ -224,7 +225,7 @@ public static class PartyUtils
 	}
 	*/
 
-	public static void updateItemRoster(ItemRoster itemRoster, List<ItemRosterElement> additions, List<ItemRosterElement> removals)
+	public static void UpdatePartyItemRoster(ItemRoster itemRoster, List<ItemRosterElement> additions, List<ItemRosterElement> removals)
 	{
 		foreach (ItemRosterElement itemRosterElement in additions)
 		{

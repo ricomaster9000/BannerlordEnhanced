@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BannerlordEnhancedFramework.extendedtypes;
+﻿using System.Collections.Generic;
 using BannerlordEnhancedFramework.src.extendedtypes;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.CampaignSystem.Extensions;
-using TaleWorlds.CampaignSystem.ViewModelCollection.CharacterDeveloper;
 using TaleWorlds.Core;
 
 namespace BannerlordEnhancedFramework.src.utils
