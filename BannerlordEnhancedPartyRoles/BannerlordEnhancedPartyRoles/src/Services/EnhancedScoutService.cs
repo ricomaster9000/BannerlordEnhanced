@@ -56,35 +56,45 @@ public static class EnhancedScoutService
 
     public static void AlertPlayerToNearbyHostileParties()
     {
-        if (IsScoutAlertsNearbyEnemiesFrozen() || !PlayerUtils.IsPlayerActiveInWorldMap() || PlayerUtils.IsPlayerImprisoned())
+        try
         {
-            return;
-        }
-
-        MobileParty hostileParty = FindFirstNearbyHostilePartyPotentiallyTargetingPlayer();
-        //List<String> hostilePartiesInfo = FindFirstNearbyHostilePartyPotentiallyTargetingPlayer().Select(party => party.Name + " with " + party.MemberRoster.TotalHealthyCount + " soldiers").ToList();
-        if (hostileParty != null)
-        {
-            // we assume player is aware of being targeted and is trying to get away if they are relatively facing the same direction as chasing party
-            if (EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer != null &&
-                EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer == hostileParty &&
-                PartyUtils.IsPartyFacingSameDirectionOfPartyDirection(PlayerUtils.PlayerParty(),hostileParty, 0.25f) &&
-                 PlayerUtils.PlayerParty().Speed > 0 /*player is not standing still */)
+            if (IsScoutAlertsNearbyEnemiesFrozen() || !PlayerUtils.IsPlayerActiveInWorldMap() ||
+                PlayerUtils.IsPlayerImprisoned())
             {
                 return;
             }
-            EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer = hostileParty;
 
-            GameUtils.PauseGame();
-            SetScoutAlertsNearbyEnemiesFrozen(true);
+            MobileParty hostileParty = FindFirstNearbyHostilePartyPotentiallyTargetingPlayer();
+            //List<String> hostilePartiesInfo = FindFirstNearbyHostilePartyPotentiallyTargetingPlayer().Select(party => party.Name + " with " + party.MemberRoster.TotalHealthyCount + " soldiers").ToList();
+            if (hostileParty != null)
+            {
+                // we assume player is aware of being targeted and is trying to get away if they are relatively facing the same direction as chasing party
+                if (EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer != null &&
+                    EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer == hostileParty &&
+                    PartyUtils.IsPartyFacingSameDirectionOfPartyDirection(PlayerUtils.PlayerParty(), hostileParty,
+                        0.25f) &&
+                    PlayerUtils.PlayerParty().Speed > 0 /*player is not standing still */)
+                {
+                    return;
+                }
 
-            WindowUtils.PopupSimpleInquiry(
-                "Enemies Approaching",
-                hostileParty.Name + " with " + hostileParty.MemberRoster.TotalHealthyCount + " soldiers",
-                () => new OneTimeJob(
-                        EnhancedScoutData.ScoutAlertsNearbyEnemiesAutoDisabledDurationInMillis, 
+                EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer = hostileParty;
+
+                GameUtils.PauseGame();
+                SetScoutAlertsNearbyEnemiesFrozen(true);
+
+                WindowUtils.PopupSimpleInquiry(
+                    "Enemies Approaching",
+                    hostileParty.Name + " with " + hostileParty.MemberRoster.TotalHealthyCount + " soldiers",
+                    () => new OneTimeJob(
+                        EnhancedScoutData.ScoutAlertsNearbyEnemiesAutoDisabledDurationInMillis,
                         () => SetScoutAlertsNearbyEnemiesFrozen(false)).StartJobImmediately()
-            );
+                );
+            }
+        }
+        catch (Exception ignored)
+        {
+            return;
         }
     }
 
