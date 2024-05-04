@@ -300,14 +300,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\*" />
+    <Compile Include="src\asynchronous\ExtendedTimer.cs" />
+    <Compile Include="src\asynchronous\OneTimeJob.cs" />
     <Compile Include="src\dialogues\*" />
+    <Compile Include="src\enums\OrderByFromAndTo.cs" />
+    <Compile Include="src\enums\HorseFamilyType.cs" />
+    <Compile Include="src\enums\OrderByEffectiveness.cs" />
+    <Compile Include="src\enums\OrderByWeight.cs" />
     <Compile Include="src\extendedtypes\*" />
-    <Compile Include="src\extendedtypes\asynchronous\ExtendedTimer.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="src\extendedtypes\asynchronous\OneTimeJob.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="src\extendedtypes\hero\CavalryRiderClass.cs" />
+    <Compile Include="src\extendedtypes\hero\CombatSkills.cs" />
+    <Compile Include="src\extendedtypes\hero\EnhancedHeros.cs" />
+    <Compile Include="src\extendedtypes\hero\FighterClass.cs" />
+    <Compile Include="src\extendedtypes\hero\HeroEquipmentCustomization.cs" />
+    <Compile Include="src\extendedtypes\hero\HeroEquipmentCustomizationByClass.cs" />
+    <Compile Include="src\extendedtypes\hero\HeroEquipmentCustomizationByClassAndCulture.cs" />
+    <Compile Include="src\extendedtypes\hero\Skills.cs" />
     <Compile Include="src\extendedtypes\itemcategories\ArmourItemCategory.cs" />
     <Compile Include="src\extendedtypes\itemcategories\BannerItemCategory.cs" />
     <Compile Include="src\extendedtypes\itemcategories\base\BaseExtendedCategory.cs" />

@@ -221,7 +221,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			}
 			if(itemRosterElementsToSell.Count > 0)
 			{
-				List<ItemRosterElement> itemsSold = PartyUtils.SellItemsToSettlement(MobileParty.MainParty, settlement, itemRosterElementsToSell);
+				List<ItemRosterElement> itemsSold = PartyUtils.SellPartyItemsToSettlement(MobileParty.MainParty, settlement, itemRosterElementsToSell);
 				if (itemsSold.Count > 0)
 				{
 					WindowUtils.DisplayMessageListNameAndTotal(categoriesSold, "Quartermaster sold items from your inventory");

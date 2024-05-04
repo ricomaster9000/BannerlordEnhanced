@@ -5,23 +5,11 @@ using TaleWorlds.Core;
 
 namespace BannerlordEnhancedFramework.extendedtypes.itemcategories;
 
-public abstract class ExtendedItemCategory
+public abstract partial class ExtendedItemCategory
 {
 	
 	public abstract string Name { get; }
 	public abstract bool isType(ItemRosterElement itemRosterElement);
-
-	public enum OrderByEffectiveness
-	{
-		MOST_EFFECTIVE,
-		LEAST_EFFECTIVE,
-		ABOVE_AVERAGE_EFFECTIVE
-	}
-	public enum OrderByWeight
-	{
-		 MOST_HEAVY,
-		 LEAST_HEAVY
-	}
 
 	public static List<ItemRosterElement> OrderItemRosterByEffectiveness(List<ItemRosterElement> itemRosterElementList, OrderByEffectiveness orderByEffectiveness = OrderByEffectiveness.MOST_EFFECTIVE)
 	{
