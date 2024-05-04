@@ -16,7 +16,7 @@ class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 {
 
 	// Don't define low level logic reference high level logic here. (Single resposibility)
-	[CommandLineFunctionality.CommandLineArgumentFunction("quatermaster_give_best_items_to_companions_new_version", "debug")]
+	[CommandLineFunctionality.CommandLineArgumentFunction("quartermaster_autotrader_give_best_equipment_to_companions", "debug")]
 	public static string DebugGiveBestItemsToCompanions(List<string> strings)
 	{
 		AutoEquipService.GiveBestEquipmentFromItemRoster();
