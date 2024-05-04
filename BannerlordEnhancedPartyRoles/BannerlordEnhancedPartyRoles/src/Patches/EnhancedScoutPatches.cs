@@ -7,7 +7,7 @@ public class EnhancedScoutPatches
 {
     public static void DoneLogic_Postfix(InventoryLogic __instance, bool __result)
     {
-        DebugUtils.LogAndPrintInfo("DoneLogic_Postfix is working");
+        // DebugUtils.LogAndPrintInfo("DoneLogic_Postfix is working");
         // this.IsVisible
     }
 }

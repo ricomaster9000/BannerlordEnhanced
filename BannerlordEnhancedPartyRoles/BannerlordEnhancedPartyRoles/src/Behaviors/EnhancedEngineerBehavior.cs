@@ -3,6 +3,7 @@ using TaleWorlds.CampaignSystem;
 using BannerlordEnhancedPartyRoles.src.Services;
 using BannerlordEnhancedFramework.dialogues;
 using BannerlordEnhancedFramework;
+using BannerlordEnhancedFramework.utils;
 
 namespace BannerlordEnhancedPartyRoles.src.Behaviors
 {
@@ -27,7 +28,7 @@ namespace BannerlordEnhancedPartyRoles.src.Behaviors
 						"Enhanced Engineer Menu",
 						ConversationSentenceType.DialogueTreeRootStart,
 						CoreInputToken.Entry.HeroMainOptions
-					).WithCondition(EnhancedEngineerService.IsPlayerTalkingToPlayerClanEngineer))
+					).WithCondition(PlayerUtils.IsPlayerTalkingToPlayerClanEngineer))
 					.WithConversationPart(
 						new SimpleConversationPart(
 							"enhanced_quatermaster_mass_execute_prisoners",

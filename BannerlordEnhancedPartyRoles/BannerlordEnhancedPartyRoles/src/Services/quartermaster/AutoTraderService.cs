@@ -1,320 +1,186 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using BannerlordEnhancedFramework.extendedtypes;
+using BannerlordEnhancedFramework.extendedtypes.itemcategories;
 using BannerlordEnhancedFramework.src.utils;
 using BannerlordEnhancedFramework.utils;
 using BannerlordEnhancedPartyRoles.src.Storage;
 using TaleWorlds.CampaignSystem.Party;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Library;
 
 namespace BannerlordEnhancedPartyRoles.src.Services
 {
 	public static class AutoTraderService
 	{
-		public static List<ExtendedItemCategory> GetAutoTraderItemFiltersWhenSelling()
+		public static List<ExtendedItemCategory> GetItemCategoriesWhenSellingByCultureCode(ExtendedCultureCode cultureCode)
 		{
 			List<ExtendedItemCategory> itemCategories = new List<ExtendedItemCategory>();
+
+			if (!GetAllowCulture(cultureCode))
+			{
+				return itemCategories;
+			}
+
 			if (GetAllowBodyArmour())
 			{
-				itemCategories.Add(ExtendedItemCategory.BodyArmourItemCategory);
+				itemCategories.Add(ExtendedItemCategories.BodyArmourItemCategory);
 			}
 			if (GetAllowWeapons())
 			{
-				itemCategories.Add(ExtendedItemCategory.WeaponItemCategory);
+				itemCategories.Add(ExtendedItemCategories.WeaponItemCategory);
 			}
 			if (GetAllowSaddles())
 			{
-				itemCategories.Add(ExtendedItemCategory.SaddleItemCategory);
+				itemCategories.Add(ExtendedItemCategories.SaddleItemCategory);
 			}
 			if (GetAllowHorses())
 			{
-				itemCategories.Add(ExtendedItemCategory.HorseItemCategory);
+				itemCategories.Add(ExtendedItemCategories.HorseItemCategory);
 			}
 			if (GetAllowCamels())
 			{
-				itemCategories.Add(ExtendedItemCategory.CamelItemCategory);
-			}
-			if (GetAllowMiscellaneous())
-			{
-				itemCategories.Add(ExtendedItemCategory.MiscellaneousItemCategory);
+				itemCategories.Add(ExtendedItemCategories.CamelItemCategory);
 			}
 			if (GetAllowBanners())
 			{
-				itemCategories.Add(ExtendedItemCategory.BannerItemCategory);
+				itemCategories.Add(ExtendedItemCategories.BannerItemCategory);
+			}
+			if (GetAllowMiscellaneous())
+			{
+				itemCategories.Add(ExtendedItemCategories.MiscellaneousItemCategory);
+			}
+			if (GetIncludeLockedItemsWhenSelling())
+			{
+				itemCategories.Add(ExtendedItemCategories.LockedItemCategory);
 			}
 			return itemCategories;
 		}
 
 		// Culture
-		public static void ToggleQuaterMasterAllowLockedItems()
+		public static void ToggleQuarterMasterAllowLockedItems()
 		{
-			SetAllowLockedItems(GetExcludeLockedItemsWhenSelling() ? true : false);
-		}
-		public static void ToggleQuaterMasterAllow_AnyCulture()
-		{
-			bool currentToggle = GetAllowAnyCulture();
-			SetAllowAnyCulture(currentToggle == false ? true : false);
-			if (GetAllowAnyCulture())
+			if (GetIncludeLockedItemsWhenSelling())
 			{
-				SetAllCultureToAllowTrue();
+				SetAllowLockedItems(false);
+			} else {
+				SetAllowLockedItems(true);
 			}
-			else
-			{
-				SetAllCultureToAllowFalse();
-			}
-		}
-		public static void ToggleQuaterMasterAllow_BattaniaCulture()
-		{
-			bool currentToggle = GetAllowBattaniaCulture();
-			SetAllCultureToAllowFalse();
-			SetAllowBattaniaCulture(currentToggle == false ? true : false);
-		}
-		public static void ToggleQuaterMasterAllow_SturgiaCulture()
-		{
-			bool currentToggle = GetAllowSturgiaCulture();
-			SetAllCultureToAllowFalse();
-			SetAllowSturgiaCulture(currentToggle == false ? true : false);
-		}
-		public static void ToggleQuaterMasterAllow_AseraiCulture()
-		{
-			bool currentToggle = GetAllowAseraiCulture();
-			SetAllCultureToAllowFalse();
-			SetAllowAseraiCulture(currentToggle == false ? true : false);
-		}
-		public static void ToggleQuaterMasterAllow_KhuzaitCulture()
-		{
-			bool currentToggle = GetAllowKhuzaitCulture();
-			SetAllCultureToAllowFalse();
-			SetAllowKhuzaitCulture(currentToggle == false ? true : false);
-		}
-		public static void ToggleQuaterMasterAllow_VlandiaCulture()
-		{
-			bool currentToggle = GetAllowVlandiaCulture();
-			SetAllCultureToAllowFalse();
-			SetAllowVlandiaCulture(currentToggle == false ? true : false);
-		}
-		public static void ToggleQuaterMasterAllow_EmpireCulture()
-		{
-			bool currentToggle = GetAllowEmpireCulture();
-			SetAllCultureToAllowFalse();
-			SetAllowEmpireCulture(currentToggle == false ? true : false);
-		}
-
-		public static void SetAllCultureToAllowFalse()
-		{
-			SetAllowAnyCulture(false);
-			SetAllowBattaniaCulture(false);
-			SetAllowSturgiaCulture(false);
-			SetAllowAseraiCulture(false);
-			SetAllowKhuzaitCulture(false);
-			SetAllowVlandiaCulture(false);
-			SetAllowEmpireCulture(false);
-		}
-		public static void SetAllCultureToAllowTrue()
-		{
-			SetAllowAnyCulture(true);
-			SetAllowBattaniaCulture(true);
-			SetAllowSturgiaCulture(true);
-			SetAllowAseraiCulture(true);
-			SetAllowKhuzaitCulture(true);
-			SetAllowVlandiaCulture(true);
-			SetAllowEmpireCulture(true);
-		}
-		public static void SetAllowAnyCulture(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowAnyCulture = flag;
 		}
 		public static void SetAllowLockedItems(bool flag)
 		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowLockedItems = flag;
-		}
-		public static void SetAllowBattaniaCulture(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowBattaniaCulture = flag;
-		}
-		public static void SetAllowSturgiaCulture(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowSturgiaCulture = flag;
-		}
-		public static void SetAllowAseraiCulture(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowAseraiCulture = flag;
-		}
-		public static void SetAllowKhuzaitCulture(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowKhuzaitCulture = flag;
-		}
-		public static void SetAllowVlandiaCulture(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowVlandiaCulture = flag;
-		}
-		public static void SetAllowEmpireCulture(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowEmpireCulture = flag;
-		}
-		public static bool GetAllowAnyCulture()
-		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowAnyCulture;
-		}
-		public static bool GetAllowBattaniaCulture()
-		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowBattaniaCulture;
-		}
-		public static bool GetAllowSturgiaCulture()
-		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowSturgiaCulture;
-		}
-		public static bool GetAllowAseraiCulture()
-		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowAseraiCulture;
-		}
-		public static bool GetAllowKhuzaitCulture()
-		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowKhuzaitCulture;
-		}
-		public static bool GetAllowVlandiaCulture()
-		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowVlandiaCulture;
-		}
-		public static bool GetAllowEmpireCulture()
-		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowEmpireCulture;
+			EnhancedQuarterMasterData.AutoTraderData.AllowLockedItems = flag;
 		}
 
-		public static CultureCode GetChosenCulture()
+		public static bool GetIncludeLockedItemsWhenSelling()
 		{
-			if (GetAllowAnyCulture())
-			{
-				return CultureCode.AnyOtherCulture;
-			}
-			if (GetAllowBattaniaCulture())
-			{
-				return CultureCode.Battania;
-			}
-			else if (GetAllowSturgiaCulture())
-			{
-				return CultureCode.Sturgia;
-			}
-			else if (GetAllowAseraiCulture())
-			{
-				return CultureCode.Aserai;
-			}
-			else if (GetAllowKhuzaitCulture())
-			{
-				return CultureCode.Khuzait;
-			}
-			else if (GetAllowVlandiaCulture())
-			{
-				return CultureCode.Vlandia;
-			}
-			else if (GetAllowEmpireCulture())
-			{
-				return CultureCode.Empire;
-			}
-			return CultureCode.Invalid;
+			return EnhancedQuarterMasterData.AutoTraderData.AllowLockedItems;
 		}
-
-
-		// Categories
-		public static void ToggleQuaterMasterAllow_ArmourCategory()
+		public static bool GetAllowBodyArmour(ExtendedCultureCode cultureCode)
 		{
-			SetAllowBodyArmour(!GetAllowBodyArmour());
+			return EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowBodyArmour"];
 		}
-		public static void ToggleQuaterMasterAllow_WeaponsCategory()
-		{
-			SetAllowWeapons(!GetAllowWeapons());
-		}
-		public static void ToggleQuaterMasterAllow_SaddlesCategory()
-		{
-			SetAllowSaddles(!GetAllowSaddles());
-		}
-		public static void ToggleQuaterMasterAllow_HorsesCategory()
-		{
-			SetAllowHorses(!GetAllowHorses());
-		}
-		public static void ToggleQuaterMasterAllow_CamelsCategory()
-		{
-			SetAllowCamels(!GetAllowCamels());
-		}
-		public static void ToggleQuaterMasterAllow_MiscellaneousCategory()
-		{
-			SetAllowMiscellaneous(!GetAllowMiscellaneous());
-		}
-		public static void ToggleQuaterMasterAllow_BannersCategory()
-		{
-			SetAllowBanners(!GetAllowBanners());
-		}
-
-		public static void SetAllowBodyArmour(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowBodyArmour = flag;
-		}
-		public static void SetAllowWeapons(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowWeapons = flag;
-		}
-		public static void SetAllowSaddles(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowSaddles = flag;
-		}
-		public static void SetAllowHorses(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowHorses = flag;
-		}
-		public static void SetAllowCamels(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowCamels = flag;
-		}
-		public static void SetAllowMiscellaneous(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowMiscellaneous = flag;
-		}
-		public static void SetAllowBanners(bool flag)
-		{
-			EnhancedQuaterMasterData.AutoTradeItems.AllowBanners = flag;
-		}
-
-		public static bool GetExcludeLockedItemsWhenSelling()
-		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowLockedItems == false;
-		}
+		
 		public static bool GetAllowBodyArmour()
 		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowBodyArmour;
+			return EnhancedQuarterMasterData.AutoTraderData.AllowBodyArmor;
 		}
+
+		public static void ToggleAllowBodyArmour()
+		{
+			bool AllowBodyArmor = !EnhancedQuarterMasterData.AutoTraderData.AllowBodyArmor;
+			EnhancedQuarterMasterData.AutoTraderData.AllowBodyArmor = AllowBodyArmor;
+		}
+
 		public static bool GetAllowWeapons()
 		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowWeapons;
+			return EnhancedQuarterMasterData.AutoTraderData.AllowWeapons;
+		}
+		public static void ToggleAllowWeapons()
+		{
+			bool AllowWeapons = !EnhancedQuarterMasterData.AutoTraderData.AllowWeapons;
+			EnhancedQuarterMasterData.AutoTraderData.AllowWeapons = AllowWeapons;
 		}
 		public static bool GetAllowSaddles()
 		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowSaddles;
+			return EnhancedQuarterMasterData.AutoTraderData.AllowSaddles;
+		}
+		public static void ToggleAllowSaddles()
+		{
+			bool AllowSaddles = !EnhancedQuarterMasterData.AutoTraderData.AllowSaddles;
+			EnhancedQuarterMasterData.AutoTraderData.AllowSaddles = AllowSaddles;
 		}
 		public static bool GetAllowMiscellaneous()
 		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowMiscellaneous;
+			return EnhancedQuarterMasterData.AutoTraderData.AllowMiscellaneous;
+		}
+		public static void ToggleAllowMiscellaneous()
+		{
+			bool AllowMiscellaneous = !EnhancedQuarterMasterData.AutoTraderData.AllowMiscellaneous;
+			EnhancedQuarterMasterData.AutoTraderData.AllowMiscellaneous = AllowMiscellaneous;
 		}
 		public static bool GetAllowHorses()
 		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowHorses;
+			return EnhancedQuarterMasterData.AutoTraderData.AllowHorses;
+		}
+		public static void ToggleAllowHorses()
+		{
+			bool ToggleAllowHorses = !EnhancedQuarterMasterData.AutoTraderData.AllowHorses;
+			EnhancedQuarterMasterData.AutoTraderData.AllowHorses = ToggleAllowHorses;
 		}
 		public static bool GetAllowCamels()
 		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowCamels;
+			return EnhancedQuarterMasterData.AutoTraderData.AllowCamels;
+		}
+		public static void ToggleAllowCamels()
+		{
+			bool AllowCamels = !EnhancedQuarterMasterData.AutoTraderData.AllowCamels;
+			EnhancedQuarterMasterData.AutoTraderData.AllowCamels = AllowCamels;
 		}
 		public static bool GetAllowBanners()
 		{
-			return EnhancedQuaterMasterData.AutoTradeItems.AllowBanners;
+			return EnhancedQuarterMasterData.AutoTraderData.AllowBanners;
+		}
+		
+		public static void ToggleAllowBanners()
+		{
+			bool AllowBanners = !EnhancedQuarterMasterData.AutoTraderData.AllowBanners;
+			EnhancedQuarterMasterData.AutoTraderData.AllowBanners = AllowBanners;
+		}
+		
+		
+		public static void SetAllowBodyArmour(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowBodyArmour"] = flag;
+		}
+		public static void SetAllowWeapons(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowWeapons"] = flag;
+		}
+		public static void SetAllowSaddles(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowSaddles"] = flag;
+		}
+		public static void SetAllowHorses(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowHorses"] = flag;
+		}
+		public static void SetAllowCamels(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowCamels"] = flag;
+		}
+		public static void SetAllowMiscellaneous(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowMiscellaneous"] = flag;
+		}
+		public static void SetAllowBanners(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowBanners"] = flag;
 		}
 
 		// Weight 
-		public static void ToggleQuaterMasterIsLightestItemsFirst()
+		public static void ToggleQuarterMasterIsLightestItemsFirst()
 		{
 			SetIsLightestItemsFirst(!GetIsLightestItemsFirst());
 		}
@@ -325,29 +191,84 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		}
 		public static bool GetIsLightestItemsFirst()
 		{
-			return EnhancedQuaterMasterData.AutoTradeItems.IsLighestItemsFirst;
+			return EnhancedQuarterMasterData.AutoTraderData.IsLightestItemsFirst;
 		}
 		public static void SetIsLightestItemsFirst(bool flag)
 		{
-			EnhancedQuaterMasterData.AutoTradeItems.IsLighestItemsFirst = flag;
+			EnhancedQuarterMasterData.AutoTraderData.IsLightestItemsFirst = flag;
 		}
 
 		public static void SellItemsWhenMainPartyEntersSettlement(Settlement settlement)
 		{
-			List<ExtendedItemCategory> itemCategories = GetAutoTraderItemFiltersWhenSelling();
+			List<ItemRosterElement> itemRosterElementsToSell = new List<ItemRosterElement>();
+			// iterate through every faction and filter the items out for that faction, add it to the main filtered out list
+			Dictionary<string, int> categoriesSold = new Dictionary<string, int>();
+			foreach (ExtendedCultureCode cultureCode in ExtendedCultureCode.values()) {
+				
+				List<ExtendedItemCategory> itemCategories = GetItemCategoriesWhenSellingByCultureCode(cultureCode);
+				
+				itemRosterElementsToSell.AddRange(
+					EquipmentUtil.FilterItemRosterByItemCategories(
+						MobileParty.MainParty.ItemRoster.ToList(),
+						itemCategories,
+						GetItemOrderByWhenSelling())
+				);
 
-			List<ItemRosterElement> itemRosterElements = EquipmentUtil.FilterItemRosterByItemCategoriesAndCultureCode(
-				MobileParty.MainParty.ItemRoster.ToList(), itemCategories, GetChosenCulture(), GetItemOrderByWhenSelling(), GetExcludeLockedItemsWhenSelling()
-			);
-			if(itemRosterElements.Count > 0)
+				categoriesSold = categoriesSold.Concat(
+						ExtendedItemCategory.GetItemCategoryToTotalWorthForCategoryFromItems(itemRosterElementsToSell, itemCategories)
+					)
+					.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+			}
+			if(itemRosterElementsToSell.Count > 0)
 			{
-				List<ItemRosterElement> itemsSold = PartyUtils.SellItemsToSettlement(MobileParty.MainParty, settlement, itemRosterElements);
-				Dictionary<string, int> categoriesSold = ExtendedItemCategory.AddItemCategoryNamesFromItemList(itemsSold, itemCategories, new Dictionary<string, int>());
+				List<ItemRosterElement> itemsSold = PartyUtils.SellItemsToSettlement(MobileParty.MainParty, settlement, itemRosterElementsToSell);
 				if (itemsSold.Count > 0)
 				{
-					EnhancedQuaterMasterService.DisplayMessageListCategoryNameAndTotal(categoriesSold, "Quartermaster sold items from your inventory");
+					WindowUtils.DisplayMessageListNameAndTotal(categoriesSold, "Quartermaster sold items from your inventory");
 				}
 			}		
+		}
+
+		public static bool GetAllowAnyCulture()
+		{
+			return EnhancedQuarterMasterData.AutoTraderData.AllowAnyCulture;
+		}
+
+		public static void ToggleAllowAnyCulture()
+		{
+			if (!EnhancedQuarterMasterData.AutoTraderData.AllowAnyCulture)
+			{
+				foreach (ExtendedCultureCode extendedCultureCode in ExtendedCultureCode.values())
+				{
+					EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[extendedCultureCode]["LockedAll"] = false;
+				}
+
+				EnhancedQuarterMasterData.AutoTraderData.AllowAnyCulture = true;
+			}
+			else
+			{
+				foreach (ExtendedCultureCode extendedCultureCode in ExtendedCultureCode.values())
+				{
+					EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[extendedCultureCode]["LockedAll"] = true;
+				}
+
+				EnhancedQuarterMasterData.AutoTraderData.AllowAnyCulture = false;
+			}
+		}
+
+		public static bool GetAllowCulture(ExtendedCultureCode cultureCode)
+		{
+			return EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowAll"];
+		}
+		
+		public static void SetAllowCulture(ExtendedCultureCode cultureCode, bool flag)
+		{
+			EnhancedQuarterMasterData.AutoTraderData.CultureToItemCategoryFilters[cultureCode]["AllowAll"] = flag;
+		}
+		
+		public static void ToggleAllowCulture(ExtendedCultureCode cultureCode)
+		{
+			SetAllowCulture(cultureCode,!GetAllowCulture(cultureCode));
 		}
 	}
 }

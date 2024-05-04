@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
 
 namespace BannerlordEnhancedFramework.utils;
@@ -33,6 +35,15 @@ public class WindowUtils
             negativeAction
         );
         InformationManager.ShowInquiry(inquiryData, true);
+    }
+
+    public static void DisplayMessageListNameAndTotal(Dictionary<string, int> categoriesDetails, string startLineMessage)
+    {
+        foreach (KeyValuePair<string, int> item in categoriesDetails)
+        {
+            startLineMessage += "\n" + item.Key + " " + item.Value;
+        }
+        InformationManager.DisplayMessage(new InformationMessage(startLineMessage, BannerlordEnhancedFramework.Colors.Yellow));
     }
     
     
