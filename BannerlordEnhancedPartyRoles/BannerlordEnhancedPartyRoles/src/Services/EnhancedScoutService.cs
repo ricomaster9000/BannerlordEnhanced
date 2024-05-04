@@ -46,9 +46,9 @@ public static class EnhancedScoutService
     public static bool IsPlayerTalkingToPlayerClanScout()
     {
         return Campaign.Current != null &&
-               GameUtils.PlayerParty() != null &&
-               GameUtils.PlayerParty().EffectiveScout != null &&
-               Campaign.Current.ConversationManager.OneToOneConversationCharacter == GameUtils.PlayerParty().EffectiveScout.CharacterObject;
+               PlayerUtils.PlayerParty() != null &&
+               PlayerUtils.PlayerParty().EffectiveScout != null &&
+               Campaign.Current.ConversationManager.OneToOneConversationCharacter == PlayerUtils.PlayerParty().EffectiveScout.CharacterObject;
     }
 
     public static void SetScoutAlertsNearbyEnemies(bool scoutAlertsNearbyEnemies)
@@ -63,7 +63,7 @@ public static class EnhancedScoutService
 
     public static void AlertPlayerToNearbyHostileParties()
     {
-        if (IsScoutAlertsNearbyEnemiesFrozen() || !GameUtils.IsPlayerActiveInWorldMap() || GameUtils.IsPlayerImprisoned())
+        if (IsScoutAlertsNearbyEnemiesFrozen() || !PlayerUtils.IsPlayerActiveInWorldMap() || PlayerUtils.IsPlayerImprisoned())
         {
             return;
         }
@@ -75,7 +75,7 @@ public static class EnhancedScoutService
             // we assume player is aware of being targeted and is trying to get away
             if (EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer != null &&
                 EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer == hostileParty &&
-                PartyUtils.IsPartyFacingSameDirectionOfPartyDirection(GameUtils.PlayerParty(),hostileParty, 0.25f))
+                PartyUtils.IsPartyFacingSameDirectionOfPartyDirection(PlayerUtils.PlayerParty(),hostileParty, 0.25f))
             {
                 return;
             }
@@ -104,7 +104,7 @@ public static class EnhancedScoutService
 
         foreach (MobileParty party in partiesToCheck)
         {
-            if (PartyUtils.WillOrCouldPartyBeAttackedByParty(party, GameUtils.PlayerParty())) {
+            if (PartyUtils.WillOrCouldPartyBeAttackedByParty(party, PlayerUtils.PlayerParty())) {
                 hostileParty = party;
                 break;
             }

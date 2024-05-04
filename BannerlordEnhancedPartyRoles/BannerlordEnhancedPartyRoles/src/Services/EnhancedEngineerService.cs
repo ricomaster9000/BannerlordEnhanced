@@ -27,12 +27,5 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 				}
 			}
 		}
-		public static bool IsPlayerTalkingToPlayerClanEngineer()
-		{
-			return Campaign.Current != null &&
-			GameUtils.PlayerParty() != null &&
-			GameUtils.PlayerParty().EffectiveQuartermaster != null &&
-			Campaign.Current.ConversationManager.OneToOneConversationCharacter == GameUtils.PlayerParty().EffectiveEngineer.CharacterObject;
-		}
 	}
 }

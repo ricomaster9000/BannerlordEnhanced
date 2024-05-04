@@ -7,6 +7,7 @@ using TaleWorlds.Core;
 using TaleWorlds.Localization;
 using TaleWorlds.Library;
 using BannerlordEnhancedFramework.extendedtypes;
+using BannerlordEnhancedFramework.extendedtypes.itemcategories;
 using Helpers;
 using TaleWorlds.CampaignSystem.Inventory;
 
@@ -392,12 +393,21 @@ namespace BannerlordEnhancedFramework.src.utils
 			return EquipmentIndex.None;
 		}
 		
+		public static List<ItemRosterElement> FilterItemRosterByItemCategories(
+			List<ItemRosterElement> itemRoster,
+			List<ExtendedItemCategory> itemCategories,
+			OrderBy orderBy = OrderBy.HEAVIEST_TO_LIGHTEST)
+		{
+			List<ItemRosterElement> itemRosterElements = HeroEquipmentCustomization.getItemsByCategories(itemRoster, itemCategories);
+			itemRosterElements = ExtendedItemCategory.OrderItemRoster(itemRosterElements, orderBy);
+			return itemRosterElements;
+		}
+		
 		public static List<ItemRosterElement> FilterItemRosterByItemCategoriesAndCultureCode(
 			List<ItemRosterElement> itemRoster,
 			List<ExtendedItemCategory> itemCategories,
 			CultureCode cultureCode,
-			OrderBy orderBy = OrderBy.HEAVIEST_TO_LIGHTEST,
-			bool excludeLockedItems = false)
+			OrderBy orderBy = OrderBy.HEAVIEST_TO_LIGHTEST)
 		{
 			List<ItemRosterElement> itemRosterElements = HeroEquipmentCustomization.getItemsByCategories(itemRoster, itemCategories);
 			if(cultureCode == CultureCode.Invalid)
@@ -408,11 +418,6 @@ namespace BannerlordEnhancedFramework.src.utils
 			if (cultureCode != CultureCode.AnyOtherCulture)
 			{
 				itemRosterElements = HeroEquipmentCustomization.getItemsByCulture(itemRosterElements, cultureCode);
-			}
-
-			if (excludeLockedItems)
-			{
-				itemRosterElements = RemoveLockedItems(itemRosterElements);
 			}
 			
 			itemRosterElements = ExtendedItemCategory.OrderItemRoster(itemRosterElements, orderBy);

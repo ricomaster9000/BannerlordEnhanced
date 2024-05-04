@@ -308,10 +308,33 @@
     <Compile Include="src\extendedtypes\asynchronous\OneTimeJob.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="src\extendedtypes\itemcategories\ArmourItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\BannerItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\base\BaseExtendedCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\BodyArmourItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\CamelItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\CamelSaddleItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\FoodItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\GoodsItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\HorseItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\HorseSaddleItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\LightArmourItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\LockedItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\MiscellaneousItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\MountItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\MuleItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\NonConsumableGoodsItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\OneHandedItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\OneHandedPolearmItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\PolearmItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\RangedWeaponItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\SaddleItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\ShieldItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\TwoHandedItemCategory.cs" />
+    <Compile Include="src\extendedtypes\itemcategories\WeaponItemCategory.cs" />
     <Compile Include="src\models\*" />
     <Compile Include="src\utils\*" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
