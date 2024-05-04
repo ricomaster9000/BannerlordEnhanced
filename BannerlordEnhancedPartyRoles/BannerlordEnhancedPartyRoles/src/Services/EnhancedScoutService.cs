@@ -69,7 +69,7 @@ public static class EnhancedScoutService
             if (EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer != null &&
                 EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer == hostileParty &&
                 (PartyUtils.IsPartyFacingSameDirectionOfPartyDirection(PlayerUtils.PlayerParty(),hostileParty, 0.25f) ||
-                 PlayerUtils.PlayerParty().Speed <= 0 /*player is standing still */)
+                 PlayerUtils.PlayerParty().Speed > 0 /*player is not standing still */)
             )
             {
                 return;
