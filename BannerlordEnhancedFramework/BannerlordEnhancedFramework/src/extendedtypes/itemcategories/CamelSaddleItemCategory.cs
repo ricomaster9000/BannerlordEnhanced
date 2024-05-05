@@ -10,6 +10,6 @@ public class CamelSaddleItemCategory : SaddleItemCategory {
     }
     public override bool isType(ItemRosterElement itemRosterElement)
     {
-        return base.isType(itemRosterElement) && itemRosterElement.EquipmentElement.Item.HorseComponent.Monster.FamilyType == (int)HorseFamilyType.Camel;
+        return base.isType(itemRosterElement) && itemRosterElement.EquipmentElement.Item.HorseComponent.Monster.FamilyType == (int)MountFamilyType.Camel;
     }
 }

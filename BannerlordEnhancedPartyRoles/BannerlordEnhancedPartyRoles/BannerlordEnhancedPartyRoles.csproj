@@ -55,6 +55,9 @@
       <Private>false</Private>
       <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.AchievementSystem.dll</HintPath>
     </Reference>
+    <Reference Include="SandBox.View">
+      <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\SandBox.View.dll</HintPath>
+    </Reference>
     <Reference Include="TaleWorlds.ActivitySystem">
       <Private>false</Private>
       <HintPath>..\..\GameLibraries\$(BannerlordGameVersionToUse)\TaleWorlds.ActivitySystem.dll</HintPath>

@@ -35,17 +35,15 @@ class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 
 	public void OnSettlementEntered(MobileParty partyEnteredSettlement, Settlement settlement, Hero leader)
 	{
-		// Our logic attach with game logic (First line)
-		if(partyEnteredSettlement != null && partyEnteredSettlement == MobileParty.MainParty)
+		if(partyEnteredSettlement == null ||
+		   partyEnteredSettlement != MobileParty.MainParty ||
+		   settlement.SettlementComponent == null ||
+		   settlement.SettlementComponent.IsTown == false ||
+		   PartyUtils.IsAtWarWithSettlement(MobileParty.MainParty, settlement))
 		{
-			// Should not have low level implementation of mod logic
-			SettlementComponent settlementComponent = settlement.SettlementComponent;
-			if (settlementComponent == null || settlementComponent.IsTown == false)
-			{
-				return;
-			}
-			AutoTraderService.SellItemsWhenMainPartyEntersSettlement(settlement);
+			return;
 		}
+		AutoTraderService.SellItemsToSettlement(settlement);
 	}
 	private void AddDialogs(CampaignGameStarter starter)
 	{
@@ -66,7 +64,10 @@ class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 			.WithConversationPart(
 				new SimpleConversationPart(
 					"enhanced_quatermaster_conv_menu_configure_equipment_settings",
-					"Equipment Filter Settings",
+					"Equipment Filter Settings" + Environment.NewLine
+					+ Environment.NewLine + "Automatically allocates equipment to your companions, streamlining the management of gear throughout your party. " 
+					+ Environment.NewLine + "Upon acquiring new items, the system intelligently assigns them to companions, taking into account their combat roles."
+					+ Environment.NewLine + " Additionally, you can customize how gear is distributed based on the faction of origin.",
 					ConversationSentenceType.DialogueTreeBranchStart
 				))
 			.WithTrueFalseConversationToggle(
@@ -155,7 +156,10 @@ class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 			.WithConversationPart(
 				new SimpleConversationPart(
 					"enhanced_quatermaster_conv_menu_configure_auto_trade_items_settings",
-					"Auto Trade Items Filter Settings",
+					"Auto Trade Items Filter Settings" + Environment.NewLine
+					+ Environment.NewLine + "Automates the selling process by automatically offloading selected items from your inventory each time you visit a town. "
+					+ Environment.NewLine + "Designed to simplify the management of your goods, "
+					+ Environment.NewLine + "this ensures you can sell bulk items effortlessly without the need to manually handle each transaction.",
 					ConversationSentenceType.DialogueTreeBranchStart
 				), AppliedDialogueLineRelation.LinkToParentBranch)
 			.WithTrueFalseConversationToggle(

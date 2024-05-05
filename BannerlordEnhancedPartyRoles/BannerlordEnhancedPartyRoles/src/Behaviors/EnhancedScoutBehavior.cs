@@ -2,8 +2,12 @@
 using BannerlordEnhancedFramework;
 using BannerlordEnhancedFramework.dialogues;
 using BannerlordEnhancedFramework.extendedtypes;
+using BannerlordEnhancedFramework.utils;
 using TaleWorlds.CampaignSystem;
 using BannerlordEnhancedPartyRoles.Services;
+using TaleWorlds.CampaignSystem.Siege;
+using TaleWorlds.CampaignSystem.Party;
+
 namespace BannerlordEnhancedPartyRoles.Behaviors
 {
     class EnhancedScoutBehavior : CampaignBehaviorBase
@@ -12,11 +16,11 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
 
         public override void RegisterEvents()
         {
-            // add Dialogs
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(AddDialogs));
+            CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, new Action<SiegeEvent>(EnhancedScoutService.ShowSiegeAlertPopupIfSettlementIsInScoutDetectedRange));
 
-            // add enemy close by alert timer
-            _enemyAlertCloseByTimer = new ExtendedTimer(250, () =>
+			// add enemy close by alert timer
+			_enemyAlertCloseByTimer = new ExtendedTimer(250, () =>
                 {
                     if (Campaign.Current == null)
                     {
@@ -44,7 +48,7 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
                         "Enhanced Scout Menu",
                         ConversationSentenceType.DialogueTreeRootStart,
                         CoreInputToken.Entry.HeroMainOptions
-                    ).WithCondition(EnhancedScoutService.IsPlayerTalkingToPlayerClanScout))
+                    ).WithCondition(PlayerUtils.IsPlayerTalkingToPlayerClanScout))
                     .WithConversationPart(
                         new SimpleConversationPart(
                             "enhanced_scout_conv_menu_configure",
@@ -67,5 +71,6 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
                                 AppliedDialogueLineRelation.LinkToCurrentBranch)
 		.Build(starter);
         }
+
     }
 }

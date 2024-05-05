@@ -28,7 +28,7 @@ public class WindowUtils
             title,
             text,
             true,
-            false,
+			yesText != null ? true : false,
             yesText,
             noText,
             affirmativeAction,

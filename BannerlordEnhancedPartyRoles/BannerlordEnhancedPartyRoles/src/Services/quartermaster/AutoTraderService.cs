@@ -185,9 +185,9 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			SetIsLightestItemsFirst(!GetIsLightestItemsFirst());
 		}
 		
-		public static EquipmentUtil.OrderBy GetItemOrderByWhenSelling()
+		public static OrderBy GetItemOrderByWhenSelling()
 		{
-			return GetIsLightestItemsFirst() ? EquipmentUtil.OrderBy.LIGHTEST_TO_HEAVIEST : EquipmentUtil.OrderBy.HEAVIEST_TO_LIGHTEST;
+			return GetIsLightestItemsFirst() ? OrderBy.LIGHTEST_TO_HEAVIEST : OrderBy.HEAVIEST_TO_LIGHTEST;
 		}
 		public static bool GetIsLightestItemsFirst()
 		{
@@ -198,11 +198,14 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			EnhancedQuarterMasterData.AutoTraderData.IsLightestItemsFirst = flag;
 		}
 
-		public static void SellItemsWhenMainPartyEntersSettlement(Settlement settlement)
+		public static void SellItemsToSettlement(Settlement settlement)
 		{
 			List<ItemRosterElement> itemRosterElementsToSell = new List<ItemRosterElement>();
-			// iterate through every faction and filter the items out for that faction, add it to the main filtered out list
+
+			// Iterate through every faction and filter the items out for that faction, add it to the main filtered out list
+
 			Dictionary<string, int> categoriesSold = new Dictionary<string, int>();
+
 			foreach (ExtendedCultureCode cultureCode in ExtendedCultureCode.values()) {
 				List<ExtendedItemCategory> itemCategories = GetItemCategoriesWhenSellingByCultureCode(cultureCode);
 				

@@ -19,7 +19,7 @@ public class ExtendedCultureCode
             { CultureCode.Nord.ToString(), new ExtendedCultureCode(CultureCode.Nord) },
             { CultureCode.Darshi.ToString(), new ExtendedCultureCode(CultureCode.Darshi) },
             { CultureCode.Vakken.ToString(), new ExtendedCultureCode(CultureCode.Vakken) },
-            { CultureCode.AnyOtherCulture.ToString(), new ExtendedCultureCode(CultureCode.AnyOtherCulture) }
+            { CultureCode.AnyOtherCulture.ToString(), new AnyOtherCulture() }
         };
 
     public static List<ExtendedCultureCode> values()
@@ -37,9 +37,11 @@ public class ExtendedCultureCode
         return byName[name.ToString()];
     }
 
-
-    private string Name;
-    private CultureCode LinkedNativeCode;
+    protected string Name;
+    protected CultureCode LinkedNativeCode;
+    
+    public ExtendedCultureCode()
+    {}
 
     public ExtendedCultureCode(string name)
     {
@@ -60,6 +62,11 @@ public class ExtendedCultureCode
     public CultureCode nativeCultureCode()
     {
         return this.LinkedNativeCode;
+    }
+
+    public virtual bool IsItemOfCulture(ItemRosterElement item)
+    {
+        return item.EquipmentElement.Item.Culture.GetCultureCode() == nativeCultureCode();
     }
 
 }

@@ -59,7 +59,12 @@ public static class PartyUtils
         return party.MapFaction.IsAtWarWith(targetParty.MapFaction);
     }
 
-    public static float CalculateDistanceBetweenParties(MobileParty partyFrom, MobileParty partyTo) {
+	public static bool IsAtWarWithSettlement(MobileParty party, Settlement settlement)
+	{
+		return party.MapFaction.IsAtWarWith(settlement.MapFaction);
+	}
+
+	public static float CalculateDistanceBetweenParties(MobileParty partyFrom, MobileParty partyTo) {
         return CalculateDistanceBetweenLocations(partyFrom.Position2D, partyTo.Position2D);
     }
     
@@ -136,6 +141,11 @@ public static class PartyUtils
 		return heros;
 	}
 
+	public static float GetDistanceToSettlement(MobileParty mobileParty, Settlement settlement)
+	{
+		return settlement.Position2D.Distance(mobileParty.Position2D);
+	}
+
 	public static List<ItemRosterElement> SellPartyItemsToSettlement(MobileParty sellerParty, Settlement settlement, List<ItemRosterElement> items)
 	{
 		List<ValueTuple<ItemRosterElement, int>> itemsToSellTuple = new List<ValueTuple<ItemRosterElement, int>>();
@@ -194,9 +204,11 @@ public static class PartyUtils
 		return itemsSold;
 	}
 
+	/*
+	 * TODO This is not working well only validates players mobile party maybe rename the function
 	public static bool IsMobilePartyValid(MobileParty party)
 	{
-		if (party.IsGarrison || party.IsMilitia)
+		if (party == null || party.IsGarrison || party.IsMilitia)
 		{
 			return false;
 		}
@@ -211,6 +223,7 @@ public static class PartyUtils
 		}
 		return true;
 	}
+	*/
 
 	public static void UpdatePartyItemRoster(ItemRoster itemRoster, List<ItemRosterElement> additions, List<ItemRosterElement> removals)
 	{

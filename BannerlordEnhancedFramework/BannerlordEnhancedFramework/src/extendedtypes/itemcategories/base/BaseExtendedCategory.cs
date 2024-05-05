@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BannerlordEnhancedFramework.src.utils;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
 namespace BannerlordEnhancedFramework.extendedtypes.itemcategories;
@@ -22,12 +23,12 @@ public abstract partial class ExtendedItemCategory
 				return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Effectiveness).ToList();
 		}
 	}
-	public static List<ItemRosterElement> OrderItemRoster(List<ItemRosterElement> itemRosterElementList, EquipmentUtil.OrderBy orderBy)
+	public static List<ItemRosterElement> OrderItemRoster(List<ItemRosterElement> itemRosterElementList, OrderBy orderBy)
 	{
 		switch (orderBy) {
-			case EquipmentUtil.OrderBy.HEAVIEST_TO_LIGHTEST:
+			case OrderBy.HEAVIEST_TO_LIGHTEST:
 				return itemRosterElementList.OrderByDescending(itemRosterElement => itemRosterElement.EquipmentElement.Item.Weight).ToList();
-			case EquipmentUtil.OrderBy.LIGHTEST_TO_HEAVIEST:
+			case OrderBy.LIGHTEST_TO_HEAVIEST:
 				return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Weight).ToList();
 			default:
 				return itemRosterElementList;
@@ -44,17 +45,19 @@ public abstract partial class ExtendedItemCategory
 		{
 			foreach (ExtendedItemCategory itemCategory in itemCategories)
 			{
-				if (itemCategory.isType(itemRosterElement) && cultureCode.nativeCultureCode() == itemRosterElement.EquipmentElement.Item.Culture.GetCultureCode())
+				if (itemCategory.isType(itemRosterElement) == false)
 				{
-					string itemCategoryToNameKey = cultureCode.getName() + " " + itemCategory.Name;
-					if (result.ContainsKey(itemCategoryToNameKey)) 
-					{
-						result[itemCategoryToNameKey]+=itemRosterElement.Amount;
-					} else 
-					{
-						result.Add(itemCategoryToNameKey, itemRosterElement.Amount);
-					}
-					break;
+					continue;
+				}
+
+				CultureCode itemCultureCode = EquipmentUtil.GetCultureCodeOfItem(itemRosterElement).nativeCultureCode();
+				string itemCategoryToNameKey = cultureCode.getName() + " " + itemCategory.Name;
+				if (result.ContainsKey(itemCategoryToNameKey))
+				{
+					result[itemCategoryToNameKey] += itemRosterElement.Amount;
+				} else
+				{
+					result.Add(itemCategoryToNameKey, itemRosterElement.Amount);
 				}
 			}
 		}
