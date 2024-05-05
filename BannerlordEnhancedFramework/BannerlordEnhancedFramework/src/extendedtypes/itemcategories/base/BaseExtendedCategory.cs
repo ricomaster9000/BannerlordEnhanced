@@ -62,7 +62,7 @@ public abstract partial class ExtendedItemCategory
 		}
 		return result;
 	}
-	
+
 	public static Dictionary<string, int> GetAllItemCategoryNamesByItemsAndCategories(List<ItemRosterElement> itemList, List<ExtendedItemCategory> itemCategories, Dictionary<string, int> categoryNames)
 	{
 		foreach (ItemRosterElement itemRosterElement in itemList)

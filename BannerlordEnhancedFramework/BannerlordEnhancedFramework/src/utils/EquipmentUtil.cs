@@ -223,6 +223,14 @@ namespace BannerlordEnhancedFramework.src.utils
 			return ((float)(horseComponent.ChargeDamage * horseComponent.Speed + horseComponent.Maneuver * horseComponent.Speed) + (float)horseComponent.BodyLength * item.Weight * 0.025f) * (float)(horseComponent.HitPoints + horseComponent.HitPointBonus) * 0.0001f;
 
 		}
+		
+		public static void FilterOutUntradeableItems(List<ItemRosterElement> items)
+		{
+			if (items != null)
+			{
+				items.RemoveAll(item => item.EquipmentElement.IsQuestItem);
+			}
+		}
 		public static List<ItemRosterElement> AddEquipmentElement(List<ItemRosterElement> targetItemRosterElement, EquipmentElement equipmentElement)
 		{
 			Predicate<ItemRosterElement> getItemRosterElement = (itemRosterElement) => {

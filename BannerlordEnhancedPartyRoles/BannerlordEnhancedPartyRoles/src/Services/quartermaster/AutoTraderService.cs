@@ -201,9 +201,6 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		public static void SellItemsToSettlement(Settlement settlement)
 		{
 			List<ItemRosterElement> itemRosterElementsToSell = new List<ItemRosterElement>();
-
-			// Iterate through every faction and filter the items out for that faction, add it to the main filtered out list
-
 			Dictionary<string, int> categoriesSold = new Dictionary<string, int>();
 
 			foreach (ExtendedCultureCode cultureCode in ExtendedCultureCode.values()) {
@@ -216,6 +213,8 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 						cultureCode,
 						GetItemOrderByWhenSelling())
 				);
+
+				EquipmentUtil.FilterOutUntradeableItems(itemRosterElementsToSell);
 				
 				categoriesSold = categoriesSold.Concat(
 						ExtendedItemCategory.GetItemCategoryToTotalWorthForCultureAndCategoryFromItems(
@@ -229,10 +228,9 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 						group => group.First().Value
 					);
 			}
+
 			if(itemRosterElementsToSell.Count > 0)
 			{
-				// remove duplicates if any
-				itemRosterElementsToSell = itemRosterElementsToSell.Distinct().ToList();
 				List<ItemRosterElement> itemsSold = PartyUtils.SellPartyItemsToSettlement(MobileParty.MainParty, settlement, itemRosterElementsToSell);
 				if (itemsSold.Count > 0)
 				{
