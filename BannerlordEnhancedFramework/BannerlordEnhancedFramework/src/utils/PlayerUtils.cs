@@ -36,7 +36,8 @@ public class PlayerUtils
 
         public static bool IsPlayerActiveInWorldMap()
         {
-            return (!IsPlayerConversing() &&
+            return (Campaign.Current != null &&
+                    !IsPlayerConversing() &&
                     !Campaign.Current.TimeControlMode.Equals(CampaignTimeControlMode.Stop) &&
                     !Campaign.Current.TimeControlMode.Equals(CampaignTimeControlMode.FastForwardStop)
                 );
