@@ -17,7 +17,7 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
         public override void RegisterEvents()
         {
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(AddDialogs));
-            CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, new Action<SiegeEvent>(EnhancedScoutService.ShowSiegeAlertPopupIfConditionsAreMet));
+            CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, new Action<SiegeEvent>(EnhancedScoutService.ShowSiegeAlertPopupIfSettlementIsInScoutDetectedRange));
 
 			// add enemy close by alert timer
 			_enemyAlertCloseByTimer = new ExtendedTimer(250, () =>
