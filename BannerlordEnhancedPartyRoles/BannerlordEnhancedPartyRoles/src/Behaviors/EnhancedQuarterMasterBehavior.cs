@@ -35,18 +35,11 @@ class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 
 	public void OnSettlementEntered(MobileParty partyEnteredSettlement, Settlement settlement, Hero leader)
 	{
-		// Our logic attach with game logic (First line)
-		if(partyEnteredSettlement == null || partyEnteredSettlement != MobileParty.MainParty)
-		{
-			return;
-		}
-		// Should not have low level implementation of mod logic
-		SettlementComponent settlementComponent = settlement.SettlementComponent;
-		if (settlementComponent == null || settlementComponent.IsTown == false)
-		{
-			return;
-		}
-		if(PartyUtils.IsAtWarWithSettlement(MobileParty.MainParty, settlement) == true)
+		if(partyEnteredSettlement == null ||
+		   partyEnteredSettlement != MobileParty.MainParty ||
+		   settlement.SettlementComponent == null ||
+		   settlement.SettlementComponent.IsTown == false ||
+		   PartyUtils.IsAtWarWithSettlement(MobileParty.MainParty, settlement))
 		{
 			return;
 		}
