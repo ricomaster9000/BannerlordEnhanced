@@ -384,6 +384,25 @@ namespace BannerlordEnhancedFramework.src.utils
 			return itemRosterElements;
 		}
 		
+		public static List<ItemRosterElement> FilterItemRosterByItemCategoriesAndCulture(
+			List<ItemRosterElement> itemRoster,
+			List<ExtendedItemCategory> itemCategories,
+			ExtendedCultureCode cultureCode,
+			OrderBy orderBy = OrderBy.HEAVIEST_TO_LIGHTEST)
+		{
+			List<ItemRosterElement> itemRosterElements = HeroEquipmentCustomization.getItemsByCategories(itemRoster, itemCategories);
+			List<ItemRosterElement> filterByCulture = new List<ItemRosterElement>();
+			foreach (ItemRosterElement item in itemRosterElements)
+			{
+				if (cultureCode.IsItemOfCulture(item))
+				{
+					filterByCulture.Add(item);
+				}
+			}
+			filterByCulture = ExtendedItemCategory.OrderItemRoster(filterByCulture, orderBy);
+			return filterByCulture;
+		}
+		
 		public static List<ItemRosterElement> FilterItemRosterByItemCategoriesAndCultureCode(
 			List<ItemRosterElement> itemRoster,
 			List<ExtendedItemCategory> itemCategories,

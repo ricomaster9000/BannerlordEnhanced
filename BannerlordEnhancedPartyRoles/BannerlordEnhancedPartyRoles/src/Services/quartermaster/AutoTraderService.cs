@@ -210,9 +210,10 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 				List<ExtendedItemCategory> itemCategories = GetItemCategoriesWhenSellingByCultureCode(cultureCode);
 				
 				itemRosterElementsToSell.AddRange(
-					EquipmentUtil.FilterItemRosterByItemCategories(
+					EquipmentUtil.FilterItemRosterByItemCategoriesAndCulture(
 						MobileParty.MainParty.ItemRoster.ToList(),
 						itemCategories,
+						cultureCode,
 						GetItemOrderByWhenSelling())
 				);
 				
