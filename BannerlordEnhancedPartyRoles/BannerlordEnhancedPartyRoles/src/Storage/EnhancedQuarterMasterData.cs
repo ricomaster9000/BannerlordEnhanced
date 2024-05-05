@@ -51,34 +51,17 @@ static class EnhancedQuarterMasterData
 		{
 			foreach (ExtendedCultureCode extendedCultureCode in ExtendedCultureCode.values())
 			{
-				if (extendedCultureCode == ExtendedCultureCode.get(CultureCode.AnyOtherCulture))
+				CultureToItemCategoryFilters.Add(extendedCultureCode, new Dictionary<string, bool>()
 				{
-					CultureToItemCategoryFilters.Add(extendedCultureCode, new Dictionary<string, bool>()
-					{
-						{ "LockedAll", true },
-						{ "AllowBodyArmour", true },
-						{ "AllowWeapons", true },
-						{ "AllowSaddles", true },
-						{ "AllowMiscellaneous", true },
-						{ "AllowHorses", true },
-						{ "AllowCamels", true },
-						{ "AllowBanners", true }
-					});
-				}
-				else
-				{
-					CultureToItemCategoryFilters.Add(extendedCultureCode, new Dictionary<string, bool>()
-					{
-						{ "LockedAll", false },
-						{ "AllowBodyArmour", true },
-						{ "AllowWeapons", true },
-						{ "AllowSaddles", true },
-						{ "AllowMiscellaneous", true },
-						{ "AllowHorses", true },
-						{ "AllowCamels", true },
-						{ "AllowBanners", true }
-					});
-				}
+					{ "LockedAll", false },
+					{ "AllowBodyArmour", true },
+					{ "AllowWeapons", true },
+					{ "AllowSaddles", true },
+					{ "AllowMiscellaneous", true },
+					{ "AllowHorses", true },
+					{ "AllowCamels", true },
+					{ "AllowBanners", true }
+				});
 			}
 		}
 		
