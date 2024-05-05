@@ -300,8 +300,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\*" />
-    <Compile Include="src\asynchronous\ExtendedTimer.cs" />
-    <Compile Include="src\asynchronous\OneTimeJob.cs" />
+    <Compile Include="src\asynchronous\ExtendedTimer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="src\asynchronous\OneTimeJob.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="src\dialogues\*" />
     <Compile Include="src\enums\OrderByFromAndTo.cs" />
     <Compile Include="src\enums\HorseFamilyType.cs" />

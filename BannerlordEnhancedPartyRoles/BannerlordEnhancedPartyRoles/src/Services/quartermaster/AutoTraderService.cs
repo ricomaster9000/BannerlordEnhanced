@@ -201,8 +201,11 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 		public static void SellItemsToSettlement(Settlement settlement)
 		{
 			List<ItemRosterElement> itemRosterElementsToSell = new List<ItemRosterElement>();
-			// iterate through every faction and filter the items out for that faction, add it to the main filtered out list
+
+			// Iterate through every faction and filter the items out for that faction, add it to the main filtered out list
+
 			Dictionary<string, int> categoriesSold = new Dictionary<string, int>();
+
 			foreach (ExtendedCultureCode cultureCode in ExtendedCultureCode.values()) {
 				List<ExtendedItemCategory> itemCategories = GetItemCategoriesWhenSellingByCultureCode(cultureCode);
 				

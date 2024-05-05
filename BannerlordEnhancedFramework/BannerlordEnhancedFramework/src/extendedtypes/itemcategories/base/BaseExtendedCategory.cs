@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BannerlordEnhancedFramework.src.utils;
+using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 
 namespace BannerlordEnhancedFramework.extendedtypes.itemcategories;
@@ -44,16 +45,29 @@ public abstract partial class ExtendedItemCategory
 		{
 			foreach (ExtendedItemCategory itemCategory in itemCategories)
 			{
-				if (itemCategory.isType(itemRosterElement) && cultureCode.nativeCultureCode() == itemRosterElement.EquipmentElement.Item.Culture.GetCultureCode())
+				if (itemCategory.isType(itemRosterElement) == false)
 				{
-					string itemCategoryToNameKey = cultureCode.getName() + " " + itemCategory.Name;
-					if (result.ContainsKey(itemCategoryToNameKey)) 
-					{
-						result[itemCategoryToNameKey]+=itemRosterElement.Amount;
-					} else 
-					{
-						result.Add(itemCategoryToNameKey, itemRosterElement.Amount);
-					}
+					continue;
+				}
+
+				BasicCultureObject? basicCultureObject = itemRosterElement.EquipmentElement.Item.Culture;
+
+				CultureCode? itemCultureCode = basicCultureObject != null ? basicCultureObject.GetCultureCode(): null;
+
+				bool hasFoundCulture = cultureCode.nativeCultureCode() == itemCultureCode;
+
+				string itemCategoryToNameKey = hasFoundCulture ? cultureCode.getName() + " " + itemCategory.Name : itemCategory.Name;
+
+				if (result.ContainsKey(itemCategoryToNameKey))
+				{
+					result[itemCategoryToNameKey] += itemRosterElement.Amount;
+				} else
+				{
+					result.Add(itemCategoryToNameKey, itemRosterElement.Amount);
+				}
+
+				if (hasFoundCulture || itemCultureCode == null)
+				{
 					break;
 				}
 			}
