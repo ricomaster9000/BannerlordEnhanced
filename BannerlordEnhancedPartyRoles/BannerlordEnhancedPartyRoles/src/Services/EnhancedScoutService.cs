@@ -153,14 +153,55 @@ public static class EnhancedScoutService
 		);
 	}
 	
-	public static void ShowSiegePopup(SiegeEvent siegeEvent)
+	public static void ShowSiegeAlertPopupIfConditionsAreMet(SiegeEvent siegeEvent)
 	{
 		Hero owner = siegeEvent.BesiegedSettlement.Owner;
 		MobileParty mainParty = MobileParty.MainParty;
 		Hero kingdomLeader = mainParty.Owner;
 		if (owner == kingdomLeader || owner.Clan.Kingdom == kingdomLeader.Clan.Kingdom)
 		{
-			EnhancedScoutService.ShowSiegePopupIfSettlementIsInScoutDetectedRange(siegeEvent);
+			GameUtils.PauseGame();
+			Settlement settlement = siegeEvent.BesiegedSettlement;
+			List<PartyBase> attackers = siegeEvent.GetInvolvedPartiesForEventType(MapEvent.BattleTypes.Siege);
+
+			float distanceToSettlement = PartyUtils.GetDistanceToSettlement(MobileParty.MainParty, settlement);
+			float scoutSkillValue = MobileParty.MainParty.EffectiveScout.GetSkillValue(DefaultSkills.Scouting);
+
+			const float baseDistance = 40;
+			const double distanceMultplier = 2.5;
+			double detectSiegeDistance = baseDistance + scoutSkillValue * distanceMultplier;
+
+			if (distanceToSettlement > detectSiegeDistance)
+			{
+				return;
+			}
+
+			string title = "Settlement is being besieged";
+			string attackersDetails = "";
+			int totalSoldiers = 0;
+
+			for (int i = 0; i < attackers.Count; i++)
+			{
+				PartyBase attacker = attackers[i];
+				MobileParty? mobileParty = attacker.MobileParty;
+				if (mobileParty != null && PlayerUtils.IsPlayerHostileToParty(mobileParty))
+				{
+					int soldiers = mobileParty.MemberRoster.TotalHealthyCount;
+					attackersDetails = attackersDetails.Add(mobileParty.Name + " with " + soldiers + " soldiers ", true);
+					totalSoldiers += soldiers;
+				}
+			}
+			string subTitle = "Scout found " + settlement.Name + " being besieged by " + totalSoldiers.ToString() + " Soldiers";
+			WindowUtils.PopupSimpleInquiry(
+				title,
+				subTitle
+				+ Environment.NewLine
+				+ attackersDetails,
+				"Show on map",
+				"Ok",
+				() => MapScreen.Instance.FastMoveCameraToPosition(settlement.Position2D),
+				() => { }
+			);
 		}
 	}
 
