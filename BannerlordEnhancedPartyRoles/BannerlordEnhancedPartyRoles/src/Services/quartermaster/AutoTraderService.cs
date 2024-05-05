@@ -231,7 +231,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			}
 			if(itemRosterElementsToSell.Count > 0)
 			{
-				// remove duplicates
+				// remove duplicates if any
 				itemRosterElementsToSell = itemRosterElementsToSell.Distinct().ToList();
 				List<ItemRosterElement> itemsSold = PartyUtils.SellPartyItemsToSettlement(MobileParty.MainParty, settlement, itemRosterElementsToSell);
 				if (itemsSold.Count > 0)

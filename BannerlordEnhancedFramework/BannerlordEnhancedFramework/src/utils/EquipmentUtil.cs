@@ -402,28 +402,7 @@ namespace BannerlordEnhancedFramework.src.utils
 			filterByCulture = ExtendedItemCategory.OrderItemRoster(filterByCulture, orderBy);
 			return filterByCulture;
 		}
-		
-		public static List<ItemRosterElement> FilterItemRosterByItemCategoriesAndCultureCode(
-			List<ItemRosterElement> itemRoster,
-			List<ExtendedItemCategory> itemCategories,
-			CultureCode cultureCode,
-			OrderBy orderBy = OrderBy.HEAVIEST_TO_LIGHTEST)
-		{
-			List<ItemRosterElement> itemRosterElements = HeroEquipmentCustomization.getItemsByCategories(itemRoster, itemCategories);
-			if(cultureCode == CultureCode.Invalid)
-			{
-				return new List<ItemRosterElement>();
-			}
 
-			if (cultureCode != CultureCode.AnyOtherCulture)
-			{
-				itemRosterElements = HeroEquipmentCustomization.getItemsByCulture(itemRosterElements, cultureCode);
-			}
-			
-			itemRosterElements = ExtendedItemCategory.OrderItemRoster(itemRosterElements, orderBy);
-			return itemRosterElements;
-		}
-		
 		public static ExtendedCultureCode GetCultureCodeOfItem(ItemRosterElement item)
 		{
 			ExtendedCultureCode result = null;

@@ -45,12 +45,11 @@ public abstract partial class ExtendedItemCategory
 		{
 			foreach (ExtendedItemCategory itemCategory in itemCategories)
 			{
-				if (itemCategory.isType(itemRosterElement) == false)
+				if (itemCategory.isType(itemRosterElement) == false || !cultureCode.IsItemOfCulture(itemRosterElement))
 				{
 					continue;
 				}
 
-				CultureCode itemCultureCode = EquipmentUtil.GetCultureCodeOfItem(itemRosterElement).nativeCultureCode();
 				string itemCategoryToNameKey = cultureCode.getName() + " " + itemCategory.Name;
 				if (result.ContainsKey(itemCategoryToNameKey))
 				{
