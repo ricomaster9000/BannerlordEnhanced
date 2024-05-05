@@ -16,10 +16,8 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
 
         public override void RegisterEvents()
         {
-            // add Dialogs
             CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(AddDialogs));
-
-			CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, new Action<SiegeEvent>(ShowSiegePopup));
+            CampaignEvents.OnSiegeEventStartedEvent.AddNonSerializedListener(this, new Action<SiegeEvent>(EnhancedScoutService.ShowSiegePopup));
 
 			// add enemy close by alert timer
 			_enemyAlertCloseByTimer = new ExtendedTimer(250, () =>
@@ -74,16 +72,5 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
 		.Build(starter);
         }
 
-		public void ShowSiegePopup(SiegeEvent siegeEvent)
-		{
-			Hero owner = siegeEvent.BesiegedSettlement.Owner;
-			MobileParty mainParty = MobileParty.MainParty;
-			Hero kingdomLeader = mainParty.Owner;
-			if (owner == kingdomLeader || owner.Clan.Kingdom == kingdomLeader.Clan.Kingdom)
-			{
-				EnhancedScoutService.ShowSiegePopupIfSettlementIsInScoutDetectedRange(siegeEvent);
-			}
-		}
-
-	}
+    }
 }

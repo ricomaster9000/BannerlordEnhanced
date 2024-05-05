@@ -152,5 +152,16 @@ public static class EnhancedScoutService
 			() => { }
 		);
 	}
+	
+	public static void ShowSiegePopup(SiegeEvent siegeEvent)
+	{
+		Hero owner = siegeEvent.BesiegedSettlement.Owner;
+		MobileParty mainParty = MobileParty.MainParty;
+		Hero kingdomLeader = mainParty.Owner;
+		if (owner == kingdomLeader || owner.Clan.Kingdom == kingdomLeader.Clan.Kingdom)
+		{
+			EnhancedScoutService.ShowSiegePopupIfSettlementIsInScoutDetectedRange(siegeEvent);
+		}
+	}
 
 }
