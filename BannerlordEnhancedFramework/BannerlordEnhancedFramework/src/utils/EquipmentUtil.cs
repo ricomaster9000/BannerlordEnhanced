@@ -44,12 +44,12 @@ namespace BannerlordEnhancedFramework.src.utils
 
 		public static bool IsItemHorse(ItemObject item)
 		{
-			return (item.HasHorseComponent && item.HorseComponent.Monster.FamilyType == (int)HorseFamilyType.Horse) ? true : false;
+			return (item.HasHorseComponent && item.HorseComponent.Monster.FamilyType == (int)MountFamilyType.Horse) ? true : false;
 		}
 
 		public static bool IsItemCamel(ItemObject item)
 		{
-			return (item.HasHorseComponent && item.HorseComponent.Monster.FamilyType == (int)HorseFamilyType.Camel) ? true : false;
+			return (item.HasHorseComponent && item.HorseComponent.Monster.FamilyType == (int)MountFamilyType.Camel) ? true : false;
 		}
 		public static bool IsItemMule(ItemObject item)
 		{

@@ -43,14 +43,6 @@ public static class EnhancedScoutService
         return EnhancedScoutData.ScoutAlertsNearbyEnemiesFrozen;
     }
 
-    public static bool IsPlayerTalkingToPlayerClanScout()
-    {
-        return Campaign.Current != null &&
-               PlayerUtils.PlayerParty() != null &&
-               PlayerUtils.PlayerParty().EffectiveScout != null &&
-               Campaign.Current.ConversationManager.OneToOneConversationCharacter == PlayerUtils.PlayerParty().EffectiveScout.CharacterObject;
-    }
-
     public static void SetScoutAlertsNearbyEnemies(bool scoutAlertsNearbyEnemies)
     {
         EnhancedScoutData.ScoutAlertsNearbyEnemies = scoutAlertsNearbyEnemies;
@@ -63,23 +55,19 @@ public static class EnhancedScoutService
 
     public static void AlertPlayerToNearbyHostileParties()
     {
-        try
-        {
-            if (IsScoutAlertsNearbyEnemiesFrozen() || !PlayerUtils.IsPlayerActiveInWorldMap() ||
-                PlayerUtils.IsPlayerImprisoned())
+        try {
+            if (IsScoutAlertsNearbyEnemiesFrozen() || !PlayerUtils.IsPlayerActiveInWorldMap() || PlayerUtils.IsPlayerImprisoned())
             {
                 return;
             }
 
             MobileParty hostileParty = FindFirstNearbyHostilePartyPotentiallyTargetingPlayer();
-            //List<String> hostilePartiesInfo = FindFirstNearbyHostilePartyPotentiallyTargetingPlayer().Select(party => party.Name + " with " + party.MemberRoster.TotalHealthyCount + " soldiers").ToList();
             if (hostileParty != null)
             {
                 // we assume player is aware of being targeted and is trying to get away if they are relatively facing the same direction as chasing party
                 if (EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer != null &&
                     EnhancedScoutData.PrevPossibleHostilePartyTargetingPlayer == hostileParty &&
-                    PartyUtils.IsPartyFacingSameDirectionOfPartyDirection(PlayerUtils.PlayerParty(), hostileParty,
-                        0.25f) &&
+                    PartyUtils.IsPartyFacingSameDirectionOfPartyDirection(PlayerUtils.PlayerParty(), hostileParty, 0.25f) &&
                     PlayerUtils.PlayerParty().Speed > 0 /*player is not standing still */)
                 {
                     return;
@@ -98,11 +86,7 @@ public static class EnhancedScoutService
                         () => SetScoutAlertsNearbyEnemiesFrozen(false)).StartJobImmediately()
                 );
             }
-        }
-        catch (Exception ignored)
-        {
-            return;
-        }
+        } catch (Exception ignored) { return; }
     }
 
     public static MobileParty FindFirstNearbyHostilePartyPotentiallyTargetingPlayer()

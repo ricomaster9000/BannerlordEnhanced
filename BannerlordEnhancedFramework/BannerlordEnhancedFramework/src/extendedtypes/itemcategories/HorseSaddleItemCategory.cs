@@ -11,6 +11,6 @@ public class HorseSaddleItemCategory : SaddleItemCategory
     }
     public override bool isType(ItemRosterElement itemRosterElement)
     {
-        return base.isType(itemRosterElement) && itemRosterElement.EquipmentElement.Item.HorseComponent.Monster.FamilyType == (int)HorseFamilyType.Horse;
+        return base.isType(itemRosterElement) && itemRosterElement.EquipmentElement.Item.HorseComponent.Monster.FamilyType == (int)MountFamilyType.Horse;
     }
 }

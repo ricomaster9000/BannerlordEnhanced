@@ -2,6 +2,7 @@
 using BannerlordEnhancedFramework;
 using BannerlordEnhancedFramework.dialogues;
 using BannerlordEnhancedFramework.extendedtypes;
+using BannerlordEnhancedFramework.utils;
 using TaleWorlds.CampaignSystem;
 using BannerlordEnhancedPartyRoles.Services;
 using TaleWorlds.CampaignSystem.Siege;
@@ -49,7 +50,7 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
                         "Enhanced Scout Menu",
                         ConversationSentenceType.DialogueTreeRootStart,
                         CoreInputToken.Entry.HeroMainOptions
-                    ).WithCondition(EnhancedScoutService.IsPlayerTalkingToPlayerClanScout))
+                    ).WithCondition(PlayerUtils.IsPlayerTalkingToPlayerClanScout))
                     .WithConversationPart(
                         new SimpleConversationPart(
                             "enhanced_scout_conv_menu_configure",

@@ -185,9 +185,9 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			SetIsLightestItemsFirst(!GetIsLightestItemsFirst());
 		}
 		
-		public static EquipmentUtil.OrderBy GetItemOrderByWhenSelling()
+		public static OrderBy GetItemOrderByWhenSelling()
 		{
-			return GetIsLightestItemsFirst() ? EquipmentUtil.OrderBy.LIGHTEST_TO_HEAVIEST : EquipmentUtil.OrderBy.HEAVIEST_TO_LIGHTEST;
+			return GetIsLightestItemsFirst() ? OrderBy.LIGHTEST_TO_HEAVIEST : OrderBy.HEAVIEST_TO_LIGHTEST;
 		}
 		public static bool GetIsLightestItemsFirst()
 		{

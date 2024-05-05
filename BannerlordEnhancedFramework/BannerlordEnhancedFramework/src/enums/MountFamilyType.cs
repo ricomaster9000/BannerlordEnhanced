@@ -1,6 +1,6 @@
 namespace BannerlordEnhancedFramework.extendedtypes;
 
-enum HorseFamilyType {
+enum MountFamilyType {
     Horse = 1,
     Camel = 2,
 }

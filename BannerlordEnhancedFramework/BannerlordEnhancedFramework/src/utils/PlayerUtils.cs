@@ -21,6 +21,14 @@ public class PlayerUtils
                    Campaign.Current.ConversationManager.OneToOneConversationCharacter == PlayerParty().EffectiveEngineer.CharacterObject;
         }
         
+        public static bool IsPlayerTalkingToPlayerClanScout()
+        {
+            return Campaign.Current != null &&
+                   PlayerUtils.PlayerParty() != null &&
+                   PlayerUtils.PlayerParty().EffectiveScout != null &&
+                   Campaign.Current.ConversationManager.OneToOneConversationCharacter == PlayerUtils.PlayerParty().EffectiveScout.CharacterObject;
+        }
+        
         public static bool IsPlayerConversing()
         {
             return Campaign.Current.ConversationManager.OneToOneConversationCharacter != null;

@@ -23,12 +23,12 @@ public abstract partial class ExtendedItemCategory
 				return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Effectiveness).ToList();
 		}
 	}
-	public static List<ItemRosterElement> OrderItemRoster(List<ItemRosterElement> itemRosterElementList, EquipmentUtil.OrderBy orderBy)
+	public static List<ItemRosterElement> OrderItemRoster(List<ItemRosterElement> itemRosterElementList, OrderBy orderBy)
 	{
 		switch (orderBy) {
-			case EquipmentUtil.OrderBy.HEAVIEST_TO_LIGHTEST:
+			case OrderBy.HEAVIEST_TO_LIGHTEST:
 				return itemRosterElementList.OrderByDescending(itemRosterElement => itemRosterElement.EquipmentElement.Item.Weight).ToList();
-			case EquipmentUtil.OrderBy.LIGHTEST_TO_HEAVIEST:
+			case OrderBy.LIGHTEST_TO_HEAVIEST:
 				return itemRosterElementList.OrderBy(itemRosterElement => itemRosterElement.EquipmentElement.Item.Weight).ToList();
 			default:
 				return itemRosterElementList;
