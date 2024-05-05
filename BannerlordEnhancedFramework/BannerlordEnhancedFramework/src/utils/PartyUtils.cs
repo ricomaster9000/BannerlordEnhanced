@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BannerlordEnhancedFramework.extendedtypes;
+using BannerlordEnhancedFramework.src.utils;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.CampaignSystem.CampaignBehaviors;
@@ -154,16 +155,12 @@ public static class PartyUtils
 
 		SettlementComponent settlementComponent = settlement.SettlementComponent;
 		TownMarketData marketData = new TownMarketData(settlement.Town);
-
+		
+		EquipmentUtil.FilterOutUntradeableItems(items);
+		
 		int settlementGold = settlementComponent.Gold;
 		foreach (ItemRosterElement itemRosterElement in items)
 		{
-			ItemObject item = itemRosterElement.EquipmentElement.Item;
-
-			if (item == null || itemRosterElement.EquipmentElement.IsQuestItem == true)
-			{
-				continue;
-			}
 			int price = marketData.GetPrice(itemRosterElement.EquipmentElement, sellerParty, true, null);
 			int totalSold = 0;
 			for (int _ = 0; _ < itemRosterElement.Amount; _++)
