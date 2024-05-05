@@ -404,5 +404,19 @@ namespace BannerlordEnhancedFramework.src.utils
 			itemRosterElements = ExtendedItemCategory.OrderItemRoster(itemRosterElements, orderBy);
 			return itemRosterElements;
 		}
+		
+		public static ExtendedCultureCode GetCultureCodeOfItem(ItemRosterElement item)
+		{
+			ExtendedCultureCode result = null;
+			foreach (ExtendedCultureCode cultureCode in ExtendedCultureCode.values())
+			{
+				if (cultureCode.IsItemOfCulture(item))
+				{
+					result = cultureCode;
+					break;
+				}	
+			}
+			return result;
+		}
 	}
 }

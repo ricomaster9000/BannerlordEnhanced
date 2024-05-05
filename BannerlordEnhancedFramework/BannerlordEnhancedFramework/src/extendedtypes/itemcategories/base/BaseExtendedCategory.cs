@@ -50,25 +50,14 @@ public abstract partial class ExtendedItemCategory
 					continue;
 				}
 
-				BasicCultureObject? basicCultureObject = itemRosterElement.EquipmentElement.Item.Culture;
-
-				CultureCode? itemCultureCode = basicCultureObject != null ? basicCultureObject.GetCultureCode(): null;
-
-				bool hasFoundCulture = cultureCode.nativeCultureCode() == itemCultureCode;
-
-				string itemCategoryToNameKey = hasFoundCulture ? cultureCode.getName() + " " + itemCategory.Name : itemCategory.Name;
-
+				CultureCode itemCultureCode = EquipmentUtil.GetCultureCodeOfItem(itemRosterElement).nativeCultureCode();
+				string itemCategoryToNameKey = cultureCode.getName() + " " + itemCategory.Name;
 				if (result.ContainsKey(itemCategoryToNameKey))
 				{
 					result[itemCategoryToNameKey] += itemRosterElement.Amount;
 				} else
 				{
 					result.Add(itemCategoryToNameKey, itemRosterElement.Amount);
-				}
-
-				if (hasFoundCulture || itemCultureCode == null)
-				{
-					break;
 				}
 			}
 		}

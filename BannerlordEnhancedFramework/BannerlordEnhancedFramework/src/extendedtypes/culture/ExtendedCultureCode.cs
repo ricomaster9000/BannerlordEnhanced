@@ -19,7 +19,7 @@ public class ExtendedCultureCode
             { CultureCode.Nord.ToString(), new ExtendedCultureCode(CultureCode.Nord) },
             { CultureCode.Darshi.ToString(), new ExtendedCultureCode(CultureCode.Darshi) },
             { CultureCode.Vakken.ToString(), new ExtendedCultureCode(CultureCode.Vakken) },
-            { CultureCode.AnyOtherCulture.ToString(), new AnyOtherCulture(CultureCode.AnyOtherCulture) }
+            { CultureCode.AnyOtherCulture.ToString(), new AnyOtherCulture() }
         };
 
     public static List<ExtendedCultureCode> values()
@@ -36,7 +36,6 @@ public class ExtendedCultureCode
     {
         return byName[name.ToString()];
     }
-
 
     protected string Name;
     protected CultureCode LinkedNativeCode;
