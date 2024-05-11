@@ -45,12 +45,11 @@ public abstract partial class ExtendedItemCategory
 		{
 			foreach (ExtendedItemCategory itemCategory in itemCategories)
 			{
-				if (itemCategory.isType(itemRosterElement) == false)
+				if (itemCategory.isType(itemRosterElement) == false || !cultureCode.IsItemOfCulture(itemRosterElement))
 				{
 					continue;
 				}
 
-				CultureCode itemCultureCode = EquipmentUtil.GetCultureCodeOfItem(itemRosterElement).nativeCultureCode();
 				string itemCategoryToNameKey = cultureCode.getName() + " " + itemCategory.Name;
 				if (result.ContainsKey(itemCategoryToNameKey))
 				{
@@ -63,7 +62,7 @@ public abstract partial class ExtendedItemCategory
 		}
 		return result;
 	}
-	
+
 	public static Dictionary<string, int> GetAllItemCategoryNamesByItemsAndCategories(List<ItemRosterElement> itemList, List<ExtendedItemCategory> itemCategories, Dictionary<string, int> categoryNames)
 	{
 		foreach (ItemRosterElement itemRosterElement in itemList)

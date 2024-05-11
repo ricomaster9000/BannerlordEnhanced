@@ -66,7 +66,7 @@ public class ExtendedCultureCode
 
     public virtual bool IsItemOfCulture(ItemRosterElement item)
     {
-        return item.EquipmentElement.Item.Culture.GetCultureCode() == nativeCultureCode();
+        return item.EquipmentElement.Item.Culture != null && item.EquipmentElement.Item.Culture.GetCultureCode() == nativeCultureCode();
     }
 
 }

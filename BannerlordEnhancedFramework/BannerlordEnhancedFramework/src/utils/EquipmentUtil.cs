@@ -223,6 +223,14 @@ namespace BannerlordEnhancedFramework.src.utils
 			return ((float)(horseComponent.ChargeDamage * horseComponent.Speed + horseComponent.Maneuver * horseComponent.Speed) + (float)horseComponent.BodyLength * item.Weight * 0.025f) * (float)(horseComponent.HitPoints + horseComponent.HitPointBonus) * 0.0001f;
 
 		}
+		
+		public static void FilterOutUntradeableItems(List<ItemRosterElement> items)
+		{
+			if (items != null)
+			{
+				items.RemoveAll(item => item.EquipmentElement.IsQuestItem);
+			}
+		}
 		public static List<ItemRosterElement> AddEquipmentElement(List<ItemRosterElement> targetItemRosterElement, EquipmentElement equipmentElement)
 		{
 			Predicate<ItemRosterElement> getItemRosterElement = (itemRosterElement) => {
@@ -384,27 +392,25 @@ namespace BannerlordEnhancedFramework.src.utils
 			return itemRosterElements;
 		}
 		
-		public static List<ItemRosterElement> FilterItemRosterByItemCategoriesAndCultureCode(
+		public static List<ItemRosterElement> FilterItemRosterByItemCategoriesAndCulture(
 			List<ItemRosterElement> itemRoster,
 			List<ExtendedItemCategory> itemCategories,
-			CultureCode cultureCode,
+			ExtendedCultureCode cultureCode,
 			OrderBy orderBy = OrderBy.HEAVIEST_TO_LIGHTEST)
 		{
 			List<ItemRosterElement> itemRosterElements = HeroEquipmentCustomization.getItemsByCategories(itemRoster, itemCategories);
-			if(cultureCode == CultureCode.Invalid)
+			List<ItemRosterElement> filterByCulture = new List<ItemRosterElement>();
+			foreach (ItemRosterElement item in itemRosterElements)
 			{
-				return new List<ItemRosterElement>();
+				if (cultureCode.IsItemOfCulture(item))
+				{
+					filterByCulture.Add(item);
+				}
 			}
-
-			if (cultureCode != CultureCode.AnyOtherCulture)
-			{
-				itemRosterElements = HeroEquipmentCustomization.getItemsByCulture(itemRosterElements, cultureCode);
-			}
-			
-			itemRosterElements = ExtendedItemCategory.OrderItemRoster(itemRosterElements, orderBy);
-			return itemRosterElements;
+			filterByCulture = ExtendedItemCategory.OrderItemRoster(filterByCulture, orderBy);
+			return filterByCulture;
 		}
-		
+
 		public static ExtendedCultureCode GetCultureCodeOfItem(ItemRosterElement item)
 		{
 			ExtendedCultureCode result = null;
