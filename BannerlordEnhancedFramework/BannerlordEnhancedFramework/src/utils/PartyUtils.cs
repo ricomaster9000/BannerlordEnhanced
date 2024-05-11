@@ -156,6 +156,7 @@ public static class PartyUtils
 		TownMarketData marketData = new TownMarketData(settlement.Town);
 
 		int settlementGold = settlementComponent.Gold;
+
 		foreach (ItemRosterElement itemRosterElement in items)
 		{
 			ItemObject item = itemRosterElement.EquipmentElement.Item;
@@ -181,8 +182,8 @@ public static class PartyUtils
 
 		}
 
-		int income = settlementComponent.Gold - settlementGold;
-		if (income == 0)
+		int profits = settlementComponent.Gold - settlementGold;
+		if (profits == 0)
 		{
 			return itemsSold;
 		}
@@ -190,12 +191,12 @@ public static class PartyUtils
 		bool isTrading = true;
 		CampaignEventDispatcher.Instance.OnPlayerInventoryExchange(itemsToBuyTuple, itemsToSellTuple, isTrading);
 
-		settlementComponent.ChangeGold(settlementComponent.Gold - income);
+		settlementComponent.ChangeGold(settlementComponent.Gold - profits);
 
-		GiveGoldAction.ApplyBetweenCharacters(null, sellerParty.Party.LeaderHero, income, false);
+		GiveGoldAction.ApplyBetweenCharacters(null, sellerParty.Party.LeaderHero, profits, false);
 		if (sellerParty.Party.LeaderHero.CompanionOf != null)
 		{
-			sellerParty.AddTaxGold((int)((float)income * 0.1f));
+			sellerParty.AddTaxGold((int)((float)profits * 0.1f));
 		}
 
 		UpdatePartyItemRoster(sellerParty.ItemRoster, new List<ItemRosterElement>(), itemsSold);
