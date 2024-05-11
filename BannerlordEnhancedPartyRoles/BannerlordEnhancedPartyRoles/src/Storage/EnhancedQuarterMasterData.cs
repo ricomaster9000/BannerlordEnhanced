@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BannerlordEnhancedFramework.extendedtypes;
 using TaleWorlds.CampaignSystem.Party;
+using TaleWorlds.Core;
 
 namespace BannerlordEnhancedPartyRoles.src.Storage;
 
@@ -38,7 +39,7 @@ static class EnhancedQuarterMasterData
 		public static bool AllowCamels = true;
 		public static bool AllowHorses = true;
 		public static bool AllowBanners = true;
-		public static bool AllowMiscellaneous = true;
+		public static bool AllowMiscellaneous = false;
 		// OrderBy filtering settings
 		public static bool IsLightestItemsFirst = true;
 		public static bool AllowLockedItems = true;
@@ -48,7 +49,7 @@ static class EnhancedQuarterMasterData
 	{
 		static AutoEquip()
 		{
-			foreach (var extendedCultureCode in ExtendedCultureCode.values())
+			foreach (ExtendedCultureCode extendedCultureCode in ExtendedCultureCode.values())
 			{
 				CultureToItemCategoryFilters.Add(extendedCultureCode, new Dictionary<string, bool>()
 				{

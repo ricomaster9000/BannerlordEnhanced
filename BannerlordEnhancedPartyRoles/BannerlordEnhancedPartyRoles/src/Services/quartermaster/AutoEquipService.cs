@@ -26,7 +26,6 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			ItemRoster itemRoster = mainParty.ItemRoster;
 			List<TroopRosterElement> allCompanionsTroopRosterElement = PartyUtils.GetHerosExcludePlayerHero(mainParty.Party.MemberRoster.GetTroopRoster(), mainParty.LeaderHero);
 			List<FighterClass> fighters = new List<FighterClass>();
-			bool canRemoveLockedItems = AutoEquipService.GetAllowLockedItems() == false;
 			Dictionary<string, int> categories = new Dictionary<string, int>();
 			
 			List<ExtendedCultureCode> chosenCultures = AutoEquipService.GetChosenCultures();
@@ -34,11 +33,6 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			{
 				HeroEquipmentCustomization heroEquipmentCustomization = new HeroEquipmentCustomizationByClass();
 
-				if (chosenCulture == ExtendedCultureCode.get(CultureCode.Invalid))
-				{
-					continue;
-				}
-				
 				if (chosenCulture != ExtendedCultureCode.get(CultureCode.AnyOtherCulture))
 				{
 					heroEquipmentCustomization = new HeroEquipmentCustomizationByClassAndCulture(chosenCulture.nativeCultureCode());
@@ -48,40 +42,34 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 				{
 					fighters.Add(new FighterClass(troopCompanion.Character.HeroObject, heroEquipmentCustomization));
 				}
+			}
+			
+			foreach (FighterClass fighterClass in fighters)
+			{
+				List<ItemRosterElement> items = AutoEquipService.GetAllowLockedItems() ? itemRoster.ToList() : EquipmentUtil.RemoveLockedItems(itemRoster.ToList());
 
-				foreach (FighterClass fighterClass in fighters)
+				if (AutoEquipService.GetAllowBattleEquipment())
 				{
-					List<ItemRosterElement> items = canRemoveLockedItems
-						? EquipmentUtil.RemoveLockedItems(itemRoster.ToList())
-						: itemRoster.ToList();
+					PartyUtils.UpdatePartyItemRoster(itemRoster, fighterClass.removeRelavantBattleEquipment(items),
+						new List<ItemRosterElement>());
 
-					if (AutoEquipService.GetAllowBattleEquipment())
-					{
-						PartyUtils.UpdatePartyItemRoster(itemRoster, fighterClass.removeRelavantBattleEquipment(items),
-							new List<ItemRosterElement>());
+					items = AutoEquipService.GetAllowLockedItems() ? itemRoster.ToList() : EquipmentUtil.RemoveLockedItems(itemRoster.ToList());
+					var changes = fighterClass.assignBattleEquipment(items);
+					categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals,
+						fighterClass.MainItemCategories, categories);
+					PartyUtils.UpdatePartyItemRoster(itemRoster, changes.additions, changes.removals);
+				}
 
-						items = canRemoveLockedItems
-							? EquipmentUtil.RemoveLockedItems(itemRoster.ToList())
-							: itemRoster.ToList();
-						var changes = fighterClass.assignBattleEquipment(items);
-						categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals,
-							fighterClass.MainItemCategories, categories);
-						PartyUtils.UpdatePartyItemRoster(itemRoster, changes.additions, changes.removals);
-					}
+				if (AutoEquipService.GetAllowCivilianEquipment())
+				{
+					items = AutoEquipService.GetAllowLockedItems() ? itemRoster.ToList() : EquipmentUtil.RemoveLockedItems(itemRoster.ToList());
+					PartyUtils.UpdatePartyItemRoster(itemRoster, fighterClass.removeRelavantCivilianEquipment(items),
+						new List<ItemRosterElement>());
+					var changes = fighterClass.assignCivilianEquipment(items);
 
-					if (AutoEquipService.GetAllowCivilianEquipment())
-					{
-						items = canRemoveLockedItems
-							? EquipmentUtil.RemoveLockedItems(itemRoster.ToList())
-							: itemRoster.ToList();
-						PartyUtils.UpdatePartyItemRoster(itemRoster, fighterClass.removeRelavantCivilianEquipment(items),
-							new List<ItemRosterElement>());
-						var changes = fighterClass.assignCivilianEquipment(items);
-
-						categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals,
-							fighterClass.MainItemCategories, categories);
-						PartyUtils.UpdatePartyItemRoster(itemRoster, changes.additions, changes.removals);
-					}
+					categories = ExtendedItemCategory.GetAllItemCategoryNamesByItemsAndCategories(changes.removals,
+						fighterClass.MainItemCategories, categories);
+					PartyUtils.UpdatePartyItemRoster(itemRoster, changes.additions, changes.removals);
 				}
 			}
 
