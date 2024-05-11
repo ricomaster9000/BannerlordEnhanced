@@ -198,7 +198,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 			EnhancedQuarterMasterData.AutoTraderData.IsLightestItemsFirst = flag;
 		}
 
-		public static void SellItemsToSettlement(Settlement settlement)
+		public static void SellExcessItemsToSettlement(Settlement settlement)
 		{
 			List<ItemRosterElement> itemRosterElementsToSell = new List<ItemRosterElement>();
 			Dictionary<string, int> categoriesSold = new Dictionary<string, int>();
@@ -215,7 +215,7 @@ namespace BannerlordEnhancedPartyRoles.src.Services
 				);
 
 				EquipmentUtil.FilterOutUntradeableItems(itemRosterElementsToSell);
-				
+
 				categoriesSold = categoriesSold.Concat(
 						ExtendedItemCategory.GetItemCategoryToTotalWorthForCultureAndCategoryFromItems(
 							itemRosterElementsToSell,

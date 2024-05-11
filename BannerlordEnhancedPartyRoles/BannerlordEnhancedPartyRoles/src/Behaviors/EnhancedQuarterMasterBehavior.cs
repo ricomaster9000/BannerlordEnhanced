@@ -26,14 +26,14 @@ class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 	public override void RegisterEvents()
 	{
 		CampaignEvents.OnSessionLaunchedEvent.AddNonSerializedListener(this, new Action<CampaignGameStarter>(AddDialogs));
-		CampaignEvents.AfterSettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(this.OnSettlementEntered));
+		CampaignEvents.AfterSettlementEntered.AddNonSerializedListener(this, new Action<MobileParty, Settlement, Hero>(this.AutoTradeItemsWithSettlementIfPlayerParty));
 	}
 
 	public override void SyncData(IDataStore dataStore)
 	{
 	}
 
-	public void OnSettlementEntered(MobileParty partyEnteredSettlement, Settlement settlement, Hero leader)
+	public void AutoTradeItemsWithSettlementIfPlayerParty(MobileParty partyEnteredSettlement, Settlement settlement, Hero leader)
 	{
 		if(partyEnteredSettlement == null ||
 		   partyEnteredSettlement != MobileParty.MainParty ||
@@ -43,7 +43,7 @@ class EnhancedQuarterMasterBehavior : CampaignBehaviorBase
 		{
 			return;
 		}
-		AutoTraderService.SellItemsToSettlement(settlement);
+		AutoTraderService.SellExcessItemsToSettlement(settlement);
 	}
 	private void AddDialogs(CampaignGameStarter starter)
 	{

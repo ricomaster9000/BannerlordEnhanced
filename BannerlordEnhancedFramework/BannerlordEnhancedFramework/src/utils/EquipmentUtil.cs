@@ -221,7 +221,6 @@ namespace BannerlordEnhancedFramework.src.utils
 		{
 			HorseComponent horseComponent = item.HorseComponent;
 			return ((float)(horseComponent.ChargeDamage * horseComponent.Speed + horseComponent.Maneuver * horseComponent.Speed) + (float)horseComponent.BodyLength * item.Weight * 0.025f) * (float)(horseComponent.HitPoints + horseComponent.HitPointBonus) * 0.0001f;
-
 		}
 		
 		public static void FilterOutUntradeableItems(List<ItemRosterElement> items)
@@ -238,7 +237,6 @@ namespace BannerlordEnhancedFramework.src.utils
 			};
 
 			int newAmount = 1;
-
 			ItemRosterElement foundItemRosterElement = targetItemRosterElement.Find(getItemRosterElement);
 
 			if (foundItemRosterElement.Amount > 0)
@@ -248,7 +246,6 @@ namespace BannerlordEnhancedFramework.src.utils
 			}
 
 			targetItemRosterElement.Add(new ItemRosterElement(equipmentElement, newAmount));
-
 			return targetItemRosterElement;
 		}
 

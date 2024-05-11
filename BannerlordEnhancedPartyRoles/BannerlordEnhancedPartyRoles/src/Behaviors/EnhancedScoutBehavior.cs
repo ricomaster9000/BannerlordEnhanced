@@ -6,7 +6,6 @@ using BannerlordEnhancedFramework.utils;
 using TaleWorlds.CampaignSystem;
 using BannerlordEnhancedPartyRoles.Services;
 using TaleWorlds.CampaignSystem.Siege;
-using TaleWorlds.CampaignSystem.Party;
 
 namespace BannerlordEnhancedPartyRoles.Behaviors
 {
@@ -26,7 +25,6 @@ namespace BannerlordEnhancedPartyRoles.Behaviors
                     {
                         _enemyAlertCloseByTimer.StopTimer();
                     }
-					// DebugUtils.LogAndPrintInfo("_enemyAlertCloseByTimer running");
 					if (EnhancedScoutService.GetScoutAlertsNearbyEnemies())
                     {
                         EnhancedScoutService.AlertPlayerToNearbyHostileParties();
